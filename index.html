@@ -229,6 +229,7 @@ header{justify-content:space-between}
       <div class="un" id="uName"></div>
       <div class="ue" id="uEmail"></div>
       <div class="sync"><span class="dot" id="syncDot"></span><span id="syncTxt">Sincronizado</span></div>
+      <button class="btn sm" id="setPassBtn" style="margin-bottom:8px"><svg class="ic"><use href="#i-pen"/></svg> Definir palavra-passe</button>
       <button class="btn bad sm" id="logoutBtn"><svg class="ic"><use href="#i-logout"/></svg> Terminar sessão</button>
     </div>
   </div>
@@ -271,6 +272,25 @@ header{justify-content:space-between}
   </section>
 
   <!-- ================= INÍCIO ================= -->
+  <!-- ================= CRIAR PALAVRA-PASSE ================= -->
+  <section id="vSetPass" class="view hidden">
+    <div class="authbox">
+      <div class="authlogo"><img src="logo.png" alt="Studions"></div>
+      <h1>Cria uma palavra-passe</h1>
+      <p class="sub">Assim também podes entrar com o teu email e a palavra-passe, além do Google.</p>
+      <div class="panel">
+        <div id="spEmail" class="hint" style="margin-bottom:4px"></div>
+        <label class="l" for="spPass">Palavra-passe</label>
+        <input id="spPass" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+        <label class="l" for="spPass2">Repetir palavra-passe</label>
+        <input id="spPass2" type="password" autocomplete="new-password">
+        <div class="actions"><button class="btn primary" id="spSubmit" style="width:100%">Guardar e continuar</button></div>
+        <div style="text-align:center;margin-top:12px"><button class="linkbtn" id="spSkip">Agora não</button></div>
+        <div class="msg" id="spMsg"></div>
+      </div>
+    </div>
+  </section>
+
   <section id="vHome" class="view hidden">
     <h1 id="welcome">Bem-vindo(a)</h1>
     <p class="sub">Escolhe como queres estudar hoje.</p>
@@ -283,7 +303,7 @@ header{justify-content:space-between}
         <svg class="ic go"><use href="#i-right"/></svg>
         <div class="big-ic"><svg class="ic"><use href="#i-layers"/></svg></div>
         <h3>Flashcards</h3>
-        <p>Treina vocabulário em qualquer idioma com cartas, tradução automática e modo escrito.</p>
+        <p>Línguas e outras matérias, com cartas, modo mental e modo escrito.</p>
         <div class="meta"><span class="chip" id="homeDecks"></span><span class="chip" id="homeCards"></span></div>
       </button>
       <div class="tile soon">
@@ -294,22 +314,44 @@ header{justify-content:space-between}
     </div>
   </section>
 
+  <!-- ================= CATEGORIA ================= -->
+  <section id="vCat" class="view hidden">
+    <h1>Flashcards</h1>
+    <p class="sub">Que tipo de flashcards queres treinar?</p>
+    <div class="grid">
+      <button class="tile" id="tileLang">
+        <svg class="ic go"><use href="#i-right"/></svg>
+        <div class="big-ic"><svg class="ic"><use href="#i-globe"/></svg></div>
+        <h3>Línguas</h3>
+        <p>Vocabulário e frases em qualquer idioma, com deteção de idioma e tradução automática.</p>
+        <div class="meta"><span class="chip" id="catLangCount"></span></div>
+      </button>
+      <button class="tile" id="tileOther">
+        <svg class="ic go"><use href="#i-right"/></svg>
+        <div class="big-ic"><svg class="ic"><use href="#i-grid"/></svg></div>
+        <h3>Outros</h3>
+        <p>Qualquer matéria: conceitos, datas, fórmulas, perguntas e respostas.</p>
+        <div class="meta"><span class="chip" id="catOtherCount"></span></div>
+      </button>
+    </div>
+  </section>
+
   <!-- ================= HUB FLASHCARDS ================= -->
   <section id="vHub" class="view hidden">
-    <h1>Flashcards</h1>
-    <p class="sub">O que queres fazer?</p>
+    <h1 id="hubTitle">Flashcards</h1>
+    <p class="sub" id="hubSub">O que queres fazer?</p>
     <div class="grid">
       <button class="tile" id="tileCards">
         <svg class="ic go"><use href="#i-right"/></svg>
         <div class="big-ic"><svg class="ic"><use href="#i-book"/></svg></div>
         <h3>Baralhos e cartas</h3>
-        <p>Cria baralhos, adiciona palavras, traduções automáticas ou manuais e notas.</p>
+        <p>Cria baralhos e adiciona cartas com respostas e notas.</p>
       </button>
       <button class="tile" id="tileStudy">
         <svg class="ic go"><use href="#i-right"/></svg>
         <div class="big-ic"><svg class="ic"><use href="#i-play"/></svg></div>
         <h3>Estudar</h3>
-        <p>Modo mental ou escrito, do original para a tradução ou ao contrário.</p>
+        <p>Modo mental ou escrito, num sentido ou no outro.</p>
       </button>
     </div>
   </section>
@@ -331,13 +373,13 @@ header{justify-content:space-between}
 
     <div class="panel">
       <h2 id="formTitle"><svg class="ic"><use href="#i-plus"/></svg> Adicionar flashcard</h2>
-      <label class="l" for="fFront" style="margin-top:0">Palavra ou frase (qualquer idioma)</label>
+      <label class="l" id="lFront" for="fFront" style="margin-top:0">Palavra ou frase (qualquer idioma)</label>
       <input id="fFront" autocomplete="off" placeholder="ex.: serendipity">
       <div class="row">
-        <div><label class="l" for="fSrc">Idioma do texto</label><select id="fSrc"></select></div>
-        <div><label class="l" for="fTgt">Traduzir para</label><select id="fTgt"></select></div>
+        <div class="langcol"><label class="l" for="fSrc">Idioma do texto</label><select id="fSrc"></select></div>
+        <div class="langcol"><label class="l" for="fTgt">Traduzir para</label><select id="fTgt"></select></div>
       </div>
-      <label class="l" for="fBack">Tradução (vazio = traduzir automaticamente)</label>
+      <label class="l" id="lBack" for="fBack">Tradução (vazio = traduzir automaticamente)</label>
       <input id="fBack" autocomplete="off" placeholder="Opcional. Várias respostas separadas por /">
       <label class="l" for="fNotes">Notas</label>
       <textarea id="fNotes" placeholder="Exemplos, género, pronúncia, contexto…"></textarea>
@@ -370,8 +412,8 @@ header{justify-content:space-between}
 
       <label class="l">Direção</label>
       <div class="seg">
-        <label><input type="radio" name="dir" value="normal" checked><span><svg class="ic"><use href="#i-right"/></svg>Original → Tradução</span></label>
-        <label><input type="radio" name="dir" value="reverse"><span><svg class="ic"><use href="#i-left"/></svg>Tradução → Original</span></label>
+        <label><input type="radio" name="dir" value="normal" checked><span><svg class="ic"><use href="#i-right"/></svg><i id="dirN" style="font-style:normal">Original → Tradução</i></span></label>
+        <label><input type="radio" name="dir" value="reverse"><span><svg class="ic"><use href="#i-left"/></svg><i id="dirR" style="font-style:normal">Tradução → Original</i></span></label>
         <label><input type="radio" name="dir" value="mixed"><span><svg class="ic"><use href="#i-swap"/></svg>Misto</span></label>
       </div>
 
@@ -492,6 +534,11 @@ const firebaseConfig = {
         try{ await Au.sendEmailVerification(cred.user); }catch(e){}
         await cred.user.reload(); notify(auth.currentUser);
       },
+      async linkPassword(pass){
+        const u=auth.currentUser; if(!u||!u.email) throw {code:'auth/no-email'};
+        await Au.linkWithCredential(u,Au.EmailAuthProvider.credential(u.email,pass));
+        await u.reload(); notify(auth.currentUser);
+      },
       async reset(email){ await Au.sendPasswordResetEmail(auth,email); },
       async resendVerification(){ if(auth.currentUser) await Au.sendEmailVerification(auth.currentUser); },
       async reloadUser(){ if(auth.currentUser){ await auth.currentUser.reload(); notify(auth.currentUser); } },
@@ -519,10 +566,10 @@ const LANGS = {
 const LEGACY_KEY='studions.v1';
 let db=null, user=null, cloud=null, saveTimer=null, unsub=null, pendingRemote=null;
 const userKey=()=>'studions.v2.'+(user?user.uid:'anon');
-function blankDb(){ const d={decks:[{id:uid(),name:'O meu baralho',cards:[]}],current:null,tgt:'pt',updatedAt:0}; d.current=d.decks[0].id; return d; }
+function blankDb(){ const d={decks:[{id:uid(),name:'O meu baralho',cards:[],type:'lang'}],current:null,tgt:'pt',updatedAt:0}; d.current=d.decks[0].id; return d; }
 const validDb=d=>d&&Array.isArray(d.decks)&&d.decks.length;
 function readLocal(key){ try{ const d=JSON.parse(localStorage.getItem(key)); return validDb(d)?d:null; }catch(e){ return null; } }
-function fixDb(){ if(!db.decks.find(d=>d.id===db.current)) db.current=db.decks[0].id; if(!db.tgt) db.tgt='pt'; }
+function fixDb(){ db.decks.forEach(d=>{ if(!d.type) d.type='lang'; }); if(!db.decks.find(d=>d.id===db.current)) db.current=db.decks[0].id; if(!db.tgt) db.tgt='pt'; }
 function save(){
   if(!db||!user) return;
   db.updatedAt=Date.now();
@@ -555,34 +602,65 @@ function listen(){
   if(unsub) unsub();
   unsub=cloud.listen(user.uid,r=>{ if(S){ pendingRemote=r; return; } applyRemote(r); });
 }
-const deck = () => db.decks.find(d=>d.id===db.current) || db.decks[0];
+let fcType='lang';
+const decksOf=(t=fcType)=>db.decks.filter(d=>(d.type||'lang')===t);
+const deck = () => db.decks.find(d=>d.id===db.current) || decksOf()[0] || db.decks[0];
+function ensureTypeDeck(){
+  if(!decksOf().length){ const d={id:uid(),name:'O meu baralho',cards:[],type:fcType}; db.decks.push(d); db.current=d.id; save(); }
+  else if(!decksOf().find(d=>d.id===db.current)) db.current=decksOf()[0].id;
+}
 
 /* ================== Navegação ================== */
-const VIEWS={loading:'vLoading',auth:'vAuth',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
-const CRUMBS={hub:'<b>Flashcards</b>',cards:'Flashcards  /  <b>Baralhos e cartas</b>',study:'Flashcards  /  <b>Estudar</b>'};
-const BACK={hub:'home',cards:'hub',study:'hub'};
+const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const TYPE_LABEL={lang:'Línguas',other:'Outros'};
+const crumbOf=v=>({cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
+const BACK={cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
   current=v;
   if(v!=='study'&&db){ S=null; if(pendingRemote){ const r=pendingRemote; pendingRemote=null; applyRemote(r); } }
   for(const k in VIEWS) $(VIEWS[k]).classList.toggle('hidden',k!==v);
-  $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading');
-  if(CRUMBS[v]) $('crumb').innerHTML=CRUMBS[v];
+  $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading'||v==='setpass');
+  if(crumbOf(v)) $('crumb').innerHTML=crumbOf(v);
   if(v==='home') updateHome();
-  if(v==='cards'){ fillDeckSelects(); renderCards(); }
-  if(v==='study'){ fillDeckSelects(); resetStudyUI(); }
+  if(v==='cat') updateCat();
+  if(v==='hub') applyHub();
+  if(v==='cards'){ applyTypeUI(); fillDeckSelects(); renderCards(); }
+  if(v==='study'){ applyTypeUI(); fillDeckSelects(); resetStudyUI(); }
   window.scrollTo({top:0});
 }
 $('brand').onclick=()=>{ if(user&&db) go('home'); };
 $('backBtn').onclick=()=>go(BACK[current]);
-$('tileFlash').onclick=()=>go('hub');
+$('tileFlash').onclick=()=>go('cat');
+$('tileLang').onclick=()=>{ fcType='lang'; go('hub'); };
+$('tileOther').onclick=()=>{ fcType='other'; go('hub'); };
+function updateCat(){
+  const cnt=t=>{ const ds=db.decks.filter(d=>(d.type||'lang')===t); return `${ic('layers')} ${ds.length} baralho${ds.length!==1?'s':''} · ${ds.reduce((n,d)=>n+d.cards.length,0)} cartas`; };
+  $('catLangCount').innerHTML=cnt('lang'); $('catOtherCount').innerHTML=cnt('other');
+}
+function applyHub(){
+  ensureTypeDeck();
+  $('hubTitle').textContent='Flashcards · '+TYPE_LABEL[fcType];
+  $('hubSub').textContent=fcType==='lang'?'Treina vocabulário e frases em qualquer idioma. O que queres fazer?':'Treina qualquer matéria com perguntas e respostas. O que queres fazer?';
+}
+function typeLabels(){ return fcType==='lang'?{f:'Original',b:'Tradução'}:{f:'Pergunta',b:'Resposta'}; }
+function applyTypeUI(){
+  const lang=fcType==='lang', T=typeLabels();
+  $('lFront').textContent=lang?'Palavra ou frase (qualquer idioma)':'Pergunta ou termo';
+  $('fFront').placeholder=lang?'ex.: serendipity':'ex.: Capital de Portugal';
+  $('lBack').textContent=lang?'Tradução (vazio = traduzir automaticamente)':'Resposta';
+  $('fBack').placeholder=lang?'Opcional. Várias respostas separadas por /':'Várias respostas aceites separadas por /';
+  document.querySelectorAll('.langcol').forEach(e=>e.classList.toggle('hidden',!lang));
+  $('transBtn').classList.toggle('hidden',!lang);
+  $('dirN').textContent=`${T.f} → ${T.b}`; $('dirR').textContent=`${T.b} → ${T.f}`;
+}
 $('tileCards').onclick=()=>go('cards');
 $('tileStudy').onclick=()=>go('study');
 
 /* ================== Baralhos ================== */
 function fillDeckSelects(){
   for(const sel of [$('deckSelect'),$('sDeck')]){
-    sel.innerHTML=db.decks.map(d=>`<option value="${d.id}">${esc(d.name)} (${d.cards.length})</option>`).join('');
+    sel.innerHTML=decksOf().map(d=>`<option value="${d.id}">${esc(d.name)} (${d.cards.length})</option>`).join('');
     sel.value=db.current;
   }
 }
@@ -590,16 +668,16 @@ $('deckSelect').onchange=e=>{ db.current=e.target.value; save(); fillDeckSelects
 $('sDeck').onchange=e=>{ db.current=e.target.value; save(); fillDeckSelects(); };
 $('newDeck').onclick=()=>{
   const n=prompt('Nome do novo baralho:'); if(!n||!n.trim()) return;
-  const d={id:uid(),name:n.trim(),cards:[]}; db.decks.push(d); db.current=d.id; save(); fillDeckSelects(); renderCards();
+  const d={id:uid(),name:n.trim(),cards:[],type:fcType}; db.decks.push(d); db.current=d.id; save(); fillDeckSelects(); renderCards();
 };
 $('renameDeck').onclick=()=>{
   const n=prompt('Novo nome:',deck().name); if(!n||!n.trim()) return;
   deck().name=n.trim(); save(); fillDeckSelects();
 };
 $('delDeck').onclick=()=>{
-  if(db.decks.length===1){ alert('Tem de existir pelo menos um baralho.'); return; }
+  if(decksOf().length===1){ alert('Tem de existir pelo menos um baralho nesta categoria.'); return; }
   if(!confirm(`Apagar o baralho "${deck().name}" e todas as suas cartas?`)) return;
-  db.decks=db.decks.filter(d=>d.id!==db.current); db.current=db.decks[0].id; save(); fillDeckSelects(); renderCards();
+  db.decks=db.decks.filter(d=>d.id!==db.current); db.current=decksOf()[0].id; save(); fillDeckSelects(); renderCards();
 };
 
 /* ================== Tradução ================== */
@@ -642,8 +720,8 @@ const setSaveLabel=()=>{ $('saveCard').innerHTML=editingId?`${ic('check')} Guard
 async function saveCard(){
   const front=$('fFront').value.trim(); if(!front){ msg('Escreve a palavra.',true); return; }
   let back=$('fBack').value.trim(), lang=$('fSrc').value;
-  if(!back){ const r=await doTranslate(); if(!r) return; back=r.text; if(lang==='auto') lang=(r.lang||'auto').split('-')[0]||'auto'; }
-  const data={front,back,notes:$('fNotes').value.trim(),srcLang:lang,tgtLang:$('fTgt').value};
+  if(!back){ if(fcType!=='lang'){ msg('Escreve a resposta.',true); return; } const r=await doTranslate(); if(!r) return; back=r.text; if(lang==='auto') lang=(r.lang||'auto').split('-')[0]||'auto'; }
+  const data={front,back,notes:$('fNotes').value.trim(),srcLang:fcType==='lang'?lang:'',tgtLang:fcType==='lang'?$('fTgt').value:''};
   if(editingId) Object.assign(deck().cards.find(c=>c.id===editingId),data);
   else deck().cards.push({id:uid(),...data,ok:0,bad:0});
   save(); cancelEdit(); fillDeckSelects(); renderCards(); msg('Carta guardada.'); $('fFront').focus();
@@ -733,8 +811,8 @@ function renderCard(){
   updateLive();
   const f=$('flip'); f.style.transition='none'; f.classList.remove('flipped'); void f.offsetWidth; f.style.transition='';
   $('flashWrap').className='wrap';
-  $('faceFront').innerHTML=`<span class="lbl">${it.rev?'Tradução':'Original'}</span><div class="big">${esc(promptOf(it))}</div>${mental?`<span class="hint">${ic('flip')} Clica para virar</span>`:''}`;
-  $('faceBack').innerHTML=mental?`<span class="lbl">${it.rev?'Original':'Tradução'}</span><div class="answer">${esc(answerOf(it))}</div><div class="prev">${esc(promptOf(it))}</div>${it.card.notes?`<div class="note">${ic('note')}<span>${esc(it.card.notes)}</span></div>`:''}`:'';
+  $('faceFront').innerHTML=`<span class="lbl">${it.rev?typeLabels().b:typeLabels().f}</span><div class="big">${esc(promptOf(it))}</div>${mental?`<span class="hint">${ic('flip')} Clica para virar</span>`:''}`;
+  $('faceBack').innerHTML=mental?`<span class="lbl">${it.rev?typeLabels().f:typeLabels().b}</span><div class="answer">${esc(answerOf(it))}</div><div class="prev">${esc(promptOf(it))}</div>${it.card.notes?`<div class="note">${ic('note')}<span>${esc(it.card.notes)}</span></div>`:''}`:'';
   if(!mental){
     $('answer').value=''; $('answer').disabled=false; $('resultBox').innerHTML='';
     $('nextWrap').classList.add('hidden'); $('checkWrap').classList.remove('hidden'); $('btnCheck').disabled=false; $('btnSkip').disabled=false;
@@ -862,7 +940,7 @@ function updateHome(){
 function renderUser(){
   const box=$('userBox'); $('uMenu').classList.add('hidden');
   if(!user){ box.classList.add('hidden'); return; }
-  box.classList.remove('hidden');
+  box.classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
   $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
   const av=$('uAvatar');
   if(user.photoURL){ av.innerHTML=`<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">`; }
@@ -942,6 +1020,28 @@ $('vDone').onclick=async()=>{
   if(user&&!user.emailVerified){ $('vDone').textContent='Ainda não confirmado'; setTimeout(()=>$('vDone').textContent='Já confirmei',3000); }
 };
 
+/* ---- palavra-passe depois do Google ---- */
+const hasPassword=()=>!!user&&(user.providerData||[]).some(p=>p.providerId==='password');
+const isGoogle=()=>!!user&&(user.providerData||[]).some(p=>p.providerId==='google.com');
+const skipKey=()=>'studions.skippass.'+user.uid;
+function needsPassword(){ if(!isGoogle()||hasPassword()) return false; try{ return !localStorage.getItem(skipKey()); }catch(e){ return true; } }
+function goSetPass(){ $('spEmail').textContent=user.email||''; $('spPass').value=''; $('spPass2').value=''; $('spMsg').textContent=''; go('setpass'); }
+$('spSubmit').onclick=async()=>{
+  const p=$('spPass').value,p2=$('spPass2').value,m=$('spMsg'); m.className='msg err';
+  if(p.length<6){ m.textContent='A palavra-passe tem de ter pelo menos 6 caracteres.'; return; }
+  if(p!==p2){ m.textContent='As palavras-passe não coincidem.'; return; }
+  $('spSubmit').disabled=true; m.textContent='';
+  try{ await cloud.linkPassword(p); go('home'); }
+  catch(e){
+    m.textContent=e.code==='auth/provider-already-linked'?'Esta conta já tem palavra-passe.'
+      :e.code==='auth/requires-recent-login'?'Por segurança, termina sessão e entra de novo com o Google; depois define a palavra-passe.':friendly(e);
+  }
+  $('spSubmit').disabled=false;
+};
+$('spPass2').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('spSubmit').click(); }});
+$('spSkip').onclick=()=>{ try{ localStorage.setItem(skipKey(),'1'); }catch(e){} go('home'); };
+$('setPassBtn').onclick=()=>{ $('uMenu').classList.add('hidden'); goSetPass(); };
+
 /* ---- estado de autenticação ---- */
 async function onUser(u){
   if(u&&user&&u.uid===user.uid){ user=u; renderUser(); updateHome(); return; }
@@ -950,7 +1050,7 @@ async function onUser(u){
     user=u; go('loading');
     try{ await loadForUser(); }catch(e){ db=readLocal(userKey())||blankDb(); }
     $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
-    renderUser(); listen(); go('home');
+    renderUser(); listen(); if(needsPassword()) goSetPass(); else go('home');
     entering=false;
   }else{
     if(unsub){ unsub(); unsub=null; }
