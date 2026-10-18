@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Studions</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
 :root{
   --bg:#eaf1fc; --bg2:#dbe8fb; --card:#ffffff; --text:#0e1a33; --muted:#5a6b8c; --line:#d3dff2;
@@ -26,6 +28,7 @@ header{display:flex;align-items:center;padding:14px 24px;background:color-mix(in
 .brand{display:flex;align-items:center;gap:10px;cursor:pointer;border:0;background:none;color:var(--text);font:inherit}
 .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 4px 14px var(--glow)}
 .mark .ic{width:19px;height:19px}
+.mark-img{width:36px;height:36px;object-fit:contain;border-radius:8px}
 .brand b{font-size:21px;letter-spacing:-.4px;font-weight:800}
 .brand b i{font-style:normal;color:var(--primary)}
 main{max-width:940px;margin:0 auto;padding:24px 20px 60px}
@@ -185,7 +188,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 
 <header>
   <button class="brand" id="brand" aria-label="Início">
-    <span class="mark"><svg class="ic"><use href="#i-layers"/></svg></span>
+    <img class="mark-img" src="logo.png" alt="">
     <b>Study<i>ons</i></b>
   </button>
 </header>
