@@ -158,12 +158,44 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .li{padding:9px 11px;border-radius:10px;background:var(--card);border:1px solid var(--line);margin-bottom:7px;animation:viewIn .45s var(--ease) both}
 .li .q{font-weight:700;font-size:14px}.li .a{font-size:14px;color:var(--muted)}
 .li .u{display:block;font-size:12px;color:var(--bad);text-decoration:line-through;opacity:.85}
+header{justify-content:space-between}
+.userbox{position:relative}
+.avatar{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font:inherit;font-weight:700;display:grid;place-items:center;cursor:pointer;overflow:hidden;padding:0;transition:.2s}
+.avatar:hover{border-color:var(--primary);box-shadow:0 0 0 4px var(--glow)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.umenu{position:absolute;right:0;top:48px;min-width:250px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px;animation:pop .25s var(--ease);z-index:20}
+.umenu .un{font-weight:700}
+.umenu .ue{color:var(--muted);font-size:13px;word-break:break-all}
+.umenu .sync{font-size:12px;color:var(--muted);margin:12px 0;display:flex;align-items:center;gap:7px}
+.umenu .btn{width:100%}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.dot.saving{background:var(--warn)}.dot.err{background:var(--bad)}
+.authbox{max-width:430px;margin:24px auto 0}
+.authlogo{display:flex;justify-content:center;margin-bottom:14px}
+.authlogo img{width:68px;height:68px;object-fit:contain}
+.authbox h1{text-align:center;font-size:26px}
+.authbox .sub{text-align:center;margin-bottom:18px}
+.gbtn{width:100%;background:#fff;color:#1f2937;border-color:#dbe3f1}
+.gbtn:hover{border-color:var(--primary)}
+.gbtn svg{width:20px;height:20px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0 12px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:4px}
+.tabs button{border:0;background:none;padding:9px;border-radius:9px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer;transition:.25s var(--ease)}
+.tabs button.active{background:var(--card);color:var(--primary);box-shadow:0 2px 10px rgba(20,50,110,.14)}
+.linkbtn{background:none;border:0;color:var(--primary);font:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:0}
+.linkbtn:hover{text-decoration:underline}
+.notice{padding:12px 14px;border-radius:12px;border:1px solid var(--warn);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:14px;margin-bottom:14px}
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:14px;border:1px solid var(--primary);background:var(--primary-soft);margin-bottom:20px;font-size:14px}
+.spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--primary);animation:sp .8s linear infinite;margin:120px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
@@ -191,6 +223,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
     <img class="mark-img" src="logo.png" alt="">
     <b>Study<i>ons</i></b>
   </button>
+  <div class="userbox hidden" id="userBox">
+    <button class="avatar" id="uAvatar" aria-label="Conta"></button>
+    <div class="umenu hidden" id="uMenu">
+      <div class="un" id="uName"></div>
+      <div class="ue" id="uEmail"></div>
+      <div class="sync"><span class="dot" id="syncDot"></span><span id="syncTxt">Sincronizado</span></div>
+      <button class="btn bad sm" id="logoutBtn"><svg class="ic"><use href="#i-logout"/></svg> Terminar sessão</button>
+    </div>
+  </div>
 </header>
 
 <main>
@@ -200,9 +241,43 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
   </div>
 
   <!-- ================= INÍCIO ================= -->
-  <section id="vHome" class="view">
-    <h1>Métodos de estudo</h1>
+  <!-- ================= A CARREGAR ================= -->
+  <section id="vLoading" class="view"><div class="spin"></div></section>
+
+  <!-- ================= LOGIN ================= -->
+  <section id="vAuth" class="view hidden">
+    <div class="authbox">
+      <div class="authlogo"><img src="logo.png" alt="Studions"></div>
+      <h1>Entra no Studions</h1>
+      <p class="sub">Os teus baralhos ficam guardados na tua conta e acompanham-te em qualquer aparelho.</p>
+      <div class="panel">
+        <div class="notice hidden" id="aNotice"></div>
+        <button class="btn gbtn" id="aGoogle">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continuar com Google
+        </button>
+        <div class="or">ou com email</div>
+        <div class="tabs"><button id="aTabLogin" class="active">Entrar</button><button id="aTabSignup">Criar conta</button></div>
+        <div id="aNameWrap" class="hidden"><label class="l" for="aName">Nome</label><input id="aName" autocomplete="name" placeholder="Como te chamamos?"></div>
+        <label class="l" for="aEmail">Email</label>
+        <input id="aEmail" type="email" autocomplete="email" placeholder="o.teu@email.com">
+        <label class="l" for="aPass">Palavra-passe</label>
+        <input id="aPass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
+        <div id="aForgotWrap" style="margin-top:8px;text-align:right"><button class="linkbtn" id="aForgot">Esqueci-me da palavra-passe</button></div>
+        <div class="actions"><button class="btn primary" id="aSubmit" style="width:100%">Entrar</button></div>
+        <div class="msg" id="aMsg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INÍCIO ================= -->
+  <section id="vHome" class="view hidden">
+    <h1 id="welcome">Bem-vindo(a)</h1>
     <p class="sub">Escolhe como queres estudar hoje.</p>
+    <div class="banner hidden" id="verifyBanner">
+      <span><svg class="ic"><use href="#i-alert"/></svg> Confirma o teu email através da mensagem que te enviámos.</span>
+      <span style="display:flex;gap:8px"><button class="btn sm" id="vResend">Reenviar email</button><button class="btn sm" id="vDone">Já confirmei</button></span>
+    </div>
     <div class="grid">
       <button class="tile" id="tileFlash">
         <svg class="ic go"><use href="#i-right"/></svg>
@@ -374,6 +449,60 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
   </section>
 </main>
 
+<script>window.cloudReady=new Promise(r=>{window.__cloudResolve=r;});</script>
+<script type="module">
+/* ============================================================
+   CONFIGURAÇÃO DO FIREBASE — cola aqui os teus valores
+   (Firebase Console → Definições do projeto → As tuas apps → Web)
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyD9Lh6_0SuPwrhjzu_iCFeooQ6KYQ8IobM",
+  authDomain: "studyons-c4acf.firebaseapp.com",
+  projectId: "studyons-c4acf",
+  storageBucket: "studyons-c4acf.firebasestorage.app",
+  messagingSenderId: "778488004203",
+  appId: "1:778488004203:web:7dc1ef391b96a9b2d5bb2e"
+};
+
+(async()=>{
+  try{
+    if(!firebaseConfig.apiKey || String(firebaseConfig.apiKey).startsWith('COLE')){ window.__cloudResolve({configured:false}); return; }
+    const B='https://www.gstatic.com/firebasejs/10.12.2/';
+    const [A,Au,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+    const app=A.initializeApp(firebaseConfig);
+    const auth=Au.getAuth(app);
+    let fs;
+    try{ fs=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})}); }
+    catch(e){ fs=F.getFirestore(app); }
+    const ref=uid=>F.doc(fs,'users',uid);
+    let cb=null;
+    const notify=u=>{ if(cb) cb(u); };
+    window.__cloudResolve({
+      configured:true,
+      onAuth(fn){ cb=fn; Au.onAuthStateChanged(auth,fn); },
+      async google(){
+        const p=new Au.GoogleAuthProvider();
+        try{ await Au.signInWithPopup(auth,p); }
+        catch(e){ if(e.code==='auth/popup-blocked') await Au.signInWithRedirect(auth,p); else throw e; }
+      },
+      async signIn(email,pass){ await Au.signInWithEmailAndPassword(auth,email,pass); },
+      async signUp(name,email,pass){
+        const cred=await Au.createUserWithEmailAndPassword(auth,email,pass);
+        await Au.updateProfile(cred.user,{displayName:name});
+        try{ await Au.sendEmailVerification(cred.user); }catch(e){}
+        await cred.user.reload(); notify(auth.currentUser);
+      },
+      async reset(email){ await Au.sendPasswordResetEmail(auth,email); },
+      async resendVerification(){ if(auth.currentUser) await Au.sendEmailVerification(auth.currentUser); },
+      async reloadUser(){ if(auth.currentUser){ await auth.currentUser.reload(); notify(auth.currentUser); } },
+      async signOut(){ await Au.signOut(auth); },
+      async loadData(uid){ const s=await F.getDoc(ref(uid)); return s.exists()?s.data():null; },
+      async saveData(uid,data){ await F.setDoc(ref(uid),JSON.parse(JSON.stringify(data))); },
+      listen(uid,fn){ return F.onSnapshot(ref(uid),s=>{ if(s.metadata.hasPendingWrites||!s.exists()) return; fn(s.data()); }); }
+    });
+  }catch(e){ console.error(e); window.__cloudResolve(null); }
+})();
+</script>
 <script>
 /* ================== Utilitários ================== */
 const $ = id => document.getElementById(id);
@@ -387,35 +516,64 @@ const LANGS = {
   sv:'Sueco', pl:'Polaco', ru:'Russo', uk:'Ucraniano', tr:'Turco', ar:'Árabe', he:'Hebraico',
   hi:'Hindi', ja:'Japonês', ko:'Coreano', zh:'Chinês', la:'Latim', ro:'Romeno', el:'Grego', cs:'Checo'
 };
-const KEY='studions.v1';
-let db;
-function load(){
-  try{ db=JSON.parse(localStorage.getItem(KEY)); }catch(e){ db=null; }
-  if(!db || !db.decks || !db.decks.length){
-    db={decks:[{id:uid(),name:'O meu baralho',cards:[]}],current:null,tgt:'pt'};
-    db.current=db.decks[0].id;
-  }
+const LEGACY_KEY='studions.v1';
+let db=null, user=null, cloud=null, saveTimer=null, unsub=null, pendingRemote=null;
+const userKey=()=>'studions.v2.'+(user?user.uid:'anon');
+function blankDb(){ const d={decks:[{id:uid(),name:'O meu baralho',cards:[]}],current:null,tgt:'pt',updatedAt:0}; d.current=d.decks[0].id; return d; }
+const validDb=d=>d&&Array.isArray(d.decks)&&d.decks.length;
+function readLocal(key){ try{ const d=JSON.parse(localStorage.getItem(key)); return validDb(d)?d:null; }catch(e){ return null; } }
+function fixDb(){ if(!db.decks.find(d=>d.id===db.current)) db.current=db.decks[0].id; if(!db.tgt) db.tgt='pt'; }
+function save(){
+  if(!db||!user) return;
+  db.updatedAt=Date.now();
+  try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
+  setSync('saving');
+  clearTimeout(saveTimer); saveTimer=setTimeout(pushCloud,800);
 }
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){} }
+async function pushCloud(){
+  if(!cloud||!user||!db) return;
+  try{ await cloud.saveData(user.uid,db); setSync('ok'); }catch(e){ setSync('err'); }
+}
+async function loadForUser(){
+  let local=readLocal(userKey()), remote=null;
+  try{ remote=await cloud.loadData(user.uid); }catch(e){}
+  if(!validDb(remote)) remote=null;
+  let imported=false;
+  if(!remote&&!local){ const legacy=readLocal(LEGACY_KEY); if(legacy){ local=legacy; imported=true; } }
+  db = remote&&local ? ((remote.updatedAt||0)>=(local.updatedAt||0)?remote:local) : (remote||local||blankDb());
+  fixDb();
+  if(imported) try{ localStorage.removeItem(LEGACY_KEY); }catch(e){}
+  if(db!==remote) save(); else try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
+}
+function applyRemote(r){
+  if(!validDb(r)||(r.updatedAt||0)<=(db.updatedAt||0)) return;
+  db=r; fixDb();
+  try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
+  fillDeckSelects(); if(current==='cards') renderCards(); if(current==='home') updateHome();
+}
+function listen(){
+  if(unsub) unsub();
+  unsub=cloud.listen(user.uid,r=>{ if(S){ pendingRemote=r; return; } applyRemote(r); });
+}
 const deck = () => db.decks.find(d=>d.id===db.current) || db.decks[0];
 
 /* ================== Navegação ================== */
-const VIEWS={home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const VIEWS={loading:'vLoading',auth:'vAuth',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
 const CRUMBS={hub:'<b>Flashcards</b>',cards:'Flashcards  /  <b>Baralhos e cartas</b>',study:'Flashcards  /  <b>Estudar</b>'};
 const BACK={hub:'home',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
   current=v;
+  if(v!=='study'&&db){ S=null; if(pendingRemote){ const r=pendingRemote; pendingRemote=null; applyRemote(r); } }
   for(const k in VIEWS) $(VIEWS[k]).classList.toggle('hidden',k!==v);
-  $('topbar').classList.toggle('hidden',v==='home');
-  if(v!=='home') $('crumb').innerHTML=CRUMBS[v];
-  if(v==='home'){ $('homeDecks').innerHTML=`${ic('layers')} ${db.decks.length} baralho${db.decks.length!==1?'s':''}`;
-    $('homeCards').innerHTML=`${ic('book')} ${db.decks.reduce((n,d)=>n+d.cards.length,0)} cartas`; }
+  $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading');
+  if(CRUMBS[v]) $('crumb').innerHTML=CRUMBS[v];
+  if(v==='home') updateHome();
   if(v==='cards'){ fillDeckSelects(); renderCards(); }
   if(v==='study'){ fillDeckSelects(); resetStudyUI(); }
   window.scrollTo({top:0});
 }
-$('brand').onclick=()=>go('home');
+$('brand').onclick=()=>{ if(user&&db) go('home'); };
 $('backBtn').onclick=()=>go(BACK[current]);
 $('tileFlash').onclick=()=>go('hub');
 $('tileCards').onclick=()=>go('cards');
@@ -528,7 +686,8 @@ let S=null;
 const radio=n=>document.querySelector(`input[name=${n}]:checked`).value;
 function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function resetStudyUI(){
-  S=null; $('studySetup').classList.remove('hidden'); $('studyRun').classList.add('hidden'); $('studyEnd').classList.add('hidden'); $('setupMsg').textContent='';
+  S=null; if(pendingRemote){ const r=pendingRemote; pendingRemote=null; applyRemote(r); }
+  $('studySetup').classList.remove('hidden'); $('studyRun').classList.add('hidden'); $('studyEnd').classList.add('hidden'); $('setupMsg').textContent='';
 }
 $('backSetup').onclick=resetStudyUI;
 $('quitBtn').onclick=()=>{ if(!S) return; if(!S.log.length) return resetStudyUI(); if(confirm('Terminar a sessão agora?')) finish(); };
@@ -688,10 +847,126 @@ function finish(){
 }
 
 /* ================== Arranque ================== */
-load();
-$('fTgt').value=db.tgt||'pt';
+/* ================== Conta e arranque ================== */
+let authMode='login', entering=false;
+const userName=()=>user.displayName||(user.email?user.email.split('@')[0]:'estudante');
+
+function updateHome(){
+  if(!user||!db) return;
+  $('welcome').textContent='Bem-vindo(a), '+userName();
+  $('homeDecks').innerHTML=`${ic('layers')} ${db.decks.length} baralho${db.decks.length!==1?'s':''}`;
+  $('homeCards').innerHTML=`${ic('book')} ${db.decks.reduce((n,d)=>n+d.cards.length,0)} cartas`;
+  const needs=!user.emailVerified&&(user.providerData||[]).some(p=>p.providerId==='password');
+  $('verifyBanner').classList.toggle('hidden',!needs);
+}
+function renderUser(){
+  const box=$('userBox'); $('uMenu').classList.add('hidden');
+  if(!user){ box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
+  const av=$('uAvatar');
+  if(user.photoURL){ av.innerHTML=`<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">`; }
+  else av.textContent=userName().charAt(0).toUpperCase();
+}
+function setSync(s){
+  const dot=$('syncDot'),t=$('syncTxt'); if(!dot) return;
+  dot.className='dot'+(s==='ok'?'':' '+s);
+  t.textContent=s==='ok'?'Sincronizado':s==='err'?'Erro ao sincronizar':(navigator.onLine?'A guardar…':'Sem ligação — guarda ao voltar a ligar');
+}
+$('uAvatar').onclick=e=>{ e.stopPropagation(); $('uMenu').classList.toggle('hidden'); };
+document.addEventListener('click',e=>{ if(!$('userBox').contains(e.target)) $('uMenu').classList.add('hidden'); });
+$('logoutBtn').onclick=async()=>{
+  $('uMenu').classList.add('hidden'); clearTimeout(saveTimer);
+  try{ await Promise.race([pushCloud(),sleep(1500)]); }catch(e){}
+  try{ await cloud.signOut(); }catch(e){}
+};
+window.addEventListener('pagehide',()=>{ if(saveTimer){ clearTimeout(saveTimer); pushCloud(); } });
+
+/* ---- ecrã de login ---- */
+function authMsg(t,err=true){ const m=$('aMsg'); m.textContent=t||''; m.className='msg'+(err&&t?' err':''); }
+function setAuthMode(m){
+  authMode=m;
+  $('aTabLogin').classList.toggle('active',m==='login'); $('aTabSignup').classList.toggle('active',m==='signup');
+  $('aNameWrap').classList.toggle('hidden',m!=='signup'); $('aForgotWrap').classList.toggle('hidden',m!=='login');
+  $('aSubmit').textContent=m==='login'?'Entrar':'Criar conta';
+  $('aPass').autocomplete=m==='login'?'current-password':'new-password'; authMsg('');
+}
+function friendly(e){
+  const m={
+    'auth/invalid-credential':'Email ou palavra-passe incorretos.','auth/wrong-password':'Email ou palavra-passe incorretos.',
+    'auth/user-not-found':'Não existe nenhuma conta com este email.','auth/email-already-in-use':'Já existe uma conta com este email. Tenta entrar.',
+    'auth/weak-password':'A palavra-passe tem de ter pelo menos 6 caracteres.','auth/invalid-email':'O email não é válido.',
+    'auth/too-many-requests':'Demasiadas tentativas. Espera um pouco e tenta de novo.','auth/network-request-failed':'Sem ligação à internet.',
+    'auth/popup-closed-by-user':'A janela foi fechada antes de concluir o login.','auth/cancelled-popup-request':'',
+    'auth/unauthorized-domain':'Este endereço ainda não está autorizado no Firebase.','auth/operation-not-allowed':'Este método de login não está ativado no Firebase.'
+  };
+  const c=e&&e.code; return c in m ? m[c] : 'Ocorreu um erro.'+(c?' ('+c+')':'');
+}
+function showAuth(notice){
+  const n=$('aNotice'); n.textContent=notice||''; n.classList.toggle('hidden',!notice);
+  $('aPass').value=''; authMsg(''); go('auth');
+}
+$('aTabLogin').onclick=()=>setAuthMode('login');
+$('aTabSignup').onclick=()=>setAuthMode('signup');
+$('aGoogle').onclick=async()=>{
+  if(!cloud||!cloud.configured) return authMsg('O login ainda não está configurado.');
+  authMsg('');
+  try{ await cloud.google(); }catch(e){ authMsg(friendly(e)); }
+};
+async function submitAuth(){
+  if(!cloud||!cloud.configured) return authMsg('O login ainda não está configurado.');
+  const email=$('aEmail').value.trim(), pass=$('aPass').value;
+  if(!email||!pass) return authMsg('Preenche o email e a palavra-passe.');
+  const name=$('aName').value.trim();
+  if(authMode==='signup'&&!name) return authMsg('Escreve o teu nome.');
+  $('aSubmit').disabled=true; authMsg('');
+  try{ if(authMode==='signup') await cloud.signUp(name,email,pass); else await cloud.signIn(email,pass); }
+  catch(e){ authMsg(friendly(e)); }
+  $('aSubmit').disabled=false;
+}
+$('aSubmit').onclick=submitAuth;
+for(const id of ['aEmail','aPass','aName']) $(id).addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submitAuth(); }});
+$('aForgot').onclick=async()=>{
+  if(!cloud||!cloud.configured) return;
+  const email=$('aEmail').value.trim(); if(!email) return authMsg('Escreve primeiro o teu email.');
+  try{ await cloud.reset(email); authMsg('Se existir uma conta com este email, enviámos um link para definir nova palavra-passe (vê também o spam).',false); }
+  catch(e){ authMsg(friendly(e)); }
+};
+$('vResend').onclick=async()=>{
+  const b=$('vResend'); b.disabled=true;
+  try{ await cloud.resendVerification(); b.textContent='Email enviado'; }catch(e){ b.textContent='Tenta mais tarde'; }
+  setTimeout(()=>{ b.disabled=false; b.textContent='Reenviar email'; },30000);
+};
+$('vDone').onclick=async()=>{
+  try{ await cloud.reloadUser(); }catch(e){}
+  if(user&&!user.emailVerified){ $('vDone').textContent='Ainda não confirmado'; setTimeout(()=>$('vDone').textContent='Já confirmei',3000); }
+};
+
+/* ---- estado de autenticação ---- */
+async function onUser(u){
+  if(u&&user&&u.uid===user.uid){ user=u; renderUser(); updateHome(); return; }
+  if(u){
+    if(entering) return; entering=true;
+    user=u; go('loading');
+    try{ await loadForUser(); }catch(e){ db=readLocal(userKey())||blankDb(); }
+    $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
+    renderUser(); listen(); go('home');
+    entering=false;
+  }else{
+    if(unsub){ unsub(); unsub=null; }
+    clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null;
+    renderUser(); showAuth();
+  }
+}
+async function boot(){
+  go('loading');
+  cloud=await Promise.race([window.cloudReady,sleep(12000).then(()=>null)]);
+  if(!cloud) return showAuth('Não foi possível carregar o serviço de login. Verifica a ligação à internet e recarrega a página.');
+  if(!cloud.configured) return showAuth('O login ainda não está configurado: falta colar a configuração do Firebase no ficheiro.');
+  cloud.onAuth(onUser);
+}
 setSaveLabel();
-go('home');
+boot();
 </script>
 </body>
 </html>
