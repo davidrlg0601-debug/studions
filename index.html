@@ -15,10 +15,14 @@
   --ease:cubic-bezier(.2,.7,.2,1);
 }
 @media (prefers-color-scheme:dark){
-  :root{--bg:#080f20; --bg2:#0d1a3a; --card:#0f1932; --text:#e7eeff; --muted:#8fa1c8; --line:#1d2c54;
+  :root:not([data-theme="light"]){color-scheme:dark;--bg:#080f20; --bg2:#0d1a3a; --card:#0f1932; --text:#e7eeff; --muted:#8fa1c8; --line:#1d2c54;
     --primary:#4f8cff; --primary-d:#3a76ec; --primary-soft:#14264f; --glow:rgba(79,140,255,.35);
     --ok:#2fd39b; --warn:#f2b43a; --bad:#ff6b78; --shadow:0 10px 34px rgba(0,0,0,.45);}
 }
+:root[data-theme="dark"]{color-scheme:dark;--bg:#080f20; --bg2:#0d1a3a; --card:#0f1932; --text:#e7eeff; --muted:#8fa1c8; --line:#1d2c54;
+    --primary:#4f8cff; --primary-d:#3a76ec; --primary-soft:#14264f; --glow:rgba(79,140,255,.35);
+    --ok:#2fd39b; --warn:#f2b43a; --bad:#ff6b78; --shadow:0 10px 34px rgba(0,0,0,.45);}
+:root[data-theme="light"]{color-scheme:light}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45;
@@ -189,6 +193,13 @@ header{justify-content:space-between}
 .banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:14px;border:1px solid var(--primary);background:var(--primary-soft);margin-bottom:20px;font-size:14px}
 .spin{width:36px;height:36px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--primary);animation:sp .8s linear infinite;margin:120px auto}
 @keyframes sp{to{transform:rotate(360deg)}}
+.profhead{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.bigav{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:grid;place-items:center;font-size:34px;font-weight:800;overflow:hidden;flex:none;border:3px solid var(--line)}
+.bigav img{width:100%;height:100%;object-fit:cover}
+.panel.danger{border-color:var(--bad)}.panel.danger h2{color:var(--bad)}
+.note2{font-size:13px;color:var(--muted);margin:0 0 10px}
+.sec h3{margin:0 0 6px;font-size:15px}
+.sep{border:0;border-top:1px solid var(--line);margin:22px 0}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -196,6 +207,13 @@ header{justify-content:space-between}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
@@ -229,6 +247,7 @@ header{justify-content:space-between}
       <div class="un" id="uName"></div>
       <div class="ue" id="uEmail"></div>
       <div class="sync"><span class="dot" id="syncDot"></span><span id="syncTxt">Sincronizado</span></div>
+      <button class="btn sm" id="profBtn" style="margin-bottom:8px"><svg class="ic"><use href="#i-user"/></svg> Perfil e definições</button>
       <button class="btn sm" id="setPassBtn" style="margin-bottom:8px"><svg class="ic"><use href="#i-pen"/></svg> Definir palavra-passe</button>
       <button class="btn bad sm" id="logoutBtn"><svg class="ic"><use href="#i-logout"/></svg> Terminar sessão</button>
     </div>
@@ -272,6 +291,110 @@ header{justify-content:space-between}
   </section>
 
   <!-- ================= INÍCIO ================= -->
+  <!-- ================= BARALHO PARTILHADO ================= -->
+  <section id="vShare" class="view hidden">
+    <div class="authbox" style="max-width:640px">
+      <div id="shLoad" class="spin"></div>
+      <div id="shErr" class="panel hidden">
+        <h2><svg class="ic"><use href="#i-alert"/></svg> Não foi possível abrir</h2>
+        <p class="note2" id="shErrTxt"></p>
+        <button class="btn primary" id="shHome">Ir para o início</button>
+      </div>
+      <div id="shBody" class="panel hidden">
+        <h2><svg class="ic"><use href="#i-share"/></svg> Baralho partilhado contigo</h2>
+        <div style="font-size:26px;font-weight:800;letter-spacing:-.5px;word-break:break-word" id="shName"></div>
+        <p class="hint" id="shBy" style="margin:4px 0 10px"></p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip" id="shType"></span><span class="chip" id="shCount"></span></div>
+        <div id="shList" class="list" style="margin-top:16px"></div>
+        <div class="actions"><button class="btn primary" id="shAdd"><svg class="ic"><use href="#i-plus"/></svg> Adicionar aos meus baralhos</button><button class="btn" id="shNo">Agora não</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PERFIL ================= -->
+  <section id="vProfile" class="view hidden">
+    <h1>Perfil e definições</h1>
+    <p class="sub">Gere a tua conta, a aparência e a segurança.</p>
+
+    <div class="panel">
+      <h2><svg class="ic"><use href="#i-user"/></svg> Perfil</h2>
+      <div class="profhead">
+        <div class="bigav" id="pfAvatar"></div>
+        <div>
+          <div class="actions" style="margin-top:0">
+            <button class="btn" id="pfPhotoBtn"><svg class="ic"><use href="#i-camera"/></svg> Alterar foto</button>
+            <button class="btn bad sm hidden" id="pfRemovePhoto">Remover</button>
+          </div>
+          <input type="file" id="pfFile" accept="image/*" class="hidden">
+          <div class="hint" style="margin-top:8px">A foto é reduzida e guardada na tua conta.</div>
+        </div>
+      </div>
+      <label class="l" for="pfName">Nome</label>
+      <div class="row" style="align-items:center;flex-wrap:nowrap">
+        <input id="pfName" maxlength="40" autocomplete="name" style="min-width:0">
+        <button class="btn primary" id="pfNameSave" style="flex:none;min-width:0">Guardar</button>
+      </div>
+      <label class="l">Email</label>
+      <div id="pfEmail" class="hint"></div>
+      <div class="msg" id="pfMsg"></div>
+    </div>
+
+    <div class="panel">
+      <h2><svg class="ic"><use href="#i-sun"/></svg> Aparência</h2>
+      <div class="seg">
+        <label><input type="radio" name="theme" value="auto" checked><span><svg class="ic"><use href="#i-grid"/></svg>Automático<small>Segue o aparelho</small></span></label>
+        <label><input type="radio" name="theme" value="light"><span><svg class="ic"><use href="#i-sun"/></svg>Claro</span></label>
+        <label><input type="radio" name="theme" value="dark"><span><svg class="ic"><use href="#i-moon"/></svg>Escuro</span></label>
+      </div>
+    </div>
+
+    <div class="panel sec">
+      <h2><svg class="ic"><use href="#i-lock"/></svg> Segurança</h2>
+      <h3>Palavra-passe</h3>
+      <div id="pfPassForm">
+        <label class="l" for="ppCur">Palavra-passe atual</label>
+        <input id="ppCur" type="password" autocomplete="current-password">
+        <div class="row">
+          <div><label class="l" for="ppNew">Nova palavra-passe</label><input id="ppNew" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
+          <div><label class="l" for="ppNew2">Repetir nova</label><input id="ppNew2" type="password" autocomplete="new-password"></div>
+        </div>
+        <div class="actions"><button class="btn primary" id="ppSubmit">Alterar palavra-passe</button></div>
+        <div class="msg" id="ppMsg"></div>
+      </div>
+      <div id="pfPassNone" class="hidden">
+        <p class="note2">Entraste com o Google e ainda não tens palavra-passe.</p>
+        <button class="btn" id="pfSetPass">Definir palavra-passe</button>
+      </div>
+      <hr class="sep">
+      <h3>Email</h3>
+      <div id="pfEmailForm" class="hidden">
+        <label class="l" for="peNew">Novo email</label>
+        <input id="peNew" type="email" autocomplete="email" placeholder="novo@email.com">
+        <label class="l" for="pePass">Palavra-passe atual</label>
+        <input id="pePass" type="password" autocomplete="current-password">
+        <div class="actions"><button class="btn primary" id="peSubmit">Alterar email</button></div>
+        <div class="msg" id="peMsg"></div>
+      </div>
+      <p id="pfEmailNote" class="note2 hidden"></p>
+    </div>
+
+    <div class="panel danger">
+      <h2><svg class="ic"><use href="#i-trash"/></svg> Eliminar conta</h2>
+      <p class="note2">Apaga de forma permanente a tua conta e todos os teus baralhos e cartas. Não é possível recuperar.</p>
+      <button class="btn bad" id="delOpen">Eliminar a minha conta…</button>
+      <div id="delBox" class="hidden">
+        <label class="l" for="dConfirm">Escreve <b>ELIMINAR</b> para confirmar</label>
+        <input id="dConfirm" autocomplete="off" placeholder="ELIMINAR">
+        <div id="dPassWrap"><label class="l" for="dPass">Palavra-passe</label><input id="dPass" type="password" autocomplete="current-password"></div>
+        <div class="actions">
+          <button class="btn bad" id="delBtn" disabled><svg class="ic"><use href="#i-trash"/></svg> Eliminar definitivamente</button>
+          <button class="btn" id="delCancel">Cancelar</button>
+        </div>
+        <div class="msg" id="dMsg"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= CRIAR PALAVRA-PASSE ================= -->
   <section id="vSetPass" class="view hidden">
     <div class="authbox">
@@ -367,8 +490,24 @@ header{justify-content:space-between}
         </div>
         <button class="btn" id="newDeck"><svg class="ic"><use href="#i-plus"/></svg> Novo</button>
         <button class="btn" id="renameDeck"><svg class="ic"><use href="#i-pen"/></svg> Renomear</button>
+        <button class="btn" id="shareDeck"><svg class="ic"><use href="#i-share"/></svg> Partilhar</button>
         <button class="btn bad" id="delDeck"><svg class="ic"><use href="#i-trash"/></svg> Apagar</button>
       </div>
+    </div>
+
+    <div class="panel hidden" id="shareBox">
+      <h2><svg class="ic"><use href="#i-share"/></svg> Partilhar baralho</h2>
+      <p class="note2">Quem tiver este link e uma conta no Studions pode ver o baralho e adicionar uma cópia aos seus. As alterações que fizeres depois só chegam a quem abrir o link se carregares em "Atualizar conteúdo".</p>
+      <div class="row" style="flex-wrap:nowrap;align-items:center">
+        <input id="shLink" readonly style="min-width:0">
+        <button class="btn primary" id="shCopy" style="flex:none;min-width:0"><svg class="ic"><use href="#i-copy"/></svg> Copiar</button>
+      </div>
+      <div class="actions">
+        <button class="btn hidden" id="shNative"><svg class="ic"><use href="#i-share"/></svg> Partilhar…</button>
+        <button class="btn" id="shUpdate"><svg class="ic"><use href="#i-repeat"/></svg> Atualizar conteúdo</button>
+        <button class="btn bad" id="shStop">Parar de partilhar</button>
+      </div>
+      <div class="msg" id="shMsg"></div>
     </div>
 
     <div class="panel">
@@ -534,6 +673,18 @@ const firebaseConfig = {
         try{ await Au.sendEmailVerification(cred.user); }catch(e){}
         await cred.user.reload(); notify(auth.currentUser);
       },
+      async shareDeck(id,data){ await F.setDoc(F.doc(fs,'shared',id),data); },
+      async getShared(id){ const s=await F.getDoc(F.doc(fs,'shared',id)); return s.exists()?s.data():null; },
+      async unshare(id){ await F.deleteDoc(F.doc(fs,'shared',id)); },
+      async updateName(name){ await Au.updateProfile(auth.currentUser,{displayName:name}); await auth.currentUser.reload(); notify(auth.currentUser); },
+      async reauth(pass){
+        const u=auth.currentUser;
+        if(pass) await Au.reauthenticateWithCredential(u,Au.EmailAuthProvider.credential(u.email,pass));
+        else await Au.reauthenticateWithPopup(u,new Au.GoogleAuthProvider());
+      },
+      async changePassword(p){ await Au.updatePassword(auth.currentUser,p); },
+      async changeEmail(e){ await Au.verifyBeforeUpdateEmail(auth.currentUser,e); },
+      async deleteAccount(uid){ await F.deleteDoc(ref(uid)); await Au.deleteUser(auth.currentUser); },
       async linkPassword(pass){
         const u=auth.currentUser; if(!u||!u.email) throw {code:'auth/no-email'};
         await Au.linkWithCredential(u,Au.EmailAuthProvider.credential(u.email,pass));
@@ -557,6 +708,14 @@ const ic = (n,extra='') => `<svg class="ic ${extra}"><use href="#i-${n}"/></svg>
 function esc(s){ const d=document.createElement('div'); d.textContent=s??''; return d.innerHTML; }
 function uid(){ return Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
+function applyTheme(t){ const r=document.documentElement; if(t==='light'||t==='dark') r.setAttribute('data-theme',t); else r.removeAttribute('data-theme'); }
+try{ applyTheme(localStorage.getItem('studions.theme')||'auto'); }catch(e){}
+let pendingShare=null;
+try{
+  const q=new URLSearchParams(location.search).get('d');
+  if(q&&/^[A-Za-z0-9_-]{10,40}$/.test(q)){ sessionStorage.setItem('studions.pendingShare',q); history.replaceState(null,'',location.pathname); }
+  const p=sessionStorage.getItem('studions.pendingShare'); if(p&&/^[A-Za-z0-9_-]{10,40}$/.test(p)) pendingShare=p;
+}catch(e){}
 
 const LANGS = {
   pt:'Português', en:'Inglês', es:'Espanhol', fr:'Francês', de:'Alemão', it:'Italiano', nl:'Neerlandês',
@@ -564,6 +723,7 @@ const LANGS = {
   hi:'Hindi', ja:'Japonês', ko:'Coreano', zh:'Chinês', la:'Latim', ro:'Romeno', el:'Grego', cs:'Checo'
 };
 const LEGACY_KEY='studions.v1';
+let deleting=false, goneMsg='';
 let db=null, user=null, cloud=null, saveTimer=null, unsub=null, pendingRemote=null;
 const userKey=()=>'studions.v2.'+(user?user.uid:'anon');
 function blankDb(){ const d={decks:[{id:uid(),name:'O meu baralho',cards:[],type:'lang'}],current:null,tgt:'pt',updatedAt:0}; d.current=d.decks[0].id; return d; }
@@ -571,14 +731,14 @@ const validDb=d=>d&&Array.isArray(d.decks)&&d.decks.length;
 function readLocal(key){ try{ const d=JSON.parse(localStorage.getItem(key)); return validDb(d)?d:null; }catch(e){ return null; } }
 function fixDb(){ db.decks.forEach(d=>{ if(!d.type) d.type='lang'; }); if(!db.decks.find(d=>d.id===db.current)) db.current=db.decks[0].id; if(!db.tgt) db.tgt='pt'; }
 function save(){
-  if(!db||!user) return;
+  if(!db||!user||deleting) return;
   db.updatedAt=Date.now();
   try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
   setSync('saving');
   clearTimeout(saveTimer); saveTimer=setTimeout(pushCloud,800);
 }
 async function pushCloud(){
-  if(!cloud||!user||!db) return;
+  if(!cloud||!user||!db||deleting) return;
   try{ await cloud.saveData(user.uid,db); setSync('ok'); }catch(e){ setSync('err'); }
 }
 async function loadForUser(){
@@ -594,7 +754,7 @@ async function loadForUser(){
 }
 function applyRemote(r){
   if(!validDb(r)||(r.updatedAt||0)<=(db.updatedAt||0)) return;
-  db=r; fixDb();
+  db=r; fixDb(); applyTheme(db.theme||'auto'); renderUser();
   try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
   fillDeckSelects(); if(current==='cards') renderCards(); if(current==='home') updateHome();
 }
@@ -611,10 +771,10 @@ function ensureTypeDeck(){
 }
 
 /* ================== Navegação ================== */
-const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',profile:'vProfile',share:'vShare',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
 const TYPE_LABEL={lang:'Línguas',other:'Outros'};
-const crumbOf=v=>({cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
-const BACK={cat:'home',hub:'cat',cards:'hub',study:'hub'};
+const crumbOf=v=>({share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
+const BACK={share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
   current=v;
@@ -623,6 +783,7 @@ function go(v){
   $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading'||v==='setpass');
   if(crumbOf(v)) $('crumb').innerHTML=crumbOf(v);
   if(v==='home') updateHome();
+  if(v==='profile') renderProfile();
   if(v==='cat') updateCat();
   if(v==='hub') applyHub();
   if(v==='cards'){ applyTypeUI(); fillDeckSelects(); renderCards(); }
@@ -677,6 +838,7 @@ $('renameDeck').onclick=()=>{
 $('delDeck').onclick=()=>{
   if(decksOf().length===1){ alert('Tem de existir pelo menos um baralho nesta categoria.'); return; }
   if(!confirm(`Apagar o baralho "${deck().name}" e todas as suas cartas?`)) return;
+  { const dd=deck(); if(dd.shareId&&cloud) cloud.unshare(dd.shareId).catch(()=>{}); }
   db.decks=db.decks.filter(d=>d.id!==db.current); db.current=decksOf()[0].id; save(); fillDeckSelects(); renderCards();
 };
 
@@ -735,6 +897,7 @@ $('cancelEdit').onclick=()=>{ cancelEdit(); msg(''); };
 for(const id of ['fFront','fBack']) $(id).addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); saveCard(); }});
 
 function renderCards(){
+  if(shareBoxDeck!==deck().id) $('shareBox').classList.add('hidden');
   const cs=deck().cards, list=$('cardList');
   $('cardCount').textContent=`· ${cs.length}`;
   list.innerHTML=cs.length?'':'<div class="empty">Ainda não há cartas neste baralho.</div>';
@@ -937,14 +1100,19 @@ function updateHome(){
   const needs=!user.emailVerified&&(user.providerData||[]).some(p=>p.providerId==='password');
   $('verifyBanner').classList.toggle('hidden',!needs);
 }
+const photoSrc=()=>(db&&db.photo)||(user&&user.photoURL)||'';
+function paintAvatar(el){
+  const p=photoSrc();
+  if(p) el.innerHTML=`<img src="${esc(p)}" alt="" referrerpolicy="no-referrer">`;
+  else el.textContent=userName().charAt(0).toUpperCase();
+}
 function renderUser(){
   const box=$('userBox'); $('uMenu').classList.add('hidden');
   if(!user){ box.classList.add('hidden'); return; }
   box.classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
   $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
   const av=$('uAvatar');
-  if(user.photoURL){ av.innerHTML=`<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">`; }
-  else av.textContent=userName().charAt(0).toUpperCase();
+  paintAvatar(av);
 }
 function setSync(s){
   const dot=$('syncDot'),t=$('syncTxt'); if(!dot) return;
@@ -976,7 +1144,7 @@ function friendly(e){
     'auth/weak-password':'A palavra-passe tem de ter pelo menos 6 caracteres.','auth/invalid-email':'O email não é válido.',
     'auth/too-many-requests':'Demasiadas tentativas. Espera um pouco e tenta de novo.','auth/network-request-failed':'Sem ligação à internet.',
     'auth/popup-closed-by-user':'A janela foi fechada antes de concluir o login.','auth/cancelled-popup-request':'',
-    'auth/unauthorized-domain':'Este endereço ainda não está autorizado no Firebase.','auth/operation-not-allowed':'Este método de login não está ativado no Firebase.'
+    'auth/requires-recent-login':'Por segurança, volta a introduzir as tuas credenciais.','auth/popup-blocked':'O navegador bloqueou a janela do Google. Permite pop-ups e tenta de novo.','auth/credential-already-in-use':'Esse email já está a ser usado por outra conta.','auth/unauthorized-domain':'Este endereço ainda não está autorizado no Firebase.','auth/operation-not-allowed':'Este método de login não está ativado no Firebase.'
   };
   const c=e&&e.code; return c in m ? m[c] : 'Ocorreu um erro.'+(c?' ('+c+')':'');
 }
@@ -1042,6 +1210,172 @@ $('spPass2').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefau
 $('spSkip').onclick=()=>{ try{ localStorage.setItem(skipKey(),'1'); }catch(e){} go('home'); };
 $('setPassBtn').onclick=()=>{ $('uMenu').classList.add('hidden'); goSetPass(); };
 
+/* ---- perfil e definições ---- */
+const pmsg=(id,t,err=true)=>{ const m=$(id); m.textContent=t||''; m.className='msg'+(err&&t?' err':''); };
+const reauthErr=e=>['auth/invalid-credential','auth/wrong-password'].includes(e&&e.code)?'Palavra-passe atual incorreta.':friendly(e);
+function renderProfile(){
+  if(!user||!db) return;
+  paintAvatar($('pfAvatar'));
+  $('pfName').value=user.displayName||''; $('pfEmail').textContent=user.email||'';
+  $('pfRemovePhoto').classList.toggle('hidden',!db.photo);
+  const r=document.querySelector(`input[name=theme][value=${db.theme||'auto'}]`); if(r) r.checked=true;
+  const pw=hasPassword(), g=isGoogle();
+  $('pfPassForm').classList.toggle('hidden',!pw); $('pfPassNone').classList.toggle('hidden',pw);
+  $('pfEmailForm').classList.toggle('hidden',!(pw&&!g)); $('pfEmailNote').classList.toggle('hidden',pw&&!g);
+  $('pfEmailNote').textContent=g?'O teu email vem da conta Google, por isso não pode ser alterado aqui.':'Define primeiro uma palavra-passe para poderes alterar o email.';
+  $('dPassWrap').classList.toggle('hidden',!pw);
+  ['pfMsg','ppMsg','peMsg','dMsg'].forEach(i=>pmsg(i,''));
+  ['ppCur','ppNew','ppNew2','peNew','pePass','dConfirm','dPass'].forEach(i=>$(i).value='');
+  $('delBtn').disabled=true; $('delBox').classList.add('hidden'); $('delOpen').classList.remove('hidden');
+}
+function fileToAvatar(file){
+  return new Promise((res,rej)=>{
+    const img=new Image(), url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const s=256,c=document.createElement('canvas'); c.width=c.height=s;
+      const m=Math.min(img.width,img.height);
+      c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,s,s);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',.85));
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); rej(new Error('imagem')); };
+    img.src=url;
+  });
+}
+$('profBtn').onclick=()=>{ $('uMenu').classList.add('hidden'); go('profile'); };
+$('pfSetPass').onclick=()=>goSetPass();
+$('pfPhotoBtn').onclick=()=>$('pfFile').click();
+$('pfFile').onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  if(!f.type||!f.type.startsWith('image/')) return pmsg('pfMsg','Escolhe um ficheiro de imagem.');
+  try{ db.photo=await fileToAvatar(f); save(); renderUser(); renderProfile(); pmsg('pfMsg','Foto atualizada.',false); }
+  catch(err){ pmsg('pfMsg','Não foi possível usar essa imagem.'); }
+};
+$('pfRemovePhoto').onclick=()=>{ delete db.photo; save(); renderUser(); renderProfile(); pmsg('pfMsg','Foto removida.',false); };
+$('pfNameSave').onclick=async()=>{
+  const n=$('pfName').value.trim(); if(!n) return pmsg('pfMsg','Escreve um nome.');
+  try{ await cloud.updateName(n); pmsg('pfMsg','Nome atualizado.',false); }catch(e){ pmsg('pfMsg',friendly(e)); }
+};
+document.querySelectorAll('input[name=theme]').forEach(r=>r.onchange=()=>{
+  db.theme=r.value; try{ localStorage.setItem('studions.theme',r.value); }catch(e){}
+  applyTheme(r.value); save();
+});
+$('ppSubmit').onclick=async()=>{
+  const c=$('ppCur').value,n=$('ppNew').value,n2=$('ppNew2').value;
+  if(!c) return pmsg('ppMsg','Escreve a palavra-passe atual.');
+  if(n.length<6) return pmsg('ppMsg','A nova palavra-passe tem de ter pelo menos 6 caracteres.');
+  if(n!==n2) return pmsg('ppMsg','As palavras-passe novas não coincidem.');
+  if(n===c) return pmsg('ppMsg','A nova palavra-passe tem de ser diferente da atual.');
+  $('ppSubmit').disabled=true; pmsg('ppMsg','');
+  try{ await cloud.reauth(c); await cloud.changePassword(n); ['ppCur','ppNew','ppNew2'].forEach(i=>$(i).value=''); pmsg('ppMsg','Palavra-passe alterada.',false); }
+  catch(e){ pmsg('ppMsg',reauthErr(e)); }
+  $('ppSubmit').disabled=false;
+};
+$('peSubmit').onclick=async()=>{
+  const ne=$('peNew').value.trim(),p=$('pePass').value;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ne)) return pmsg('peMsg','O email não é válido.');
+  if(ne.toLowerCase()===(user.email||'').toLowerCase()) return pmsg('peMsg','Esse já é o teu email.');
+  if(!p) return pmsg('peMsg','Escreve a palavra-passe atual.');
+  $('peSubmit').disabled=true; pmsg('peMsg','');
+  try{ await cloud.reauth(p); await cloud.changeEmail(ne); $('peNew').value=''; $('pePass').value=''; pmsg('peMsg','Enviámos um link de confirmação para '+ne+'. O email só muda depois de clicares nele (vê também o spam).',false); }
+  catch(e){ pmsg('peMsg',reauthErr(e)); }
+  $('peSubmit').disabled=false;
+};
+/* eliminar conta */
+$('delOpen').onclick=()=>{ $('delBox').classList.remove('hidden'); $('delOpen').classList.add('hidden'); $('dConfirm').focus(); };
+$('delCancel').onclick=()=>{ $('delBox').classList.add('hidden'); $('delOpen').classList.remove('hidden'); $('dConfirm').value=''; $('dPass').value=''; $('delBtn').disabled=true; pmsg('dMsg',''); };
+$('dConfirm').addEventListener('input',()=>{ $('delBtn').disabled=$('dConfirm').value.trim().toUpperCase()!=='ELIMINAR'; });
+$('delBtn').onclick=async()=>{
+  if($('dConfirm').value.trim().toUpperCase()!=='ELIMINAR') return;
+  const pw=hasPassword(); if(pw&&!$('dPass').value) return pmsg('dMsg','Escreve a tua palavra-passe.');
+  $('delBtn').disabled=true; pmsg('dMsg','');
+  try{ await cloud.reauth(pw?$('dPass').value:null); }
+  catch(e){ pmsg('dMsg',reauthErr(e)); $('delBtn').disabled=false; return; }
+  for(const dd of db.decks){ if(dd.shareId){ try{ await cloud.unshare(dd.shareId); }catch(e){} } }
+  const id=user.uid; deleting=true; clearTimeout(saveTimer); saveTimer=null; if(unsub){ unsub(); unsub=null; }
+  goneMsg='A tua conta e todos os teus dados foram eliminados.';
+  try{ await cloud.deleteAccount(id); }
+  catch(e){ deleting=false; goneMsg=''; listen(); pmsg('dMsg',friendly(e)); $('delBtn').disabled=false; return; }
+  try{ localStorage.removeItem('studions.v2.'+id); localStorage.removeItem('studions.skippass.'+id); }catch(e){}
+};
+
+/* ---- partilha de baralhos ---- */
+let shareBoxDeck=null, sharedData=null;
+const smsg=(t,err=true)=>pmsg('shMsg',t,err);
+const shareUrl=id=>location.origin+location.pathname+'?d='+id;
+function newShareId(){ const a=new Uint8Array(15); crypto.getRandomValues(a); return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function snapshot(d){
+  return {ownerUid:user.uid,ownerName:userName(),name:d.name,type:d.type||'lang',updatedAt:Date.now(),
+    cards:d.cards.map(c=>({front:c.front,back:c.back,notes:c.notes||'',srcLang:c.srcLang||'',tgtLang:c.tgtLang||''}))};
+}
+function showShare(){
+  const d=deck(); shareBoxDeck=d.id;
+  $('shareBox').classList.remove('hidden');
+  $('shLink').value=d.shareId?shareUrl(d.shareId):'';
+  $('shNative').classList.toggle('hidden',!navigator.share||!d.shareId);
+  ['shCopy','shUpdate','shStop'].forEach(i=>$(i).disabled=!d.shareId);
+}
+$('shareDeck').onclick=async()=>{
+  const d=deck();
+  if(!d.cards.length){ showShare(); return smsg('Adiciona cartas ao baralho antes de o partilhar.'); }
+  showShare(); smsg('');
+  if(!d.shareId){
+    const id=newShareId(); smsg('A criar link…',false);
+    try{ await cloud.shareDeck(id,snapshot(d)); d.shareId=id; save(); showShare(); smsg('Link criado. Copia-o e envia a quem quiseres.',false); }
+    catch(e){ smsg(e&&e.code==='permission-denied'?'Sem permissão: falta atualizar as regras do Firestore para permitir partilhas.':friendly(e)); }
+  }
+};
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){ try{ $('shLink').select(); return document.execCommand('copy'); }catch(e2){ return false; } }
+}
+$('shCopy').onclick=async()=>{ const ok=await copyText($('shLink').value); smsg(ok?'Link copiado.':'Seleciona o link e copia-o manualmente.',!ok); };
+$('shNative').onclick=()=>{ const d=deck(); if(d.shareId&&navigator.share) navigator.share({title:'Studions — '+d.name,text:'Baralho "'+d.name+'" no Studions',url:shareUrl(d.shareId)}).catch(()=>{}); };
+$('shUpdate').onclick=async()=>{
+  const d=deck(); if(!d.shareId) return;
+  if(!d.cards.length) return smsg('O baralho está vazio. Adiciona cartas ou pára de partilhar.');
+  try{ await cloud.shareDeck(d.shareId,snapshot(d)); smsg('Conteúdo atualizado. O link é o mesmo.',false); }catch(e){ smsg(friendly(e)); }
+};
+$('shStop').onclick=async()=>{
+  const d=deck(); if(!d.shareId) return;
+  if(!confirm('Parar de partilhar? O link deixa de funcionar. Quem já adicionou uma cópia mantém-na.')) return;
+  try{ await cloud.unshare(d.shareId); delete d.shareId; save(); showShare(); smsg('Partilha terminada.',false); }catch(e){ smsg(friendly(e)); }
+};
+
+/* abrir um baralho partilhado */
+const clip=(s,n)=>String(s==null?'':s).slice(0,n);
+async function openShare(){
+  const id=pendingShare; pendingShare=null; try{ sessionStorage.removeItem('studions.pendingShare'); }catch(e){}
+  sharedData=null; go('share');
+  $('shLoad').classList.remove('hidden'); $('shBody').classList.add('hidden'); $('shErr').classList.add('hidden');
+  try{
+    const d=await cloud.getShared(id); if(!d||!Array.isArray(d.cards)||!d.cards.length) throw new Error('vazio');
+    sharedData={name:clip(d.name,60)||'Baralho partilhado',type:d.type==='other'?'other':'lang',owner:clip(d.ownerName,40),mine:d.ownerUid===user.uid,
+      cards:d.cards.slice(0,2000).map(c=>({front:clip(c.front,500),back:clip(c.back,500),notes:clip(c.notes,1000),srcLang:clip(c.srcLang,8),tgtLang:clip(c.tgtLang,8)})).filter(c=>c.front&&c.back)};
+    renderShare();
+  }catch(e){
+    $('shLoad').classList.add('hidden'); $('shErr').classList.remove('hidden');
+    $('shErrTxt').textContent='O link pode estar incorreto ou o dono terminou a partilha.';
+  }
+}
+function renderShare(){
+  const s=sharedData; $('shLoad').classList.add('hidden'); $('shBody').classList.remove('hidden');
+  $('shName').textContent=s.name;
+  $('shBy').textContent=s.mine?'Este baralho é teu. Podes adicionar uma cópia.':(s.owner?'Partilhado por '+s.owner:'');
+  $('shType').innerHTML=ic(s.type==='lang'?'globe':'grid')+' '+TYPE_LABEL[s.type];
+  $('shCount').innerHTML=ic('layers')+' '+s.cards.length+' carta'+(s.cards.length!==1?'s':'');
+  const l=$('shList'); l.innerHTML='';
+  s.cards.slice(0,8).forEach((c,i)=>{ const el=document.createElement('div'); el.className='item'; el.style.animationDelay=i*40+'ms';
+    el.innerHTML=`<div><div class="t">${esc(c.front)}</div><div class="s">${esc(c.back)}</div></div>`; l.appendChild(el); });
+  if(s.cards.length>8){ const m=document.createElement('div'); m.className='hint'; m.style.textAlign='center'; m.textContent='… e mais '+(s.cards.length-8); l.appendChild(m); }
+}
+$('shAdd').onclick=()=>{
+  const s=sharedData; if(!s) return;
+  const d={id:uid(),name:s.name,type:s.type,cards:s.cards.map(c=>({id:uid(),...c,ok:0,bad:0}))};
+  db.decks.push(d); db.current=d.id; fcType=d.type; save(); sharedData=null; go('hub');
+};
+$('shNo').onclick=()=>{ sharedData=null; go('home'); };
+$('shHome').onclick=()=>go('home');
+
 /* ---- estado de autenticação ---- */
 async function onUser(u){
   if(u&&user&&u.uid===user.uid){ user=u; renderUser(); updateHome(); return; }
@@ -1050,12 +1384,14 @@ async function onUser(u){
     user=u; go('loading');
     try{ await loadForUser(); }catch(e){ db=readLocal(userKey())||blankDb(); }
     $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
-    renderUser(); listen(); if(needsPassword()) goSetPass(); else go('home');
+    if(!db.theme){ try{ db.theme=localStorage.getItem('studions.theme')||'auto'; }catch(e){ db.theme='auto'; } }
+    applyTheme(db.theme);
+    renderUser(); listen(); if(pendingShare) openShare(); else if(needsPassword()) goSetPass(); else go('home');
     entering=false;
   }else{
     if(unsub){ unsub(); unsub=null; }
-    clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null;
-    renderUser(); showAuth();
+    clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null; deleting=false;
+    renderUser(); showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
   }
 }
 async function boot(){
