@@ -200,6 +200,13 @@ header{justify-content:space-between}
 .note2{font-size:13px;color:var(--muted);margin:0 0 10px}
 .sec h3{margin:0 0 6px;font-size:15px}
 .sep{border:0;border-top:1px solid var(--line);margin:22px 0}
+.hright{display:flex;align-items:center;gap:12px}
+.iconbtn{position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--text);display:grid;place-items:center;cursor:pointer;padding:0;transition:.2s}
+.iconbtn:hover{border-color:var(--primary);color:var(--primary);box-shadow:0 0 0 4px var(--glow)}
+.badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:99px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px;animation:pop .3s var(--ease)}
+.codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(26px,6vw,36px);font-weight:800;letter-spacing:4px;color:var(--primary);text-align:center;padding:16px;border-radius:14px;background:var(--primary-soft);border:1px dashed var(--primary);word-break:break-all}
+.tabs.three{grid-template-columns:repeat(3,1fr)}
+.item .s b{color:var(--text)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -207,6 +214,7 @@ header{justify-content:space-between}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
@@ -241,6 +249,8 @@ header{justify-content:space-between}
     <img class="mark-img" src="logo.png" alt="">
     <b>Study<i>ons</i></b>
   </button>
+  <div class="hright">
+  <button class="iconbtn hidden" id="friendsBtn" title="Amigos e caixa de entrada" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg><span class="badge hidden" id="fbadge"></span></button>
   <div class="userbox hidden" id="userBox">
     <button class="avatar" id="uAvatar" aria-label="Conta"></button>
     <div class="umenu hidden" id="uMenu">
@@ -251,6 +261,7 @@ header{justify-content:space-between}
       <button class="btn sm" id="setPassBtn" style="margin-bottom:8px"><svg class="ic"><use href="#i-pen"/></svg> Definir palavra-passe</button>
       <button class="btn bad sm" id="logoutBtn"><svg class="ic"><use href="#i-logout"/></svg> Terminar sessão</button>
     </div>
+  </div>
   </div>
 </header>
 
@@ -269,7 +280,7 @@ header{justify-content:space-between}
     <div class="authbox">
       <div class="authlogo"><img src="logo.png" alt="Studions"></div>
       <h1>Entra no Studions</h1>
-      <p class="sub">Os teus baralhos ficam guardados na tua conta e acompanham-te em qualquer aparelho.</p>
+      
       <div class="panel">
         <div class="notice hidden" id="aNotice"></div>
         <button class="btn gbtn" id="aGoogle">
@@ -291,6 +302,38 @@ header{justify-content:space-between}
   </section>
 
   <!-- ================= INÍCIO ================= -->
+  <!-- ================= AMIGOS ================= -->
+  <section id="vFriends" class="view hidden">
+    <h1>Amigos</h1>
+    <p class="sub">Troca baralhos com amigos através de um código.</p>
+
+    <div class="panel">
+      <h2><svg class="ic"><use href="#i-user"/></svg> O teu código de amigo</h2>
+      <div class="codebox" id="fcCode">…</div>
+      <p class="note2" style="margin-top:12px">Dá este código a quem quiseres que te possa enviar baralhos. Serve só para partilhar baralhos.</p>
+      <div class="actions" style="margin-top:0">
+        <button class="btn primary" id="fcCopy"><svg class="ic"><use href="#i-copy"/></svg> Copiar</button>
+        <button class="btn" id="fcNew"><svg class="ic"><use href="#i-repeat"/></svg> Gerar novo código</button>
+      </div>
+      <div class="msg" id="fcMsg"></div>
+    </div>
+
+    <div class="panel">
+      <h2><svg class="ic"><use href="#i-plus"/></svg> Adicionar amigo</h2>
+      <div class="row" style="flex-wrap:nowrap;align-items:center">
+        <input id="faCode" placeholder="Código do amigo (ex.: K7QM-4XD2)" autocomplete="off" autocapitalize="characters" style="min-width:0;text-transform:uppercase">
+        <button class="btn primary" id="faAdd" style="flex:none;min-width:0">Adicionar</button>
+      </div>
+      <div class="msg" id="faMsg"></div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs three"><button id="ftInbox" class="active">Caixa</button><button id="ftFriends">Amigos</button><button id="ftBlocked">Bloqueados</button></div>
+      <div id="fList" class="list" style="margin-top:14px"></div>
+      <div class="msg" id="flMsg"></div>
+    </div>
+  </section>
+
   <!-- ================= BARALHO PARTILHADO ================= -->
   <section id="vShare" class="view hidden">
     <div class="authbox" style="max-width:640px">
@@ -507,6 +550,12 @@ header{justify-content:space-between}
         <button class="btn" id="shUpdate"><svg class="ic"><use href="#i-repeat"/></svg> Atualizar conteúdo</button>
         <button class="btn bad" id="shStop">Parar de partilhar</button>
       </div>
+      <hr class="sep" style="margin:18px 0 14px">
+      <label class="l" style="margin-top:0">Enviar a um amigo</label>
+      <div class="row" style="flex-wrap:nowrap;align-items:center">
+        <select id="shFriend" style="min-width:0"></select>
+        <button class="btn primary" id="shSend" style="flex:none;min-width:0"><svg class="ic"><use href="#i-share"/></svg> Enviar</button>
+      </div>
       <div class="msg" id="shMsg"></div>
     </div>
 
@@ -673,6 +722,36 @@ const firebaseConfig = {
         try{ await Au.sendEmailVerification(cred.user); }catch(e){}
         await cred.user.reload(); notify(auth.currentUser);
       },
+      async ensureCode(uid,name,existing){
+        if(existing){ const s=await F.getDoc(F.doc(fs,'codes',existing)); if(s.exists()&&s.data().uid===uid) return existing; }
+        return await this.newCode(uid,name,'');
+      },
+      async newCode(uid,name,old){
+        const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+        for(let i=0;i<6;i++){
+          const b=new Uint8Array(8); crypto.getRandomValues(b); const c=Array.from(b,x=>A[x%A.length]).join('');
+          try{ await F.setDoc(F.doc(fs,'codes',c),{uid,name}); if(old){ try{ await F.deleteDoc(F.doc(fs,'codes',old)); }catch(e){} } return c; }
+          catch(e){ if(e.code!=='permission-denied') throw e; }
+        }
+        throw {code:'permission-denied'};
+      },
+      async lookupCode(code){ const s=await F.getDoc(F.doc(fs,'codes',code)); return s.exists()?s.data():null; },
+      async listFriends(uid){ const s=await F.getDocs(F.collection(fs,'friends',uid,'people')); return s.docs.map(d=>({id:d.id,...d.data()})); },
+      async friendStatus(me,fid){ const s=await F.getDoc(F.doc(fs,'friends',fid,'people',me)); return s.exists(); },
+      async addFriend(me,fid,name){ await F.setDoc(F.doc(fs,'friends',me,'people',fid),{name,addedAt:Date.now()}); },
+      async removeFriend(me,fid){ await F.deleteDoc(F.doc(fs,'friends',me,'people',fid)); },
+      async listBlocks(uid){ const s=await F.getDocs(F.collection(fs,'blocks',uid,'people')); return s.docs.map(d=>({id:d.id,...d.data()})); },
+      async blockUser(me,bid,name){ await F.setDoc(F.doc(fs,'blocks',me,'people',bid),{name,at:Date.now()}); try{ await F.deleteDoc(F.doc(fs,'friends',me,'people',bid)); }catch(e){} },
+      async unblock(me,bid){ await F.deleteDoc(F.doc(fs,'blocks',me,'people',bid)); },
+      async sendItem(to,item){ await F.addDoc(F.collection(fs,'inbox',to,'items'),item); },
+      async deleteItem(uid,id){ await F.deleteDoc(F.doc(fs,'inbox',uid,'items',id)); },
+      listenInbox(uid,fn,errFn){ return F.onSnapshot(F.query(F.collection(fs,'inbox',uid,'items'),F.orderBy('createdAt','desc')),s=>fn(s.docs.map(d=>({id:d.id,...d.data()}))),errFn); },
+      async cleanup(uid,code){
+        try{ if(code) await F.deleteDoc(F.doc(fs,'codes',code)); }catch(e){}
+        for(const p of [['friends',uid,'people'],['blocks',uid,'people'],['inbox',uid,'items']]){
+          try{ const s=await F.getDocs(F.collection(fs,...p)); await Promise.all(s.docs.map(d=>F.deleteDoc(d.ref))); }catch(e){}
+        }
+      },
       async shareDeck(id,data){ await F.setDoc(F.doc(fs,'shared',id),data); },
       async getShared(id){ const s=await F.getDoc(F.doc(fs,'shared',id)); return s.exists()?s.data():null; },
       async unshare(id){ await F.deleteDoc(F.doc(fs,'shared',id)); },
@@ -771,10 +850,10 @@ function ensureTypeDeck(){
 }
 
 /* ================== Navegação ================== */
-const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',profile:'vProfile',share:'vShare',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',profile:'vProfile',share:'vShare',friends:'vFriends',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
 const TYPE_LABEL={lang:'Línguas',other:'Outros'};
-const crumbOf=v=>({share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
-const BACK={share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
+const crumbOf=v=>({friends:'<b>Amigos</b>',share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
+const BACK={friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
   current=v;
@@ -783,6 +862,7 @@ function go(v){
   $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading'||v==='setpass');
   if(crumbOf(v)) $('crumb').innerHTML=crumbOf(v);
   if(v==='home') updateHome();
+  if(v==='friends') showFriends();
   if(v==='profile') renderProfile();
   if(v==='cat') updateCat();
   if(v==='hub') applyHub();
@@ -1108,8 +1188,8 @@ function paintAvatar(el){
 }
 function renderUser(){
   const box=$('userBox'); $('uMenu').classList.add('hidden');
-  if(!user){ box.classList.add('hidden'); return; }
-  box.classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
+  if(!user){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); return; }
+  box.classList.remove('hidden'); $('friendsBtn').classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
   $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
   const av=$('uAvatar');
   paintAvatar(av);
@@ -1291,6 +1371,8 @@ $('delBtn').onclick=async()=>{
   try{ await cloud.reauth(pw?$('dPass').value:null); }
   catch(e){ pmsg('dMsg',reauthErr(e)); $('delBtn').disabled=false; return; }
   for(const dd of db.decks){ if(dd.shareId){ try{ await cloud.unshare(dd.shareId); }catch(e){} } }
+  if(unInbox){ unInbox(); unInbox=null; }
+  try{ await cloud.cleanup(user.uid,db.friendCode); }catch(e){}
   const id=user.uid; deleting=true; clearTimeout(saveTimer); saveTimer=null; if(unsub){ unsub(); unsub=null; }
   goneMsg='A tua conta e todos os teus dados foram eliminados.';
   try{ await cloud.deleteAccount(id); }
@@ -1313,11 +1395,12 @@ function showShare(){
   $('shLink').value=d.shareId?shareUrl(d.shareId):'';
   $('shNative').classList.toggle('hidden',!navigator.share||!d.shareId);
   ['shCopy','shUpdate','shStop'].forEach(i=>$(i).disabled=!d.shareId);
+  fillSendSelect(); if(!d.shareId) $('shSend').disabled=true;
 }
 $('shareDeck').onclick=async()=>{
   const d=deck();
   if(!d.cards.length){ showShare(); return smsg('Adiciona cartas ao baralho antes de o partilhar.'); }
-  showShare(); smsg('');
+  showShare(); smsg(''); refreshFriends().then(()=>{ if(shareBoxDeck===deck().id) { fillSendSelect(); if(!deck().shareId) $('shSend').disabled=true; } });
   if(!d.shareId){
     const id=newShareId(); smsg('A criar link…',false);
     try{ await cloud.shareDeck(id,snapshot(d)); d.shareId=id; save(); showShare(); smsg('Link criado. Copia-o e envia a quem quiseres.',false); }
@@ -1343,8 +1426,9 @@ $('shStop').onclick=async()=>{
 
 /* abrir um baralho partilhado */
 const clip=(s,n)=>String(s==null?'':s).slice(0,n);
-async function openShare(){
-  const id=pendingShare; pendingShare=null; try{ sessionStorage.removeItem('studions.pendingShare'); }catch(e){}
+let shareItemId=null;
+async function openShare(idArg,itemId){
+  const id=idArg||pendingShare; shareItemId=itemId||null; pendingShare=null; try{ sessionStorage.removeItem('studions.pendingShare'); }catch(e){}
   sharedData=null; go('share');
   $('shLoad').classList.remove('hidden'); $('shBody').classList.add('hidden'); $('shErr').classList.add('hidden');
   try{
@@ -1371,10 +1455,145 @@ function renderShare(){
 $('shAdd').onclick=()=>{
   const s=sharedData; if(!s) return;
   const d={id:uid(),name:s.name,type:s.type,cards:s.cards.map(c=>({id:uid(),...c,ok:0,bad:0}))};
-  db.decks.push(d); db.current=d.id; fcType=d.type; save(); sharedData=null; go('hub');
+  db.decks.push(d); db.current=d.id; fcType=d.type; save(); sharedData=null;
+  if(shareItemId){ cloud.deleteItem(user.uid,shareItemId).catch(()=>{}); shareItemId=null; }
+  go('hub');
 };
-$('shNo').onclick=()=>{ sharedData=null; go('home'); };
-$('shHome').onclick=()=>go('home');
+$('shNo').onclick=()=>{ sharedData=null; go(shareItemId?'friends':'home'); shareItemId=null; };
+$('shHome').onclick=()=>{ go(shareItemId?'friends':'home'); shareItemId=null; };
+
+/* ---- amigos e caixa de entrada ---- */
+let friends=[], blocks=[], inbox=[], fTab='inbox', unInbox=null, codeChecked=false;
+const fnorm=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+const fshow=c=>c?c.slice(0,4)+'-'+c.slice(4):'…';
+const fmsg=(t,err=true)=>pmsg('fcMsg',t,err), amsg=(t,err=true)=>pmsg('faMsg',t,err), lmsg=(t,err=true)=>pmsg('flMsg',t,err);
+function badge(){ const n=inbox.length,b=$('fbadge'); b.textContent=n>9?'9+':String(n); b.classList.toggle('hidden',!n); }
+async function refreshFriends(){
+  if(!cloud||!user) return;
+  try{ const l=await cloud.listFriends(user.uid); friends=await Promise.all(l.map(async f=>({...f,ok:await cloud.friendStatus(user.uid,f.id).catch(()=>false)}))); }catch(e){}
+}
+async function refreshBlocks(){ if(!cloud||!user) return; try{ blocks=await cloud.listBlocks(user.uid); }catch(e){} }
+function startInbox(){
+  if(unInbox) unInbox();
+  unInbox=cloud.listenInbox(user.uid,items=>{ inbox=items; badge(); if(current==='friends') renderFriends(); },()=>{});
+}
+function fillSendSelect(){
+  const sel=$('shFriend'), ok=friends.filter(f=>f.ok);
+  sel.innerHTML=ok.length?ok.map(f=>`<option value="${esc(f.id)}">${esc(clip(f.name,60)||'Amigo')}</option>`).join(''):'<option value="">Ainda não tens amigos que te tenham aceitado</option>';
+  $('shSend').disabled=!ok.length;
+}
+$('friendsBtn').onclick=()=>{ if(inbox.length) fTab='inbox'; go('friends'); };
+async function showFriends(){
+  renderFriends(); ensureCode();
+  await Promise.all([refreshFriends(),refreshBlocks()]); if(current==='friends') renderFriends();
+}
+async function ensureCode(){
+  if(codeChecked&&db.friendCode) return;
+  try{
+    const c=await cloud.ensureCode(user.uid,clip(userName(),60),db.friendCode||'');
+    if(c!==db.friendCode){ db.friendCode=c; save(); }
+    codeChecked=true; fmsg(''); renderFriends();
+  }catch(e){ $('fcCode').textContent='—'; fmsg(e&&e.code==='permission-denied'?'Falta atualizar as regras do Firestore para usar amigos.':friendly(e)); }
+}
+function nameOfFriend(id,fallback){ const f=friends.find(x=>x.id===id); return clip(f&&f.name||fallback,60)||'Alguém'; }
+function renderFriends(){
+  if(!db) return;
+  $('fcCode').textContent=fshow(db.friendCode);
+  $('ftInbox').textContent='Caixa'+(inbox.length?` (${inbox.length})`:'');
+  $('ftFriends').textContent='Amigos'+(friends.length?` (${friends.length})`:'');
+  $('ftBlocked').textContent='Bloqueados'+(blocks.length?` (${blocks.length})`:'');
+  [['Inbox','inbox'],['Friends','friends'],['Blocked','blocked']].forEach(([n,k])=>$('ft'+n).classList.toggle('active',fTab===k));
+  const L=$('fList'); L.innerHTML='';
+  const row=(html,btns)=>{
+    const el=document.createElement('div'); el.className='item';
+    el.innerHTML=`<div>${html}</div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"></div>`;
+    const box=el.lastElementChild;
+    btns.forEach(([label,cls,fn])=>{ const b=document.createElement('button'); b.className='btn sm '+cls; b.textContent=label; b.onclick=fn; box.appendChild(b); });
+    L.appendChild(el);
+  };
+  const empty=t=>{ L.innerHTML=`<div class="empty">${t}</div>`; };
+  if(fTab==='inbox'){
+    if(!inbox.length) return empty('A caixa está vazia. Pedidos de amizade e baralhos enviados por amigos aparecem aqui.');
+    inbox.forEach(it=>{
+      const nm=it.kind==='deck'?nameOfFriend(it.fromUid,it.fromName):clip(it.fromName,60)||'Alguém';
+      if(it.kind==='friend') row(`<div class="t">${esc(nm)}</div><div class="s">Quer ser teu amigo</div>`,
+        [['Aceitar','primary',()=>acceptFriend(it,nm)],['Ignorar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
+      else if(it.kind==='deck'){
+        const n=Number(it.count)||0, ty=it.deckType==='other'?'Outros':'Línguas';
+        row(`<div class="t">${esc(clip(it.deckName,60)||'Baralho')}</div><div class="s">De <b>${esc(nm)}</b> · ${n} carta${n!==1?'s':''} · ${ty}</div>`,
+          [['Ver','primary',()=>{ if(/^[A-Za-z0-9_-]{10,40}$/.test(String(it.shareId))) openShare(it.shareId,it.id); }],['Recusar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
+      }
+    });
+  }else if(fTab==='friends'){
+    if(!friends.length) return empty('Ainda não tens amigos. Pede o código a alguém e adiciona-o acima.');
+    friends.forEach(f=>row(`<div class="t">${esc(clip(f.name,60)||'Amigo')} <span class="tag">${f.ok?'Amigo':'Pendente'}</span></div><div class="s">${f.ok?'Podem trocar baralhos.':'A aguardar que aceite o pedido.'}</div>`,
+      [['Remover','',()=>removeFriendUI(f)],['Bloquear','bad',()=>blockFrom({fromUid:f.id},clip(f.name,60)||'esta pessoa')]]));
+  }else{
+    if(!blocks.length) return empty('Não bloqueaste ninguém.');
+    blocks.forEach(b=>row(`<div class="t">${esc(clip(b.name,60)||'Utilizador')}</div><div class="s">Não pode enviar-te pedidos nem baralhos.</div>`,
+      [['Desbloquear','',async()=>{ try{ await cloud.unblock(user.uid,b.id); await refreshBlocks(); renderFriends(); }catch(e){ lmsg(friendly(e)); } }]]));
+  }
+}
+async function acceptFriend(it,nm){
+  lmsg('');
+  try{ await cloud.addFriend(user.uid,it.fromUid,nm); await cloud.deleteItem(user.uid,it.id); await refreshFriends(); renderFriends(); }
+  catch(e){ lmsg(friendly(e)); }
+}
+async function dismiss(it){ lmsg(''); try{ await cloud.deleteItem(user.uid,it.id); }catch(e){ lmsg(friendly(e)); } }
+async function removeFriendUI(f){
+  if(!confirm('Remover '+(clip(f.name,60)||'este amigo')+' da tua lista?')) return;
+  try{ await cloud.removeFriend(user.uid,f.id); await refreshFriends(); renderFriends(); }catch(e){ lmsg(friendly(e)); }
+}
+async function blockFrom(it,nm){
+  if(!confirm('Bloquear '+nm+'? Deixas de receber pedidos e baralhos desta pessoa, e ela é removida dos teus amigos.')) return;
+  lmsg('');
+  try{
+    await cloud.blockUser(user.uid,it.fromUid,nm);
+    for(const x of inbox.filter(i=>i.fromUid===it.fromUid)) await cloud.deleteItem(user.uid,x.id).catch(()=>{});
+    await Promise.all([refreshFriends(),refreshBlocks()]); fTab='blocked'; renderFriends();
+  }catch(e){ lmsg(friendly(e)); }
+}
+['Inbox','Friends','Blocked'].forEach(n=>$('ft'+n).onclick=()=>{ fTab=n.toLowerCase(); lmsg(''); renderFriends(); });
+$('fcCopy').onclick=async()=>{
+  if(!db.friendCode) return;
+  try{ await navigator.clipboard.writeText(db.friendCode); fmsg('Código copiado.',false); }catch(e){ fmsg('Seleciona o código e copia-o manualmente.'); }
+};
+$('fcNew').onclick=async()=>{
+  if(!confirm('Gerar um código novo? O código antigo deixa de funcionar para novos pedidos. Os teus amigos atuais mantêm-se.')) return;
+  try{ const c=await cloud.newCode(user.uid,clip(userName(),60),db.friendCode||''); db.friendCode=c; save(); renderFriends(); fmsg('Código novo gerado.',false); }
+  catch(e){ fmsg(e&&e.code==='permission-denied'?'Falta atualizar as regras do Firestore para usar amigos.':friendly(e)); }
+};
+$('faAdd').onclick=async()=>{
+  const c=fnorm($('faCode').value); amsg('');
+  if(c.length!==8) return amsg('O código tem 8 letras e números.');
+  if(c===db.friendCode) return amsg('Esse é o teu próprio código.');
+  $('faAdd').disabled=true;
+  try{
+    const t=await cloud.lookupCode(c);
+    if(!t) return amsg('Código não encontrado. Confirma-o com o teu amigo.');
+    const nm=clip(t.name,60)||'Amigo';
+    if(t.uid===user.uid) return amsg('Esse é o teu próprio código.');
+    if(friends.some(f=>f.id===t.uid)) return amsg('Já tens esta pessoa na lista.');
+    if(blocks.some(b=>b.id===t.uid)) return amsg('Bloqueaste esta pessoa. Desbloqueia-a primeiro.');
+    await cloud.addFriend(user.uid,t.uid,nm);
+    try{ await cloud.sendItem(t.uid,{kind:'friend',fromUid:user.uid,fromName:clip(userName(),60),createdAt:Date.now()}); }
+    catch(e){ await cloud.removeFriend(user.uid,t.uid).catch(()=>{}); return amsg('Não foi possível enviar o pedido a esta pessoa.'); }
+    $('faCode').value=''; amsg('Pedido enviado a '+nm+'. Quando aceitar, podem trocar baralhos.',false);
+    fTab='friends'; await refreshFriends(); renderFriends();
+  }catch(e){ amsg(e&&e.code==='permission-denied'?'Falta atualizar as regras do Firestore para usar amigos.':friendly(e)); }
+  finally{ $('faAdd').disabled=false; }
+};
+$('faCode').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('faAdd').click(); }});
+$('shSend').onclick=async()=>{
+  const d=deck(), to=$('shFriend').value; if(!d.shareId||!to) return;
+  const nm=nameOfFriend(to,'amigo'); $('shSend').disabled=true; smsg('');
+  try{
+    await cloud.shareDeck(d.shareId,snapshot(d));
+    await cloud.sendItem(to,{kind:'deck',fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:Date.now()});
+    smsg('Enviado para '+nm+'. Vai aparecer na caixa dele.',false);
+  }catch(e){ smsg(e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
+  $('shSend').disabled=false;
+};
 
 /* ---- estado de autenticação ---- */
 async function onUser(u){
@@ -1386,11 +1605,12 @@ async function onUser(u){
     $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
     if(!db.theme){ try{ db.theme=localStorage.getItem('studions.theme')||'auto'; }catch(e){ db.theme='auto'; } }
     applyTheme(db.theme);
-    renderUser(); listen(); if(pendingShare) openShare(); else if(needsPassword()) goSetPass(); else go('home');
+    renderUser(); listen(); startInbox(); refreshFriends(); refreshBlocks(); if(pendingShare) openShare(); else if(needsPassword()) goSetPass(); else go('home');
     entering=false;
   }else{
     if(unsub){ unsub(); unsub=null; }
     clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null; deleting=false;
+    if(unInbox){ unInbox(); unInbox=null; } inbox=[]; friends=[]; blocks=[]; codeChecked=false; badge();
     renderUser(); showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
   }
 }
