@@ -207,6 +207,15 @@ header{justify-content:space-between}
 .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(26px,6vw,36px);font-weight:800;letter-spacing:4px;color:var(--primary);text-align:center;padding:16px;border-radius:14px;background:var(--primary-soft);border:1px dashed var(--primary);word-break:break-all}
 .tabs.three{grid-template-columns:repeat(3,1fr)}
 .item .s b{color:var(--text)}
+.who{display:flex;gap:12px;align-items:center;min-width:0}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:grid;place-items:center;font-weight:800;overflow:hidden;flex:none;border:2px solid var(--line)}
+.av img{width:100%;height:100%;object-fit:cover}
+.tag.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+.diff{line-height:1.9}
+.dok{padding:0 1px}
+.dnear{background:color-mix(in srgb,var(--warn) 26%,transparent);border-radius:5px;padding:0 4px;color:var(--text)}
+.dbad{background:color-mix(in srgb,var(--bad) 24%,transparent);border-radius:5px;padding:0 4px;color:var(--text)}
+.li .u.acc{color:var(--warn);text-decoration:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -214,6 +223,7 @@ header{justify-content:space-between}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
@@ -250,7 +260,8 @@ header{justify-content:space-between}
     <b>Study<i>ons</i></b>
   </button>
   <div class="hright">
-  <button class="iconbtn hidden" id="friendsBtn" title="Amigos e caixa de entrada" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg><span class="badge hidden" id="fbadge"></span></button>
+  <button class="iconbtn hidden" id="mailBtn" title="Caixa de entrada" aria-label="Caixa de entrada"><svg class="ic"><use href="#i-mail"/></svg><span class="badge hidden" id="fbadge"></span></button>
+  <button class="iconbtn hidden" id="friendsBtn" title="Amigos" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg></button>
   <div class="userbox hidden" id="userBox">
     <button class="avatar" id="uAvatar" aria-label="Conta"></button>
     <div class="umenu hidden" id="uMenu">
@@ -302,6 +313,16 @@ header{justify-content:space-between}
   </section>
 
   <!-- ================= INÍCIO ================= -->
+  <!-- ================= CAIXA DE ENTRADA ================= -->
+  <section id="vMail" class="view hidden">
+    <h1>Caixa de entrada</h1>
+    <p class="sub">Pedidos de amizade, baralhos recebidos e avisos.</p>
+    <div class="panel">
+      <div id="mList" class="list"></div>
+      <div class="msg" id="mMsg"></div>
+    </div>
+  </section>
+
   <!-- ================= AMIGOS ================= -->
   <section id="vFriends" class="view hidden">
     <h1>Amigos</h1>
@@ -328,7 +349,7 @@ header{justify-content:space-between}
     </div>
 
     <div class="panel">
-      <div class="tabs three"><button id="ftInbox" class="active">Caixa</button><button id="ftFriends">Amigos</button><button id="ftBlocked">Bloqueados</button></div>
+      <div class="tabs"><button id="ftFriends" class="active">Amigos</button><button id="ftBlocked">Bloqueados</button></div>
       <div id="fList" class="list" style="margin-top:14px"></div>
       <div class="msg" id="flMsg"></div>
     </div>
@@ -540,21 +561,23 @@ header{justify-content:space-between}
 
     <div class="panel hidden" id="shareBox">
       <h2><svg class="ic"><use href="#i-share"/></svg> Partilhar baralho</h2>
-      <p class="note2">Quem tiver este link e uma conta no Studions pode ver o baralho e adicionar uma cópia aos seus. As alterações que fizeres depois só chegam a quem abrir o link se carregares em "Atualizar conteúdo".</p>
-      <div class="row" style="flex-wrap:nowrap;align-items:center">
-        <input id="shLink" readonly style="min-width:0">
-        <button class="btn primary" id="shCopy" style="flex:none;min-width:0"><svg class="ic"><use href="#i-copy"/></svg> Copiar</button>
+      <div class="sec">
+        <h3>Enviar a amigos</h3>
+        <div id="shFriends" class="list"></div>
       </div>
-      <div class="actions">
-        <button class="btn hidden" id="shNative"><svg class="ic"><use href="#i-share"/></svg> Partilhar…</button>
-        <button class="btn" id="shUpdate"><svg class="ic"><use href="#i-repeat"/></svg> Atualizar conteúdo</button>
-        <button class="btn bad" id="shStop">Parar de partilhar</button>
-      </div>
-      <hr class="sep" style="margin:18px 0 14px">
-      <label class="l" style="margin-top:0">Enviar a um amigo</label>
-      <div class="row" style="flex-wrap:nowrap;align-items:center">
-        <select id="shFriend" style="min-width:0"></select>
-        <button class="btn primary" id="shSend" style="flex:none;min-width:0"><svg class="ic"><use href="#i-share"/></svg> Enviar</button>
+      <hr class="sep">
+      <div class="sec">
+        <h3>Partilhar por link</h3>
+        <p class="note2">Quem tiver o link e uma conta no Studions pode ver o baralho e adicionar uma cópia. As alterações que fizeres depois só chegam a quem abrir o link se carregares em "Atualizar conteúdo".</p>
+        <div class="row" style="flex-wrap:nowrap;align-items:center">
+          <input id="shLink" readonly style="min-width:0">
+          <button class="btn primary" id="shCopy" style="flex:none;min-width:0"><svg class="ic"><use href="#i-copy"/></svg> Copiar</button>
+        </div>
+        <div class="actions">
+          <button class="btn hidden" id="shNative"><svg class="ic"><use href="#i-share"/></svg> Partilhar…</button>
+          <button class="btn" id="shUpdate"><svg class="ic"><use href="#i-repeat"/></svg> Atualizar conteúdo</button>
+          <button class="btn bad" id="shStop">Parar de partilhar</button>
+        </div>
       </div>
       <div class="msg" id="shMsg"></div>
     </div>
@@ -722,6 +745,8 @@ const firebaseConfig = {
         try{ await Au.sendEmailVerification(cred.user); }catch(e){}
         await cred.user.reload(); notify(auth.currentUser);
       },
+      async saveProfile(uid,d){ await F.setDoc(F.doc(fs,'profiles',uid),d); },
+      async getProfile(uid){ const s=await F.getDoc(F.doc(fs,'profiles',uid)); return s.exists()?s.data():null; },
       async ensureCode(uid,name,existing){
         if(existing){ const s=await F.getDoc(F.doc(fs,'codes',existing)); if(s.exists()&&s.data().uid===uid) return existing; }
         return await this.newCode(uid,name,'');
@@ -748,6 +773,7 @@ const firebaseConfig = {
       listenInbox(uid,fn,errFn){ return F.onSnapshot(F.query(F.collection(fs,'inbox',uid,'items'),F.orderBy('createdAt','desc')),s=>fn(s.docs.map(d=>({id:d.id,...d.data()}))),errFn); },
       async cleanup(uid,code){
         try{ if(code) await F.deleteDoc(F.doc(fs,'codes',code)); }catch(e){}
+        try{ await F.deleteDoc(F.doc(fs,'profiles',uid)); }catch(e){}
         for(const p of [['friends',uid,'people'],['blocks',uid,'people'],['inbox',uid,'items']]){
           try{ const s=await F.getDocs(F.collection(fs,...p)); await Promise.all(s.docs.map(d=>F.deleteDoc(d.ref))); }catch(e){}
         }
@@ -850,10 +876,10 @@ function ensureTypeDeck(){
 }
 
 /* ================== Navegação ================== */
-const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',profile:'vProfile',share:'vShare',friends:'vFriends',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',profile:'vProfile',share:'vShare',friends:'vFriends',mail:'vMail',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
 const TYPE_LABEL={lang:'Línguas',other:'Outros'};
-const crumbOf=v=>({friends:'<b>Amigos</b>',share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
-const BACK={friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
+const crumbOf=v=>({mail:'<b>Caixa de entrada</b>',friends:'<b>Amigos</b>',share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
+const BACK={mail:'home',friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
   current=v;
@@ -862,6 +888,7 @@ function go(v){
   $('topbar').classList.toggle('hidden',v==='home'||v==='auth'||v==='loading'||v==='setpass');
   if(crumbOf(v)) $('crumb').innerHTML=crumbOf(v);
   if(v==='home') updateHome();
+  if(v==='mail') showMail();
   if(v==='friends') showFriends();
   if(v==='profile') renderProfile();
   if(v==='cat') updateCat();
@@ -1096,31 +1123,82 @@ function lev(a,b){
   return p[n];
 }
 const variants=s=>s.split(/\s*[\/;|]\s*/).map(x=>x.trim()).filter(Boolean);
+const tokensOf=s=>s.trim().split(/\s+/).filter(Boolean);
+function tokKind(u,e){
+  if(norm(u)===norm(e)) return 'ok';
+  const x=loose(u),y=loose(e);
+  if(x===y) return 'acc';
+  const th=y.length<=3?0:y.length<=7?1:2;
+  return th>0&&lev(x,y)<=th?'near':'sub';
+}
+const TOKCOST={ok:0,acc:.05,near:.35,sub:1};
+function align(ut,et){
+  const n=ut.length,m=et.length,D=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=1;i<=n;i++) D[i][0]=i;
+  for(let j=1;j<=m;j++) D[0][j]=j;
+  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++) D[i][j]=Math.min(D[i-1][j]+1,D[i][j-1]+1,D[i-1][j-1]+TOKCOST[tokKind(ut[i-1],et[j-1])]);
+  const ops=[]; let i=n,j=m;
+  while(i>0||j>0){
+    if(i>0&&j>0){ const k=tokKind(ut[i-1],et[j-1]); if(Math.abs(D[i][j]-(D[i-1][j-1]+TOKCOST[k]))<1e-9){ ops.push({t:k,u:i-1,e:j-1}); i--; j--; continue; } }
+    if(i>0&&Math.abs(D[i][j]-(D[i-1][j]+1))<1e-9){ ops.push({t:'ins',u:i-1,e:-1}); i--; continue; }
+    ops.push({t:'del',u:-1,e:j-1}); j--;
+  }
+  return {ops:ops.reverse(),cost:D[n][m]};
+}
+function gradeOne(user,exp){
+  const u=norm(user),e=norm(exp);
+  if(!u) return {g:'erro',rank:0,score:0};
+  if(u===e) return {g:'certo',rank:4,score:1};
+  const lu=loose(user),le=loose(exp);
+  if(lu===le) return {g:'certo',accent:true,rank:3,score:.98};
+  const ut=tokensOf(user),et=tokensOf(exp);
+  if(et.length<5&&le.length<25){
+    const th=le.length<=3?0:le.length<=7?1:le.length<=12?2:3, d=lev(lu,le), ok=th>0&&d<=th;
+    return {g:ok?'mal':'erro',rank:ok?2:1,score:Math.max(0,1-d/Math.max(le.length,1))};
+  }
+  const ws=1-align(ut,et).cost/Math.max(ut.length,et.length), cs=1-lev(lu,le)/Math.max(lu.length,le.length);
+  const score=Math.max(ws,cs), thr=et.length>=15?.78:.85, ok=score>=thr;
+  return {g:ok?'mal':'erro',rank:ok?2:1,score};
+}
 function grade(user,expected){
-  const u=norm(user); if(!u) return 'erro';
-  let best='erro';
+  let best=null;
   for(const v of [expected,...variants(expected)]){
-    if(norm(v)===u) return 'certo';
-    const lv=loose(v),lu=loose(user);
-    if(lv===lu) best='mal';
-    else{ const th=lv.length<=3?0:lv.length<=7?1:lv.length<=12?2:3; if(th>0&&lev(lv,lu)<=th) best='mal'; }
+    const r=gradeOne(user,v); r.variant=v;
+    if(!best||r.rank>best.rank||(r.rank===best.rank&&r.score>best.score)) best=r;
   }
   return best;
+}
+function diffHTML(user,exp){
+  const ut=tokensOf(user),et=tokensOf(exp),{ops}=align(ut,et),ex=[],us=[];
+  ops.forEach(o=>{
+    const e=o.e>=0?esc(et[o.e]):null,u=o.u>=0?esc(ut[o.u]):null;
+    if(o.t==='ok'){ ex.push(`<span class="dok">${e}</span>`); us.push(`<span class="dok">${u}</span>`); }
+    else if(o.t==='acc'||o.t==='near'){ ex.push(`<span class="dnear">${e}</span>`); us.push(`<span class="dnear">${u}</span>`); }
+    else if(o.t==='sub'){ ex.push(`<span class="dbad">${e}</span>`); us.push(`<span class="dbad">${u}</span>`); }
+    else if(o.t==='del') ex.push(`<span class="dbad">${e}</span>`);
+    else us.push(`<span class="dbad">${u}</span>`);
+  });
+  return {exp:ex.join(' '),us:us.join(' ')};
 }
 function checkAnswer(skip){
   if(!S||S.busy||S.answered||S.mode!=='write') return;
   S.answered=true;
   const it=cur(),c=it.card,exp=answerOf(it),val=$('answer').value;
-  const g=skip?'erro':grade(val,exp);
-  S.log.push({card:c,prompt:promptOf(it),expected:exp,user:skip?'':val.trim(),grade:g});
+  const r=skip?{g:'erro',variant:exp,score:0}:grade(val,exp), g=r.g, best=r.variant||exp;
+  S.log.push({card:c,prompt:promptOf(it),expected:exp,user:skip?'':val.trim(),grade:g,accent:!!r.accent});
   if(g==='certo') c.ok=(c.ok||0)+1; else if(g==='mal') c.ok=(c.ok||0)+.5; else c.bad=(c.bad||0)+1;
   save(); updateLive();
   const T={certo:['check','Certo!'],mal:['alert','Mal escrito'],erro:['x','Errado']}[g];
   $('flashWrap').classList.add('g-'+g);
-  $('resultBox').innerHTML=`<div class="result ${g}"><div class="rb">${ic(T[0])}</div><div><b>${T[1]}</b>
-    ${g!=='certo'?`<div class="d">Resposta correta: <strong>${esc(exp)}</strong></div>`:''}
-    ${!skip&&g!=='certo'?`<div class="d">Escreveste: ${esc(val)}</div>`:''}
-    ${c.notes?`<div class="d">${ic('note')} ${esc(c.notes)}</div>`:''}</div></div>`;
+  const multi=!skip&&val.trim()&&tokensOf(best).length>=3, df=multi?diffHTML(val,best):null;
+  const sim=multi&&g!=='certo'?`<span class="tag" style="margin-left:0;margin-right:6px">semelhança ${Math.round(Math.max(0,r.score)*100)}%</span>`:'';
+  let body='';
+  if(g==='certo'&&r.accent) body=`<div class="d"><span class="tag warn" style="margin-left:0">acentos</span> Está certo, mas faltam acentos: ${multi?`<span class="diff">${df.exp}</span>`:`<strong>${esc(best)}</strong>`}</div>`;
+  else if(g!=='certo'){
+    body=multi?`<div class="d">${sim}Resposta correta:</div><div class="d diff">${df.exp}</div><div class="d">Escreveste:</div><div class="d diff">${df.us}</div>`
+      :`<div class="d">Resposta correta: <strong>${esc(exp)}</strong></div>`+(!skip&&val.trim()?`<div class="d">Escreveste: ${esc(val)}</div>`:'');
+  }
+  $('resultBox').innerHTML=`<div class="result ${g}"><div class="rb">${ic(T[0])}</div><div style="min-width:0"><b>${T[1]}</b>${body}${c.notes?`<div class="d">${ic('note')} ${esc(c.notes)}</div>`:''}</div></div>`;
   $('answer').disabled=true; $('checkWrap').classList.add('hidden'); $('nextWrap').classList.remove('hidden'); $('btnNext').focus();
 }
 function nextCard(){ if(!S||S.busy||!S.answered) return; advance('leave-next'); }
@@ -1145,8 +1223,8 @@ function countUp(el,to,dur=1100){
 function groupHTML(title,icon,cls,items){
   if(!items.length) return '';
   return `<div class="grp ${cls}"><h3>${ic(icon)} ${title}<span class="count">${items.length}</span></h3>`+
-    items.map((l,i)=>`<div class="li" style="animation-delay:${Math.min(i,14)*45+200}ms"><div class="q">${esc(l.prompt)}</div>
-      <div class="a">${esc(l.expected)}</div>${l.user&&l.grade!=='certo'?`<span class="u">${esc(l.user)}</span>`:''}</div>`).join('')+`</div>`;
+    items.map((l,i)=>`<div class="li" style="animation-delay:${Math.min(i,14)*45+200}ms"><div class="q">${esc(l.prompt)}${l.accent?' <span class="tag warn">acentos</span>':''}</div>
+      <div class="a">${esc(l.expected)}</div>${l.user&&l.grade!=='certo'?`<span class="u">${esc(l.user)}</span>`:''}${l.accent&&l.user?`<span class="u acc">${esc(l.user)}</span>`:''}</div>`).join('')+`</div>`;
 }
 function finish(){
   $('bar').style.width='100%';
@@ -1154,7 +1232,7 @@ function finish(){
   const ok=S.log.filter(l=>l.grade==='certo'),mal=S.log.filter(l=>l.grade==='mal'),bad=S.log.filter(l=>l.grade==='erro');
   const n=S.log.length, pct=n?Math.round((ok.length+mal.length*.5)/n*100):0;
   const mental=S.mode==='mental';
-  let st=`<div class="stat ok"><div class="v">${ic('check')}${ok.length}</div><div class="k">${mental?'Acertei':'Certas'}</div></div>`;
+  let st=`<div class="stat ok"><div class="v">${ic('check')}${ok.length}</div><div class="k">${mental?'Acertei':'Certas'}</div>${ok.filter(l=>l.accent).length?`<div class="k" style="color:var(--warn)">${ok.filter(l=>l.accent).length} sem acentos</div>`:''}</div>`;
   if(!mental) st+=`<div class="stat mal" style="animation-delay:.1s"><div class="v">${ic('alert')}${mal.length}</div><div class="k">Mal escritas</div></div>`;
   st+=`<div class="stat erro" style="animation-delay:.2s"><div class="v">${ic('x')}${bad.length}</div><div class="k">${mental?'Passadas':'Erradas'}</div></div>`;
   $('endStats').innerHTML=st;
@@ -1188,8 +1266,8 @@ function paintAvatar(el){
 }
 function renderUser(){
   const box=$('userBox'); $('uMenu').classList.add('hidden');
-  if(!user){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); return; }
-  box.classList.remove('hidden'); $('friendsBtn').classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
+  if(!user){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); $('mailBtn').classList.add('hidden'); return; }
+  box.classList.remove('hidden'); $('friendsBtn').classList.remove('hidden'); $('mailBtn').classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
   $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
   const av=$('uAvatar');
   paintAvatar(av);
@@ -1327,13 +1405,13 @@ $('pfPhotoBtn').onclick=()=>$('pfFile').click();
 $('pfFile').onchange=async e=>{
   const f=e.target.files[0]; e.target.value=''; if(!f) return;
   if(!f.type||!f.type.startsWith('image/')) return pmsg('pfMsg','Escolhe um ficheiro de imagem.');
-  try{ db.photo=await fileToAvatar(f); save(); renderUser(); renderProfile(); pmsg('pfMsg','Foto atualizada.',false); }
+  try{ db.photo=await fileToAvatar(f); save(); publishProfile(); renderUser(); renderProfile(); pmsg('pfMsg','Foto atualizada.',false); }
   catch(err){ pmsg('pfMsg','Não foi possível usar essa imagem.'); }
 };
-$('pfRemovePhoto').onclick=()=>{ delete db.photo; save(); renderUser(); renderProfile(); pmsg('pfMsg','Foto removida.',false); };
+$('pfRemovePhoto').onclick=()=>{ delete db.photo; save(); publishProfile(); renderUser(); renderProfile(); pmsg('pfMsg','Foto removida.',false); };
 $('pfNameSave').onclick=async()=>{
   const n=$('pfName').value.trim(); if(!n) return pmsg('pfMsg','Escreve um nome.');
-  try{ await cloud.updateName(n); pmsg('pfMsg','Nome atualizado.',false); }catch(e){ pmsg('pfMsg',friendly(e)); }
+  try{ await cloud.updateName(n); publishProfile(); pmsg('pfMsg','Nome atualizado.',false); }catch(e){ pmsg('pfMsg',friendly(e)); }
 };
 document.querySelectorAll('input[name=theme]').forEach(r=>r.onchange=()=>{
   db.theme=r.value; try{ localStorage.setItem('studions.theme',r.value); }catch(e){}
@@ -1395,12 +1473,12 @@ function showShare(){
   $('shLink').value=d.shareId?shareUrl(d.shareId):'';
   $('shNative').classList.toggle('hidden',!navigator.share||!d.shareId);
   ['shCopy','shUpdate','shStop'].forEach(i=>$(i).disabled=!d.shareId);
-  fillSendSelect(); if(!d.shareId) $('shSend').disabled=true;
+  renderSendList();
 }
 $('shareDeck').onclick=async()=>{
   const d=deck();
   if(!d.cards.length){ showShare(); return smsg('Adiciona cartas ao baralho antes de o partilhar.'); }
-  showShare(); smsg(''); refreshFriends().then(()=>{ if(shareBoxDeck===deck().id) { fillSendSelect(); if(!deck().shareId) $('shSend').disabled=true; } });
+  showShare(); smsg(''); refreshFriends().then(()=>{ if(shareBoxDeck===deck().id) renderSendList(); });
   if(!d.shareId){
     const id=newShareId(); smsg('A criar link…',false);
     try{ await cloud.shareDeck(id,snapshot(d)); d.shareId=id; save(); showShare(); smsg('Link criado. Copia-o e envia a quem quiseres.',false); }
@@ -1459,33 +1537,105 @@ $('shAdd').onclick=()=>{
   if(shareItemId){ cloud.deleteItem(user.uid,shareItemId).catch(()=>{}); shareItemId=null; }
   go('hub');
 };
-$('shNo').onclick=()=>{ sharedData=null; go(shareItemId?'friends':'home'); shareItemId=null; };
-$('shHome').onclick=()=>{ go(shareItemId?'friends':'home'); shareItemId=null; };
+$('shNo').onclick=()=>{ sharedData=null; go(shareItemId?'mail':'home'); shareItemId=null; };
+$('shHome').onclick=()=>{ go(shareItemId?'mail':'home'); shareItemId=null; };
 
-/* ---- amigos e caixa de entrada ---- */
-let friends=[], blocks=[], inbox=[], fTab='inbox', unInbox=null, codeChecked=false;
+/* ---- amigos, caixa de entrada e perfis ---- */
+let friends=[], blocks=[], inbox=[], fTab='friends', unInbox=null, codeChecked=false, lastAcc=0;
+const profiles={}, sentTo={};
 const fnorm=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const fshow=c=>c?c.slice(0,4)+'-'+c.slice(4):'…';
-const fmsg=(t,err=true)=>pmsg('fcMsg',t,err), amsg=(t,err=true)=>pmsg('faMsg',t,err), lmsg=(t,err=true)=>pmsg('flMsg',t,err);
+const fmsg=(t,err=true)=>pmsg('fcMsg',t,err), amsg=(t,err=true)=>pmsg('faMsg',t,err);
+const emsg=t=>pmsg(current==='mail'?'mMsg':'flMsg',t);
+const safePhoto=p=>typeof p==='string'&&((p.length<150000&&/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(p))||/^https:\/\/lh3\.googleusercontent\.com\/[A-Za-z0-9_\-\/=.:%?&+~]*$/.test(p));
 function badge(){ const n=inbox.length,b=$('fbadge'); b.textContent=n>9?'9+':String(n); b.classList.toggle('hidden',!n); }
+function timeAgo(t){ const s=(Date.now()-(Number(t)||Date.now()))/1000; if(s<60) return 'agora mesmo'; if(s<3600) return 'há '+Math.floor(s/60)+' min'; if(s<86400) return 'há '+Math.floor(s/3600)+' h'; return 'há '+Math.floor(s/86400)+' d'; }
+function myPhoto(){ if(db&&db.photo) return db.photo; const g=user&&user.photoURL; return g&&safePhoto(g)?g:''; }
+async function publishProfile(){
+  if(!cloud||!user||!db) return;
+  try{ await cloud.saveProfile(user.uid,{name:clip(userName(),60),photo:myPhoto(),updatedAt:Date.now()}); }catch(e){}
+}
+async function loadProfiles(ids){
+  const now=Date.now();
+  await Promise.all([...new Set(ids)].filter(i=>i&&(!profiles[i]||now-profiles[i].t>60000)).map(async i=>{
+    try{ profiles[i]={t:now,d:await cloud.getProfile(i)}; }catch(e){ profiles[i]={t:now,d:null}; }
+  }));
+}
+const profOf=id=>(profiles[id]&&profiles[id].d)||null;
+function nameOf(id,fallback){ const p=profOf(id), f=friends.find(x=>x.id===id); return clip((p&&p.name)||(f&&f.name)||fallback,60)||'Alguém'; }
+function avatarHTML(id,name){
+  const p=profOf(id), ph=p&&safePhoto(p.photo)?p.photo:'';
+  return `<div class="av">${ph?`<img src="${esc(ph)}" alt="" referrerpolicy="no-referrer">`:esc((name||'?').trim().charAt(0).toUpperCase()||'?')}</div>`;
+}
+function makeRow(L,whoHTML,btns){
+  const el=document.createElement('div'); el.className='item';
+  el.innerHTML=`<div class="who">${whoHTML}</div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"></div>`;
+  const box=el.lastElementChild;
+  btns.forEach(([label,cls,fn])=>{ const b=document.createElement('button'); b.className='btn sm '+cls; b.textContent=label; b.onclick=fn; box.appendChild(b); });
+  L.appendChild(el);
+}
 async function refreshFriends(){
   if(!cloud||!user) return;
   try{ const l=await cloud.listFriends(user.uid); friends=await Promise.all(l.map(async f=>({...f,ok:await cloud.friendStatus(user.uid,f.id).catch(()=>false)}))); }catch(e){}
 }
 async function refreshBlocks(){ if(!cloud||!user) return; try{ blocks=await cloud.listBlocks(user.uid); }catch(e){} }
+function rerender(){ if(current==='friends') renderFriends(); else if(current==='mail') renderMail(); }
 function startInbox(){
   if(unInbox) unInbox();
-  unInbox=cloud.listenInbox(user.uid,items=>{ inbox=items; badge(); if(current==='friends') renderFriends(); },()=>{});
+  unInbox=cloud.listenInbox(user.uid,items=>{
+    inbox=items; badge();
+    const acc=items.filter(i=>i.kind==='accepted').length;
+    if(acc!==lastAcc){ lastAcc=acc; refreshFriends().then(rerender); }
+    if(current==='mail'){ renderMail(); loadProfiles(items.map(i=>i.fromUid)).then(()=>{ if(current==='mail') renderMail(); }); }
+  },()=>{});
 }
-function fillSendSelect(){
-  const sel=$('shFriend'), ok=friends.filter(f=>f.ok);
-  sel.innerHTML=ok.length?ok.map(f=>`<option value="${esc(f.id)}">${esc(clip(f.name,60)||'Amigo')}</option>`).join(''):'<option value="">Ainda não tens amigos que te tenham aceitado</option>';
-  $('shSend').disabled=!ok.length;
+$('friendsBtn').onclick=()=>{ fTab='friends'; go('friends'); };
+$('mailBtn').onclick=()=>go('mail');
+
+/* ---- caixa de entrada ---- */
+async function showMail(){ renderMail(); await loadProfiles(inbox.map(i=>i.fromUid)); if(current==='mail') renderMail(); }
+function renderMail(){
+  const L=$('mList'); if(!L) return; L.innerHTML='';
+  if(!inbox.length){ L.innerHTML='<div class="empty">Sem notificações por agora.<br><span class="hint">Pedidos de amizade, baralhos recebidos e avisos aparecem aqui.</span></div>'; return; }
+  inbox.forEach(it=>{
+    const nm=nameOf(it.fromUid,it.fromName), ago=timeAgo(it.createdAt), who=avatarHTML(it.fromUid,nm);
+    if(it.kind==='friend') makeRow(L,`${who}<div style="min-width:0"><div class="t">${esc(nm)}</div><div class="s">quer ser teu amigo · ${ago}</div></div>`,
+      [['Aceitar','primary',()=>acceptFriend(it,nm)],['Ignorar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
+    else if(it.kind==='deck'){
+      const n=Number(it.count)||0, ty=it.deckType==='other'?'Outros':'Línguas';
+      makeRow(L,`${who}<div style="min-width:0"><div class="t">${esc(nm)} enviou-te um baralho</div><div class="s"><b>«${esc(clip(it.deckName,60)||'Baralho')}»</b> · ${n} carta${n!==1?'s':''} · ${ty} · ${ago}</div></div>`,
+        [['Ver','primary',()=>{ if(/^[A-Za-z0-9_-]{10,40}$/.test(String(it.shareId))) openShare(it.shareId,it.id); }],['Recusar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
+    }else if(it.kind==='accepted') makeRow(L,`${who}<div style="min-width:0"><div class="t">${esc(nm)}</div><div class="s">aceitou o teu pedido de amizade · ${ago}</div></div>`,[['OK','primary',()=>dismiss(it)]]);
+  });
 }
-$('friendsBtn').onclick=()=>{ if(inbox.length) fTab='inbox'; go('friends'); };
+async function acceptFriend(it,nm){
+  emsg('');
+  try{
+    await cloud.addFriend(user.uid,it.fromUid,nm);
+    try{ await cloud.sendItem(it.fromUid,{kind:'accepted',fromUid:user.uid,fromName:clip(userName(),60),createdAt:Date.now()}); }catch(e){}
+    await cloud.deleteItem(user.uid,it.id); await refreshFriends(); rerender();
+  }catch(e){ emsg(friendly(e)); }
+}
+async function dismiss(it){ emsg(''); try{ await cloud.deleteItem(user.uid,it.id); }catch(e){ emsg(friendly(e)); } }
+async function removeFriendUI(f,nm){
+  if(!confirm('Remover '+nm+' da tua lista?')) return;
+  try{ await cloud.removeFriend(user.uid,f.id); await refreshFriends(); rerender(); }catch(e){ emsg(friendly(e)); }
+}
+async function blockFrom(it,nm){
+  if(!confirm('Bloquear '+nm+'? Deixas de receber pedidos e baralhos desta pessoa, e ela é removida dos teus amigos.')) return;
+  emsg('');
+  try{
+    await cloud.blockUser(user.uid,it.fromUid,nm);
+    for(const x of inbox.filter(i=>i.fromUid===it.fromUid)) await cloud.deleteItem(user.uid,x.id).catch(()=>{});
+    await Promise.all([refreshFriends(),refreshBlocks()]); if(current==='friends') fTab='blocked'; rerender();
+  }catch(e){ emsg(friendly(e)); }
+}
+
+/* ---- amigos ---- */
 async function showFriends(){
   renderFriends(); ensureCode();
   await Promise.all([refreshFriends(),refreshBlocks()]); if(current==='friends') renderFriends();
+  await loadProfiles([...friends,...blocks].map(x=>x.id)); if(current==='friends') renderFriends();
 }
 async function ensureCode(){
   if(codeChecked&&db.friendCode) return;
@@ -1495,65 +1645,31 @@ async function ensureCode(){
     codeChecked=true; fmsg(''); renderFriends();
   }catch(e){ $('fcCode').textContent='—'; fmsg(e&&e.code==='permission-denied'?'Falta atualizar as regras do Firestore para usar amigos.':friendly(e)); }
 }
-function nameOfFriend(id,fallback){ const f=friends.find(x=>x.id===id); return clip(f&&f.name||fallback,60)||'Alguém'; }
 function renderFriends(){
   if(!db) return;
   $('fcCode').textContent=fshow(db.friendCode);
-  $('ftInbox').textContent='Caixa'+(inbox.length?` (${inbox.length})`:'');
   $('ftFriends').textContent='Amigos'+(friends.length?` (${friends.length})`:'');
   $('ftBlocked').textContent='Bloqueados'+(blocks.length?` (${blocks.length})`:'');
-  [['Inbox','inbox'],['Friends','friends'],['Blocked','blocked']].forEach(([n,k])=>$('ft'+n).classList.toggle('active',fTab===k));
+  $('ftFriends').classList.toggle('active',fTab!=='blocked'); $('ftBlocked').classList.toggle('active',fTab==='blocked');
   const L=$('fList'); L.innerHTML='';
-  const row=(html,btns)=>{
-    const el=document.createElement('div'); el.className='item';
-    el.innerHTML=`<div>${html}</div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"></div>`;
-    const box=el.lastElementChild;
-    btns.forEach(([label,cls,fn])=>{ const b=document.createElement('button'); b.className='btn sm '+cls; b.textContent=label; b.onclick=fn; box.appendChild(b); });
-    L.appendChild(el);
-  };
   const empty=t=>{ L.innerHTML=`<div class="empty">${t}</div>`; };
-  if(fTab==='inbox'){
-    if(!inbox.length) return empty('A caixa está vazia. Pedidos de amizade e baralhos enviados por amigos aparecem aqui.');
-    inbox.forEach(it=>{
-      const nm=it.kind==='deck'?nameOfFriend(it.fromUid,it.fromName):clip(it.fromName,60)||'Alguém';
-      if(it.kind==='friend') row(`<div class="t">${esc(nm)}</div><div class="s">Quer ser teu amigo</div>`,
-        [['Aceitar','primary',()=>acceptFriend(it,nm)],['Ignorar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
-      else if(it.kind==='deck'){
-        const n=Number(it.count)||0, ty=it.deckType==='other'?'Outros':'Línguas';
-        row(`<div class="t">${esc(clip(it.deckName,60)||'Baralho')}</div><div class="s">De <b>${esc(nm)}</b> · ${n} carta${n!==1?'s':''} · ${ty}</div>`,
-          [['Ver','primary',()=>{ if(/^[A-Za-z0-9_-]{10,40}$/.test(String(it.shareId))) openShare(it.shareId,it.id); }],['Recusar','',()=>dismiss(it)],['Bloquear','bad',()=>blockFrom(it,nm)]]);
-      }
-    });
-  }else if(fTab==='friends'){
+  if(fTab!=='blocked'){
     if(!friends.length) return empty('Ainda não tens amigos. Pede o código a alguém e adiciona-o acima.');
-    friends.forEach(f=>row(`<div class="t">${esc(clip(f.name,60)||'Amigo')} <span class="tag">${f.ok?'Amigo':'Pendente'}</span></div><div class="s">${f.ok?'Podem trocar baralhos.':'A aguardar que aceite o pedido.'}</div>`,
-      [['Remover','',()=>removeFriendUI(f)],['Bloquear','bad',()=>blockFrom({fromUid:f.id},clip(f.name,60)||'esta pessoa')]]));
+    friends.forEach(f=>{
+      const nm=nameOf(f.id,f.name);
+      makeRow(L,`${avatarHTML(f.id,nm)}<div style="min-width:0"><div class="t">${esc(nm)} <span class="tag ${f.ok?'':'warn'}">${f.ok?'Amigo':'Pendente'}</span></div><div class="s">${f.ok?'Podem trocar baralhos.':'A aguardar que aceite o pedido.'}</div></div>`,
+        [['Remover','',()=>removeFriendUI(f,nm)],['Bloquear','bad',()=>blockFrom({fromUid:f.id},nm)]]);
+    });
   }else{
     if(!blocks.length) return empty('Não bloqueaste ninguém.');
-    blocks.forEach(b=>row(`<div class="t">${esc(clip(b.name,60)||'Utilizador')}</div><div class="s">Não pode enviar-te pedidos nem baralhos.</div>`,
-      [['Desbloquear','',async()=>{ try{ await cloud.unblock(user.uid,b.id); await refreshBlocks(); renderFriends(); }catch(e){ lmsg(friendly(e)); } }]]));
+    blocks.forEach(b=>{
+      const nm=nameOf(b.id,b.name);
+      makeRow(L,`${avatarHTML(b.id,nm)}<div style="min-width:0"><div class="t">${esc(nm)}</div><div class="s">Não pode enviar-te pedidos nem baralhos.</div></div>`,
+        [['Desbloquear','',async()=>{ try{ await cloud.unblock(user.uid,b.id); await refreshBlocks(); renderFriends(); }catch(e){ emsg(friendly(e)); } }]]);
+    });
   }
 }
-async function acceptFriend(it,nm){
-  lmsg('');
-  try{ await cloud.addFriend(user.uid,it.fromUid,nm); await cloud.deleteItem(user.uid,it.id); await refreshFriends(); renderFriends(); }
-  catch(e){ lmsg(friendly(e)); }
-}
-async function dismiss(it){ lmsg(''); try{ await cloud.deleteItem(user.uid,it.id); }catch(e){ lmsg(friendly(e)); } }
-async function removeFriendUI(f){
-  if(!confirm('Remover '+(clip(f.name,60)||'este amigo')+' da tua lista?')) return;
-  try{ await cloud.removeFriend(user.uid,f.id); await refreshFriends(); renderFriends(); }catch(e){ lmsg(friendly(e)); }
-}
-async function blockFrom(it,nm){
-  if(!confirm('Bloquear '+nm+'? Deixas de receber pedidos e baralhos desta pessoa, e ela é removida dos teus amigos.')) return;
-  lmsg('');
-  try{
-    await cloud.blockUser(user.uid,it.fromUid,nm);
-    for(const x of inbox.filter(i=>i.fromUid===it.fromUid)) await cloud.deleteItem(user.uid,x.id).catch(()=>{});
-    await Promise.all([refreshFriends(),refreshBlocks()]); fTab='blocked'; renderFriends();
-  }catch(e){ lmsg(friendly(e)); }
-}
-['Inbox','Friends','Blocked'].forEach(n=>$('ft'+n).onclick=()=>{ fTab=n.toLowerCase(); lmsg(''); renderFriends(); });
+['Friends','Blocked'].forEach(n=>$('ft'+n).onclick=()=>{ fTab=n.toLowerCase(); pmsg('flMsg',''); renderFriends(); });
 $('fcCopy').onclick=async()=>{
   if(!db.friendCode) return;
   try{ await navigator.clipboard.writeText(db.friendCode); fmsg('Código copiado.',false); }catch(e){ fmsg('Seleciona o código e copia-o manualmente.'); }
@@ -1579,21 +1695,37 @@ $('faAdd').onclick=async()=>{
     try{ await cloud.sendItem(t.uid,{kind:'friend',fromUid:user.uid,fromName:clip(userName(),60),createdAt:Date.now()}); }
     catch(e){ await cloud.removeFriend(user.uid,t.uid).catch(()=>{}); return amsg('Não foi possível enviar o pedido a esta pessoa.'); }
     $('faCode').value=''; amsg('Pedido enviado a '+nm+'. Quando aceitar, podem trocar baralhos.',false);
-    fTab='friends'; await refreshFriends(); renderFriends();
+    fTab='friends'; await refreshFriends(); renderFriends(); loadProfiles([t.uid]).then(()=>{ if(current==='friends') renderFriends(); });
   }catch(e){ amsg(e&&e.code==='permission-denied'?'Falta atualizar as regras do Firestore para usar amigos.':friendly(e)); }
   finally{ $('faAdd').disabled=false; }
 };
 $('faCode').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('faAdd').click(); }});
-$('shSend').onclick=async()=>{
-  const d=deck(), to=$('shFriend').value; if(!d.shareId||!to) return;
-  const nm=nameOfFriend(to,'amigo'); $('shSend').disabled=true; smsg('');
+
+/* ---- enviar baralho a amigos (lista com foto) ---- */
+function renderSendList(skipLoad){
+  const L=$('shFriends'); if(!L) return; L.innerHTML='';
+  const d=deck(), ok=friends.filter(f=>f.ok);
+  if(!ok.length){
+    L.innerHTML='<div class="empty" style="padding:14px">Ainda não tens amigos que te tenham aceitado. <button class="linkbtn" id="shGoFriends">Adicionar amigos</button></div>';
+    $('shGoFriends').onclick=()=>go('friends'); return;
+  }
+  ok.forEach(f=>{
+    const nm=nameOf(f.id,f.name), done=!!sentTo[(d.shareId||'')+':'+f.id];
+    makeRow(L,`${avatarHTML(f.id,nm)}<div class="t">${esc(nm)}</div>`,[]);
+    const b=document.createElement('button'); b.className='btn sm '+(done?'':'primary'); b.disabled=!d.shareId||done;
+    b.innerHTML=done?ic('check')+' Enviado':ic('share')+' Enviar'; b.onclick=()=>sendTo(f.id,nm,b);
+    L.lastElementChild.lastElementChild.appendChild(b);
+  });
+  if(!skipLoad) loadProfiles(ok.map(f=>f.id)).then(()=>{ if(!$('shareBox').classList.contains('hidden')&&shareBoxDeck===deck().id) renderSendList(true); });
+}
+async function sendTo(uidTo,nm,btn){
+  const d=deck(); if(!d.shareId) return; btn.disabled=true; smsg('');
   try{
     await cloud.shareDeck(d.shareId,snapshot(d));
-    await cloud.sendItem(to,{kind:'deck',fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:Date.now()});
-    smsg('Enviado para '+nm+'. Vai aparecer na caixa dele.',false);
-  }catch(e){ smsg(e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
-  $('shSend').disabled=false;
-};
+    await cloud.sendItem(uidTo,{kind:'deck',fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:Date.now()});
+    sentTo[d.shareId+':'+uidTo]=1; renderSendList(true); smsg('Enviado para '+nm+'.',false);
+  }catch(e){ btn.disabled=false; smsg(e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
+}
 
 /* ---- estado de autenticação ---- */
 async function onUser(u){
@@ -1605,12 +1737,12 @@ async function onUser(u){
     $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
     if(!db.theme){ try{ db.theme=localStorage.getItem('studions.theme')||'auto'; }catch(e){ db.theme='auto'; } }
     applyTheme(db.theme);
-    renderUser(); listen(); startInbox(); refreshFriends(); refreshBlocks(); if(pendingShare) openShare(); else if(needsPassword()) goSetPass(); else go('home');
+    renderUser(); listen(); startInbox(); refreshFriends(); refreshBlocks(); publishProfile(); if(pendingShare) openShare(); else if(needsPassword()) goSetPass(); else go('home');
     entering=false;
   }else{
     if(unsub){ unsub(); unsub=null; }
     clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null; deleting=false;
-    if(unInbox){ unInbox(); unInbox=null; } inbox=[]; friends=[]; blocks=[]; codeChecked=false; badge();
+    if(unInbox){ unInbox(); unInbox=null; } inbox=[]; friends=[]; blocks=[]; codeChecked=false; lastAcc=0; badge();
     renderUser(); showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
   }
 }
