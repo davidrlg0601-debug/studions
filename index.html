@@ -216,6 +216,9 @@ header{justify-content:space-between}
 .dnear{background:color-mix(in srgb,var(--warn) 26%,transparent);border-radius:5px;padding:0 4px;color:var(--text)}
 .dbad{background:color-mix(in srgb,var(--bad) 24%,transparent);border-radius:5px;padding:0 4px;color:var(--text)}
 .li .u.acc{color:var(--warn);text-decoration:none}
+.rb.spinning .ic{animation:sp .8s linear infinite}
+.guestbox{display:flex;align-items:center;gap:10px}
+.tile.soon .meta{margin-top:14px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -223,6 +226,7 @@ header{justify-content:space-between}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-quiz" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
@@ -260,6 +264,7 @@ header{justify-content:space-between}
     <b>Study<i>ons</i></b>
   </button>
   <div class="hright">
+  <div class="guestbox hidden" id="guestBox"><span class="chip">Convidado</span><button class="btn primary sm" id="guestLogin">Entrar ou criar conta</button></div>
   <button class="iconbtn hidden" id="mailBtn" title="Caixa de entrada" aria-label="Caixa de entrada"><svg class="ic"><use href="#i-mail"/></svg><span class="badge hidden" id="fbadge"></span></button>
   <button class="iconbtn hidden" id="friendsBtn" title="Amigos" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg></button>
   <div class="userbox hidden" id="userBox">
@@ -308,6 +313,9 @@ header{justify-content:space-between}
         <div id="aForgotWrap" style="margin-top:8px;text-align:right"><button class="linkbtn" id="aForgot">Esqueci-me da palavra-passe</button></div>
         <div class="actions"><button class="btn primary" id="aSubmit" style="width:100%">Entrar</button></div>
         <div class="msg" id="aMsg"></div>
+        <div class="or">ou</div>
+        <button class="btn" id="aGuest" style="width:100%"><svg class="ic"><use href="#i-user"/></svg> Continuar como convidado</button>
+        <p class="note2" style="margin:10px 0 0;text-align:center">Sem conta, os teus dados ficam só neste aparelho e não há amigos, partilha nem sincronização.</p>
       </div>
     </div>
   </section>
@@ -481,6 +489,10 @@ header{justify-content:space-between}
   <section id="vHome" class="view hidden">
     <h1 id="welcome">Bem-vindo(a)</h1>
     <p class="sub">Escolhe como queres estudar hoje.</p>
+    <div class="banner hidden" id="guestBanner">
+      <span><svg class="ic"><use href="#i-alert"/></svg> Modo convidado: os dados ficam só neste aparelho e as funções online (amigos, partilha e sincronização) não estão disponíveis.</span>
+      <button class="btn sm primary" id="guestBannerBtn">Criar conta</button>
+    </div>
     <div class="banner hidden" id="verifyBanner">
       <span><svg class="ic"><use href="#i-alert"/></svg> Confirma o teu email através da mensagem que te enviámos.</span>
       <span style="display:flex;gap:8px"><button class="btn sm" id="vResend">Reenviar email</button><button class="btn sm" id="vDone">Já confirmei</button></span>
@@ -493,6 +505,12 @@ header{justify-content:space-between}
         <p>Línguas e outras matérias, com cartas, modo mental e modo escrito.</p>
         <div class="meta"><span class="chip" id="homeDecks"></span><span class="chip" id="homeCards"></span></div>
       </button>
+      <div class="tile soon" aria-disabled="true">
+        <div class="big-ic"><svg class="ic"><use href="#i-quiz"/></svg></div>
+        <h3>Quiz</h3>
+        <p>Testa os teus conhecimentos com perguntas e respostas.</p>
+        <div class="meta"><span class="chip"><svg class="ic"><use href="#i-clock"/></svg> Em breve</span></div>
+      </div>
       <div class="tile soon">
         <div class="big-ic"><svg class="ic"><use href="#i-clock"/></svg></div>
         <h3>Mais métodos</h3>
@@ -557,6 +575,7 @@ header{justify-content:space-between}
         <button class="btn" id="shareDeck"><svg class="ic"><use href="#i-share"/></svg> Partilhar</button>
         <button class="btn bad" id="delDeck"><svg class="ic"><use href="#i-trash"/></svg> Apagar</button>
       </div>
+      <p class="note2 hidden" id="guestHint" style="margin:12px 0 0">Com uma conta podes partilhar baralhos por link e enviá-los a amigos. <button class="linkbtn" id="guestHintBtn">Criar conta</button></p>
     </div>
 
     <div class="panel hidden" id="shareBox">
@@ -839,11 +858,12 @@ function save(){
   if(!db||!user||deleting) return;
   db.updatedAt=Date.now();
   try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
+  if(user.isGuest) return;
   setSync('saving');
   clearTimeout(saveTimer); saveTimer=setTimeout(pushCloud,800);
 }
 async function pushCloud(){
-  if(!cloud||!user||!db||deleting) return;
+  if(!cloud||!user||!db||deleting||user.isGuest) return;
   try{ await cloud.saveData(user.uid,db); setSync('ok'); }catch(e){ setSync('err'); }
 }
 async function loadForUser(){
@@ -851,6 +871,7 @@ async function loadForUser(){
   try{ remote=await cloud.loadData(user.uid); }catch(e){}
   if(!validDb(remote)) remote=null;
   let imported=false;
+  if(!remote&&!local){ const g=readLocal('studions.v2.guest'); if(g&&g.decks.some(d=>d.cards.length)) local=JSON.parse(JSON.stringify(g)); }
   if(!remote&&!local){ const legacy=readLocal(LEGACY_KEY); if(legacy){ local=legacy; imported=true; } }
   db = remote&&local ? ((remote.updatedAt||0)>=(local.updatedAt||0)?remote:local) : (remote||local||blankDb());
   fixDb();
@@ -882,6 +903,7 @@ const crumbOf=v=>({mail:'<b>Caixa de entrada</b>',friends:'<b>Amigos</b>',share:
 const BACK={mail:'home',friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
+  if(user&&user.isGuest&&['friends','mail','profile','share','setpass'].includes(v)) v='home';
   current=v;
   if(v!=='study'&&db){ S=null; if(pendingRemote){ const r=pendingRemote; pendingRemote=null; applyRemote(r); } }
   for(const k in VIEWS) $(VIEWS[k]).classList.toggle('hidden',k!==v);
@@ -914,6 +936,7 @@ function applyHub(){
 function typeLabels(){ return fcType==='lang'?{f:'Original',b:'Tradução'}:{f:'Pergunta',b:'Resposta'}; }
 function applyTypeUI(){
   const lang=fcType==='lang', T=typeLabels();
+  { const g=!!(user&&user.isGuest); $('shareDeck').classList.toggle('hidden',g); $('guestHint').classList.toggle('hidden',!g); if(g) $('shareBox').classList.add('hidden'); }
   $('lFront').textContent=lang?'Palavra ou frase (qualquer idioma)':'Pergunta ou termo';
   $('fFront').placeholder=lang?'ex.: serendipity':'ex.: Capital de Portugal';
   $('lBack').textContent=lang?'Tradução (vazio = traduzir automaticamente)':'Resposta';
@@ -991,7 +1014,7 @@ async function saveCard(){
   let back=$('fBack').value.trim(), lang=$('fSrc').value;
   if(!back){ if(fcType!=='lang'){ msg('Escreve a resposta.',true); return; } const r=await doTranslate(); if(!r) return; back=r.text; if(lang==='auto') lang=(r.lang||'auto').split('-')[0]||'auto'; }
   const data={front,back,notes:$('fNotes').value.trim(),srcLang:fcType==='lang'?lang:'',tgtLang:fcType==='lang'?$('fTgt').value:''};
-  if(editingId) Object.assign(deck().cards.find(c=>c.id===editingId),data);
+  if(editingId){ const oc=deck().cards.find(c=>c.id===editingId); if(oc.front!==front||oc.back!==back){ oc.altsA=[]; oc.altsQ=[]; } Object.assign(oc,data); }
   else deck().cards.push({id:uid(),...data,ok:0,bad:0});
   save(); cancelEdit(); fillDeckSelects(); renderCards(); msg('Carta guardada.'); $('fFront').focus();
 }
@@ -1123,23 +1146,46 @@ function lev(a,b){
   return p[n];
 }
 const variants=s=>s.split(/\s*[\/;|]\s*/).map(x=>x.trim()).filter(Boolean);
+let GLANG='';
+const GEN_ON=l=>!l||['pt','es','ca','gl','it','fr'].includes(l);
+const GMAP={};
+const gm=(k,list)=>list.forEach(w=>GMAP[w]=k);
+gm('D',['o','a','os','as','el','la','los','las','le','les','il','lo','i','gli','l']);
+gm('I',['um','uma','uns','umas','un','una','unos','unas','une','uno']);
+gm('E1',['ele','ela']); gm('E2',['eles','elas']);
+gm('M1',['meu','minha']); gm('M2',['meus','minhas']); gm('T1',['teu','tua']); gm('T2',['teus','tuas']);
+gm('S1',['seu','sua']); gm('S2',['seus','suas']); gm('N1',['nosso','nossa']); gm('N2',['nossos','nossas']);
+gm('X1',['este','esta']); gm('X2',['estes','estas']); gm('Y1',['esse','essa']); gm('Y2',['esses','essas']);
+gm('Z1',['aquele','aquela']); gm('Z2',['aqueles','aquelas']); gm('DE1',['dele','dela']); gm('DE2',['deles','delas']);
+gm('QL',['algum','alguma']); gm('NH',['nenhum','nenhuma']);
+function genderKey(t,lang){
+  if(GMAP[t]) return GMAP[t];
+  if(t.length<3) return t;
+  let s=t;
+  if(lang==='fr') return s.replace(/euse$/,'eur').replace(/trice$/,'teur').replace(/ienne$/,'ien').replace(/ere$/,'er').replace(/([^aeo])e$/,'$1');
+  s=s.replace(/(oras|ores)$/,'ors').replace(/ora$/,'or').replace(/trizes$/,'tors').replace(/triz$/,'tor').replace(/esas$/,'eses').replace(/esa$/,'es').replace(/aos$/,'as').replace(/ao$/,'a');
+  if(/[ao]s$/.test(s)) return s.slice(0,-2)+'*s';
+  if(/[ao]$/.test(s)) return s.slice(0,-1)+'*';
+  return s;
+}
 const tokensOf=s=>s.trim().split(/\s+/).filter(Boolean);
 function tokKind(u,e){
   if(norm(u)===norm(e)) return 'ok';
   const x=loose(u),y=loose(e);
   if(x===y) return 'acc';
+  if(GEN_ON(GLANG)&&genderKey(x,GLANG)===genderKey(y,GLANG)) return 'gen';
   const th=y.length<=3?0:y.length<=7?1:2;
   return th>0&&lev(x,y)<=th?'near':'sub';
 }
-const TOKCOST={ok:0,acc:.05,near:.35,sub:1};
+const OPCOST={ok:0,acc:.05,gen:.05,syn:.1,near:.35,sub:1,ins:1,del:1};
 function align(ut,et){
   const n=ut.length,m=et.length,D=Array.from({length:n+1},()=>new Array(m+1).fill(0));
   for(let i=1;i<=n;i++) D[i][0]=i;
   for(let j=1;j<=m;j++) D[0][j]=j;
-  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++) D[i][j]=Math.min(D[i-1][j]+1,D[i][j-1]+1,D[i-1][j-1]+TOKCOST[tokKind(ut[i-1],et[j-1])]);
+  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++) D[i][j]=Math.min(D[i-1][j]+1,D[i][j-1]+1,D[i-1][j-1]+OPCOST[tokKind(ut[i-1],et[j-1])]);
   const ops=[]; let i=n,j=m;
   while(i>0||j>0){
-    if(i>0&&j>0){ const k=tokKind(ut[i-1],et[j-1]); if(Math.abs(D[i][j]-(D[i-1][j-1]+TOKCOST[k]))<1e-9){ ops.push({t:k,u:i-1,e:j-1}); i--; j--; continue; } }
+    if(i>0&&j>0){ const k=tokKind(ut[i-1],et[j-1]); if(Math.abs(D[i][j]-(D[i-1][j-1]+OPCOST[k]))<1e-9){ ops.push({t:k,u:i-1,e:j-1}); i--; j--; continue; } }
     if(i>0&&Math.abs(D[i][j]-(D[i-1][j]+1))<1e-9){ ops.push({t:'ins',u:i-1,e:-1}); i--; continue; }
     ops.push({t:'del',u:-1,e:j-1}); j--;
   }
@@ -1152,6 +1198,11 @@ function gradeOne(user,exp){
   const lu=loose(user),le=loose(exp);
   if(lu===le) return {g:'certo',accent:true,rank:3,score:.98};
   const ut=tokensOf(user),et=tokensOf(exp);
+  if(ut.length===et.length){
+    let gen=false,acc=false,all=true;
+    for(let i=0;i<ut.length&&all;i++){ const k=tokKind(ut[i],et[i]); if(k==='gen') gen=true; else if(k==='acc') acc=true; else if(k!=='ok') all=false; }
+    if(all) return {g:'certo',accent:acc,gender:gen,rank:3,score:.98};
+  }
   if(et.length<5&&le.length<25){
     const th=le.length<=3?0:le.length<=7?1:le.length<=12?2:3, d=lev(lu,le), ok=th>0&&d<=th;
     return {g:ok?'mal':'erro',rank:ok?2:1,score:Math.max(0,1-d/Math.max(le.length,1))};
@@ -1160,48 +1211,111 @@ function gradeOne(user,exp){
   const score=Math.max(ws,cs), thr=et.length>=15?.78:.85, ok=score>=thr;
   return {g:ok?'mal':'erro',rank:ok?2:1,score};
 }
-function grade(user,expected){
+function grade(user,expected,alts){
   let best=null;
-  for(const v of [expected,...variants(expected)]){
+  const cand=[[expected,false],...variants(expected).map(v=>[v,false]),...(alts||[]).map(a=>[a,true])];
+  for(const [v,isAlt] of cand){
     const r=gradeOne(user,v); r.variant=v;
+    if(isAlt){ if(r.g!=='certo') continue; r.syn=true; r.fromAlt=true; r.rank=Math.min(r.rank,3); }
     if(!best||r.rank>best.rank||(r.rank===best.rank&&r.score>best.score)) best=r;
   }
-  return best;
+  return best||{g:'erro',rank:0,score:0,variant:expected};
 }
-function diffHTML(user,exp){
-  const ut=tokensOf(user),et=tokensOf(exp),{ops}=align(ut,et),ex=[],us=[];
+/* ---- sinónimos (precisa de internet): compara o significado através da tradução ---- */
+const pcache=new Map();
+function tr(text,sl,tl){
+  const k=(sl||'auto')+'|'+tl+'|'+text;
+  if(!pcache.has(k)) pcache.set(k,translate(text,sl||'auto',tl).catch(()=>null));
+  return pcache.get(k);
+}
+const stripArt=s=>loose(s).replace(/^(the|an|a|to|o|a|os|as|um|uma|el|la|los|las|le|les|il|der|die|das)\s+/,'');
+function same(a,b){ const x=stripArt(a),y=stripArt(b); return !!x&&!!y&&(x===y||(x.length>=6&&lev(x,y)<=1)); }
+async function synonymHit(val,exps,al,ql,piv,promptText,isLang){
+  if(loose(val)===loose(promptText)) return null;
+  if(al==='en'&&tokensOf(val).length===1){
+    for(const e of exps){
+      if(tokensOf(e).length!==1) continue;
+      try{ const r=await fetch('https://api.datamuse.com/words?rel_syn='+encodeURIComponent(e)+'&max=60'); const j=await r.json(); if(j.some(x=>loose(x.word)===loose(val))) return e; }catch(err){}
+    }
+  }
+  if(isLang&&ql&&ql!==al){ const b=await tr(val,al,ql); if(b&&b.text&&same(b.text,promptText)) return exps[0]; }
+  const pu=await tr(val,al,piv); if(!pu||!pu.text) return null;
+  for(const e of exps){ const pe=await tr(e,al,piv); if(pe&&pe.text&&same(pu.text,pe.text)) return e; }
+  return null;
+}
+async function tokenSyn(a,b,al,piv){
+  const [x,y]=await Promise.all([tr(a,al,piv),tr(b,al,piv)]);
+  return !!(x&&y&&x.text&&y.text&&same(x.text,y.text));
+}
+async function enhance(it,val,exp,r0){
+  const c=it.card, al=(it.rev?c.srcLang:c.tgtLang)||'', ql=(it.rev?c.tgtLang:c.srcLang)||'';
+  const A=al==='auto'?'':al, Q=ql==='auto'?'':ql, piv=A==='en'?'pt':'en';
+  const exps=[...new Set([exp,...variants(exp)])], ut=tokensOf(val);
+  if(!ut.length) return null;
+  if(ut.length<=4&&exps.some(e=>tokensOf(e).length<=4)){
+    const hit=await synonymHit(val,exps,A,Q,piv,promptOf(it),fcType==='lang');
+    return hit?{g:'certo',syn:true,rank:3,score:.97,variant:hit}:null;
+  }
+  const best=r0.variant||exp, et=tokensOf(best), {ops}=align(ut,et);
+  const subs=ops.filter(o=>o.t==='sub').slice(0,8);
+  if(!subs.length) return null;
+  const hits=await Promise.all(subs.map(o=>tokenSyn(ut[o.u],et[o.e],A,piv)));
+  let any=false; subs.forEach((o,i)=>{ if(hits[i]){ o.t='syn'; any=true; } });
+  if(!any) return null;
+  const cost=ops.reduce((s,o)=>s+OPCOST[o.t],0), score=1-cost/Math.max(ut.length,et.length);
+  const allOk=ops.every(o=>['ok','acc','gen','syn'].includes(o.t)), thr=et.length>=15?.78:.85;
+  const g=allOk?'certo':(score>=thr?'mal':'erro'), ord={erro:0,mal:1,certo:2};
+  if(ord[g]<=ord[r0.g]) return null;
+  return {g,syn:true,accent:ops.some(o=>o.t==='acc'),gender:ops.some(o=>o.t==='gen'),rank:g==='certo'?3:2,score,variant:best,ops};
+}
+function diffHTML(user,exp,opsIn){
+  const ut=tokensOf(user),et=tokensOf(exp),ops=opsIn||align(ut,et).ops,ex=[],us=[];
   ops.forEach(o=>{
     const e=o.e>=0?esc(et[o.e]):null,u=o.u>=0?esc(ut[o.u]):null;
     if(o.t==='ok'){ ex.push(`<span class="dok">${e}</span>`); us.push(`<span class="dok">${u}</span>`); }
-    else if(o.t==='acc'||o.t==='near'){ ex.push(`<span class="dnear">${e}</span>`); us.push(`<span class="dnear">${u}</span>`); }
+    else if(['acc','near','gen','syn'].includes(o.t)){ ex.push(`<span class="dnear">${e}</span>`); us.push(`<span class="dnear">${u}</span>`); }
     else if(o.t==='sub'){ ex.push(`<span class="dbad">${e}</span>`); us.push(`<span class="dbad">${u}</span>`); }
     else if(o.t==='del') ex.push(`<span class="dbad">${e}</span>`);
     else us.push(`<span class="dbad">${u}</span>`);
   });
   return {exp:ex.join(' '),us:us.join(' ')};
 }
-function checkAnswer(skip){
+async function checkAnswer(skip){
   if(!S||S.busy||S.answered||S.mode!=='write') return;
-  S.answered=true;
-  const it=cur(),c=it.card,exp=answerOf(it),val=$('answer').value;
-  const r=skip?{g:'erro',variant:exp,score:0}:grade(val,exp), g=r.g, best=r.variant||exp;
-  S.log.push({card:c,prompt:promptOf(it),expected:exp,user:skip?'':val.trim(),grade:g,accent:!!r.accent});
+  S.answered=true; S.checking=true;
+  const sess=S,it=cur(),c=it.card,exp=answerOf(it),val=$('answer').value;
+  GLANG=(it.rev?c.srcLang:c.tgtLang)||''; if(GLANG==='auto') GLANG='';
+  $('answer').disabled=true; $('checkWrap').classList.add('hidden');
+  let r=skip?{g:'erro',variant:exp,score:0}:grade(val,exp,c[it.rev?'altsQ':'altsA']);
+  if(!skip&&val.trim()&&r.g!=='certo'){
+    $('resultBox').innerHTML=`<div class="result" style="border-color:var(--primary)"><div class="rb spinning" style="background:var(--primary)">${ic('repeat')}</div><div><b>A verificar sinónimos…</b><div class="d">Só demora um instante.</div></div></div>`;
+    try{ const r2=await Promise.race([enhance(it,val,exp,r),sleep(3500).then(()=>null)]); if(r2) r=r2; }catch(e){}
+    if(S!==sess||sess.over) return;
+  }
+  sess.checking=false;
+  const g=r.g, best=r.variant||exp;
+  const tags=[r.accent&&'acentos',r.gender&&'género',r.syn&&'sinónimo'].filter(Boolean);
+  S.log.push({card:c,prompt:promptOf(it),expected:exp,user:skip?'':val.trim(),grade:g,tags});
   if(g==='certo') c.ok=(c.ok||0)+1; else if(g==='mal') c.ok=(c.ok||0)+.5; else c.bad=(c.bad||0)+1;
+  if(r.syn&&!r.fromAlt&&g==='certo'&&tokensOf(val).length<=4){ const k=it.rev?'altsQ':'altsA'; c[k]=[...new Set([...(c[k]||[]),val.trim()])].slice(-30); }
   save(); updateLive();
   const T={certo:['check','Certo!'],mal:['alert','Mal escrito'],erro:['x','Errado']}[g];
   $('flashWrap').classList.add('g-'+g);
-  const multi=!skip&&val.trim()&&tokensOf(best).length>=3, df=multi?diffHTML(val,best):null;
+  const multi=!skip&&val.trim()&&tokensOf(best).length>=3, df=multi?diffHTML(val,best,r.ops):null;
   const sim=multi&&g!=='certo'?`<span class="tag" style="margin-left:0;margin-right:6px">semelhança ${Math.round(Math.max(0,r.score)*100)}%</span>`:'';
   let body='';
-  if(g==='certo'&&r.accent) body=`<div class="d"><span class="tag warn" style="margin-left:0">acentos</span> Está certo, mas faltam acentos: ${multi?`<span class="diff">${df.exp}</span>`:`<strong>${esc(best)}</strong>`}</div>`;
-  else if(g!=='certo'){
+  if(g==='certo'&&tags.length){
+    const why=tags.includes('sinónimo')?'Aceite como sinónimo.':tags.includes('género')?'Aceite: variante de género.':'Está certo, mas faltam acentos.';
+    const exShow=(multi&&(!r.syn||r.ops))?`<span class="diff">${df.exp}</span>`:`<strong>${esc(exp)}</strong>`;
+    body=`<div class="d">${tags.map(t=>`<span class="tag warn" style="margin-left:0;margin-right:4px">${t}</span>`).join('')} ${why} Resposta guardada: ${exShow}</div>`;
+  }else if(g!=='certo'){
     body=multi?`<div class="d">${sim}Resposta correta:</div><div class="d diff">${df.exp}</div><div class="d">Escreveste:</div><div class="d diff">${df.us}</div>`
       :`<div class="d">Resposta correta: <strong>${esc(exp)}</strong></div>`+(!skip&&val.trim()?`<div class="d">Escreveste: ${esc(val)}</div>`:'');
   }
   $('resultBox').innerHTML=`<div class="result ${g}"><div class="rb">${ic(T[0])}</div><div style="min-width:0"><b>${T[1]}</b>${body}${c.notes?`<div class="d">${ic('note')} ${esc(c.notes)}</div>`:''}</div></div>`;
-  $('answer').disabled=true; $('checkWrap').classList.add('hidden'); $('nextWrap').classList.remove('hidden'); $('btnNext').focus();
+  $('nextWrap').classList.remove('hidden'); $('btnNext').focus();
 }
-function nextCard(){ if(!S||S.busy||!S.answered) return; advance('leave-next'); }
+function nextCard(){ if(!S||S.busy||!S.answered||S.checking) return; advance('leave-next'); }
 $('btnCheck').onclick=()=>checkAnswer(false);
 $('btnSkip').onclick=()=>checkAnswer(true);
 $('btnNext').onclick=nextCard;
@@ -1223,16 +1337,17 @@ function countUp(el,to,dur=1100){
 function groupHTML(title,icon,cls,items){
   if(!items.length) return '';
   return `<div class="grp ${cls}"><h3>${ic(icon)} ${title}<span class="count">${items.length}</span></h3>`+
-    items.map((l,i)=>`<div class="li" style="animation-delay:${Math.min(i,14)*45+200}ms"><div class="q">${esc(l.prompt)}${l.accent?' <span class="tag warn">acentos</span>':''}</div>
-      <div class="a">${esc(l.expected)}</div>${l.user&&l.grade!=='certo'?`<span class="u">${esc(l.user)}</span>`:''}${l.accent&&l.user?`<span class="u acc">${esc(l.user)}</span>`:''}</div>`).join('')+`</div>`;
+    items.map((l,i)=>`<div class="li" style="animation-delay:${Math.min(i,14)*45+200}ms"><div class="q">${esc(l.prompt)}${(l.tags||[]).map(t=>' <span class="tag warn">'+t+'</span>').join('')}</div>
+      <div class="a">${esc(l.expected)}</div>${l.user&&l.grade!=='certo'?`<span class="u">${esc(l.user)}</span>`:''}${(l.tags&&l.tags.length&&l.user)?`<span class="u acc">${esc(l.user)}</span>`:''}</div>`).join('')+`</div>`;
 }
 function finish(){
+  if(S) S.over=true;
   $('bar').style.width='100%';
   $('studyRun').classList.add('hidden'); $('studyEnd').classList.remove('hidden');
   const ok=S.log.filter(l=>l.grade==='certo'),mal=S.log.filter(l=>l.grade==='mal'),bad=S.log.filter(l=>l.grade==='erro');
   const n=S.log.length, pct=n?Math.round((ok.length+mal.length*.5)/n*100):0;
   const mental=S.mode==='mental';
-  let st=`<div class="stat ok"><div class="v">${ic('check')}${ok.length}</div><div class="k">${mental?'Acertei':'Certas'}</div>${ok.filter(l=>l.accent).length?`<div class="k" style="color:var(--warn)">${ok.filter(l=>l.accent).length} sem acentos</div>`:''}</div>`;
+  let st=`<div class="stat ok"><div class="v">${ic('check')}${ok.length}</div><div class="k">${mental?'Acertei':'Certas'}</div>${ok.filter(l=>l.tags&&l.tags.length).length?`<div class="k" style="color:var(--warn)">${ok.filter(l=>l.tags&&l.tags.length).length} com avisos</div>`:''}</div>`;
   if(!mental) st+=`<div class="stat mal" style="animation-delay:.1s"><div class="v">${ic('alert')}${mal.length}</div><div class="k">Mal escritas</div></div>`;
   st+=`<div class="stat erro" style="animation-delay:.2s"><div class="v">${ic('x')}${bad.length}</div><div class="k">${mental?'Passadas':'Erradas'}</div></div>`;
   $('endStats').innerHTML=st;
@@ -1252,7 +1367,8 @@ const userName=()=>user.displayName||(user.email?user.email.split('@')[0]:'estud
 
 function updateHome(){
   if(!user||!db) return;
-  $('welcome').textContent='Bem-vindo(a), '+userName();
+  $('welcome').textContent=user.isGuest?'Bem-vindo(a)':'Bem-vindo(a), '+userName();
+  $('guestBanner').classList.toggle('hidden',!user.isGuest);
   $('homeDecks').innerHTML=`${ic('layers')} ${db.decks.length} baralho${db.decks.length!==1?'s':''}`;
   $('homeCards').innerHTML=`${ic('book')} ${db.decks.reduce((n,d)=>n+d.cards.length,0)} cartas`;
   const needs=!user.emailVerified&&(user.providerData||[]).some(p=>p.providerId==='password');
@@ -1266,7 +1382,9 @@ function paintAvatar(el){
 }
 function renderUser(){
   const box=$('userBox'); $('uMenu').classList.add('hidden');
-  if(!user){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); $('mailBtn').classList.add('hidden'); return; }
+  if(!user){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); $('mailBtn').classList.add('hidden'); $('guestBox').classList.add('hidden'); return; }
+  if(user.isGuest){ box.classList.add('hidden'); $('friendsBtn').classList.add('hidden'); $('mailBtn').classList.add('hidden'); $('guestBox').classList.remove('hidden'); return; }
+  $('guestBox').classList.add('hidden');
   box.classList.remove('hidden'); $('friendsBtn').classList.remove('hidden'); $('mailBtn').classList.remove('hidden'); $('setPassBtn').classList.toggle('hidden',hasPassword());
   $('uName').textContent=userName(); $('uEmail').textContent=user.email||'';
   const av=$('uAvatar');
@@ -1727,11 +1845,29 @@ async function sendTo(uidTo,nm,btn){
   }catch(e){ btn.disabled=false; smsg(e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
 }
 
+/* ---- modo convidado ---- */
+const GUEST={uid:'guest',isGuest:true,displayName:'Convidado',email:'',providerData:[]};
+const guestFlag=()=>{ try{ return localStorage.getItem('studions.guest')==='1'; }catch(e){ return false; } };
+function enterGuest(){
+  try{ localStorage.setItem('studions.guest','1'); }catch(e){}
+  user=GUEST; db=readLocal(userKey())||blankDb(); fixDb();
+  if(!db.theme){ try{ db.theme=localStorage.getItem('studions.theme')||'auto'; }catch(e){ db.theme='auto'; } }
+  applyTheme(db.theme);
+  $('fTgt').value=db.tgt||'pt'; setSaveLabel(); renderUser(); go('home');
+}
+function leaveGuest(){
+  try{ localStorage.removeItem('studions.guest'); }catch(e){}
+  S=null; user=null; db=null; renderUser(); showAuth();
+}
+$('aGuest').onclick=enterGuest;
+['guestLogin','guestBannerBtn','guestHintBtn'].forEach(i=>$(i).onclick=leaveGuest);
+
 /* ---- estado de autenticação ---- */
 async function onUser(u){
   if(u&&user&&u.uid===user.uid){ user=u; renderUser(); updateHome(); return; }
   if(u){
     if(entering) return; entering=true;
+    try{ localStorage.removeItem('studions.guest'); }catch(e){}
     user=u; go('loading');
     try{ await loadForUser(); }catch(e){ db=readLocal(userKey())||blankDb(); }
     $('fTgt').value=db.tgt||'pt'; setSaveLabel(); setSync('ok');
@@ -1743,14 +1879,16 @@ async function onUser(u){
     if(unsub){ unsub(); unsub=null; }
     clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null; deleting=false;
     if(unInbox){ unInbox(); unInbox=null; } inbox=[]; friends=[]; blocks=[]; codeChecked=false; lastAcc=0; badge();
-    renderUser(); showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
+    renderUser();
+    if(guestFlag()&&!pendingShare&&!goneMsg){ enterGuest(); return; }
+    showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
   }
 }
 async function boot(){
   go('loading');
   cloud=await Promise.race([window.cloudReady,sleep(12000).then(()=>null)]);
-  if(!cloud) return showAuth('Não foi possível carregar o serviço de login. Verifica a ligação à internet e recarrega a página.');
-  if(!cloud.configured) return showAuth('O login ainda não está configurado: falta colar a configuração do Firebase no ficheiro.');
+  if(!cloud){ if(guestFlag()&&!pendingShare) return enterGuest(); return showAuth('Não foi possível carregar o serviço de login. Verifica a ligação à internet e recarrega a página.'); }
+  if(!cloud.configured){ if(guestFlag()&&!pendingShare) return enterGuest(); return showAuth('O login ainda não está configurado: falta colar a configuração do Firebase no ficheiro.'); }
   cloud.onAuth(onUser);
 }
 setSaveLabel();
