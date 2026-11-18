@@ -240,6 +240,56 @@ header{justify-content:space-between}
 .legal p,.legal li{font-size:14px;line-height:1.55}
 .legal ul{padding-left:20px;margin:6px 0}
 .legal mark{background:color-mix(in srgb,var(--warn) 30%,transparent);color:var(--text);padding:1px 6px;border-radius:6px}
+/* ===== dock inferior ===== */
+.dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:flex;gap:4px;padding:7px;border-radius:26px;
+  background:color-mix(in srgb,var(--card) 72%,transparent);backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);
+  border:1px solid color-mix(in srgb,var(--line) 80%,transparent);box-shadow:0 18px 44px rgba(10,30,80,.22),inset 0 1px 0 rgba(255,255,255,.35);animation:dockIn .5s var(--ease)}
+@keyframes dockIn{from{opacity:0;transform:translate(-50%,26px)}to{opacity:1;transform:translateX(-50%)}}
+.dk-b{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:64px;padding:9px 12px 7px;border:0;border-radius:19px;background:none;color:var(--muted);font:inherit;font-size:11px;font-weight:700;cursor:pointer;
+  transition:color .25s,background .3s var(--ease),transform .25s var(--ease),box-shadow .3s}
+.dk-b .ic{width:22px;height:22px;transition:transform .3s var(--ease)}
+.dk-b:hover{color:var(--text);transform:translateY(-2px)}
+.dk-b:active{transform:scale(.94)}
+.dk-b.active{color:#fff;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 8px 20px var(--glow)}
+.dk-b.active .ic{transform:translateY(-1px) scale(1.08)}
+.dk-b .badge{top:1px;right:8px}
+body.has-dock main{padding-bottom:124px}
+body.has-dock .foot{padding-bottom:112px}
+@media (max-width:520px){.dock{width:calc(100% - 20px);justify-content:space-between;gap:2px;padding:6px}.dk-b{min-width:0;flex:1;padding:8px 4px 6px;font-size:10.5px}}
+/* ===== mensagens ===== */
+.crow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--text);font:inherit;cursor:pointer;animation:viewIn .35s var(--ease) both;transition:border-color .2s,transform .2s}
+.crow:hover{border-color:var(--primary);transform:translateX(3px)}
+.crow .mid{flex:1;min-width:0}
+.crow .nm{font-weight:700;display:flex;gap:8px;justify-content:space-between;align-items:baseline}
+.crow .nm .tm{font-size:11px;color:var(--muted);font-weight:500;flex:none}
+.crow .pv{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ub{min-width:20px;height:20px;border-radius:99px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 6px;flex:none;animation:pop .3s var(--ease)}
+.cvhead{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.cvhead .t{font-weight:800;font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.msgs{display:flex;flex-direction:column;gap:6px;overflow-y:auto;height:min(56vh,520px);padding:6px 2px;scroll-behavior:smooth}
+.bub{max-width:80%;padding:9px 13px 6px;border-radius:18px;word-break:break-word;font-size:15px;animation:pop .25s var(--ease)}
+.bub .msgtxt{white-space:pre-wrap}
+.bub .tm{display:block;font-size:10.5px;opacity:.65;margin-top:2px;text-align:right}
+.bub.me{align-self:flex-end;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border-bottom-right-radius:6px}
+.bub.them{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:6px}
+.bub.pend{opacity:.6}
+.dsep{align-self:center;font-size:11px;font-weight:700;color:var(--muted);background:var(--bg);border:1px solid var(--line);padding:2px 10px;border-radius:99px;margin:6px 0}
+.bub.deckb{padding:10px 12px 6px;min-width:230px}
+.bub .dklbl{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+.bub .dk{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:13px;background:rgba(255,255,255,.16)}
+.bub.them .dk{background:var(--primary-soft)}
+.bub .dki{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.22);flex:none}
+.bub.them .dki{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff}
+.bub .dkt{min-width:0;display:flex;flex-direction:column;gap:2px}
+.bub .dkt b{font-size:15px;word-break:break-word}
+.bub .dkm{display:flex;gap:6px;font-size:12px;opacity:.85}
+.bub .dkb{margin-top:8px;width:100%}
+.bub.me .dkb{background:rgba(255,255,255,.2);color:#fff;border-color:transparent}
+.cvform{display:flex;gap:8px;align-items:flex-end;margin-top:12px}
+.cvform textarea{min-height:44px;max-height:120px;resize:none;flex:1;margin:0}
+.cvform .btn{flex:none;height:44px;padding:0 14px}
+.cvpick{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.cvpick h3{margin:0 0 8px;font-size:14px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -280,6 +330,9 @@ header{justify-content:space-between}
 <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
 <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
 <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M20 17v4H6.5A2.5 2.5 0 0 1 4 18.5"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14.5h4"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
 </defs></svg>
 
 <header>
@@ -289,8 +342,6 @@ header{justify-content:space-between}
   </button>
   <div class="hright">
   <div class="guestbox hidden" id="guestBox"><select class="langsel" id="gLang" translate="no" aria-label="Idioma"></select><span class="chip">Convidado</span><button class="btn primary sm" id="guestLogin">Entrar ou criar conta</button></div>
-  <button class="iconbtn hidden" id="mailBtn" title="Caixa de entrada" aria-label="Caixa de entrada"><svg class="ic"><use href="#i-mail"/></svg><span class="badge hidden" id="fbadge"></span></button>
-  <button class="iconbtn hidden" id="friendsBtn" title="Amigos" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg></button>
   <div class="userbox hidden" id="userBox">
     <button class="avatar" id="uAvatar" aria-label="Conta"></button>
     <div class="umenu hidden" id="uMenu">
@@ -389,6 +440,31 @@ header{justify-content:space-between}
       <div class="tabs"><button id="ftFriends" class="active">Amigos</button><button id="ftBlocked">Bloqueados</button></div>
       <div id="fList" class="list" style="margin-top:14px"></div>
       <div class="msg" id="flMsg"></div>
+    </div>
+  </section>
+
+  <!-- ================= MENSAGENS ================= -->
+  <section id="vChats" class="view hidden">
+    <h1>Mensagens</h1>
+    <p class="sub">Conversas com os teus amigos.</p>
+    <div class="panel">
+      <div id="cList" class="list"></div>
+      <div class="msg" id="cMsg"></div>
+    </div>
+  </section>
+
+  <section id="vChat" class="view hidden">
+    <div class="panel">
+      <div class="cvhead" id="cvHead"></div>
+      <div class="msgs" id="cvMsgs"></div>
+      <div class="cvpick hidden" id="cvDecks"><h3>Escolhe um baralho para enviar</h3><div id="cvDeckList" class="list"></div></div>
+      <div class="cvform" id="cvForm">
+        <button class="btn" id="cvDeckBtn" title="Enviar baralho" aria-label="Enviar baralho"><svg class="ic"><use href="#i-layers"/></svg></button>
+        <textarea id="cvText" rows="1" maxlength="500" placeholder="Escreve uma mensagem…" autocomplete="off"></textarea>
+        <button class="btn primary" id="cvSend" title="Enviar" aria-label="Enviar"><svg class="ic"><use href="#i-send"/></svg></button>
+      </div>
+      <p class="note2 hidden" id="cvNo" style="margin:12px 0 0">Só podes enviar mensagens a amigos que já aceitaram o teu pedido.</p>
+      <div class="msg" id="cvMsg"></div>
     </div>
   </section>
 
@@ -822,6 +898,15 @@ header{justify-content:space-between}
 
 <footer class="foot"><button class="linkbtn" data-legal="privacy">Política de privacidade</button> · <button class="linkbtn" data-legal="terms">Termos de utilização</button></footer>
 
+<nav class="dock hidden" id="dock" aria-label="Navegação">
+  <button class="dk-b" data-dock="home" id="dkHome" title="Início" aria-label="Início"><svg class="ic"><use href="#i-home"/></svg><span>Início</span></button>
+  <button class="dk-b" data-dock="chats" id="dkChats" title="Mensagens" aria-label="Mensagens"><svg class="ic"><use href="#i-chat"/></svg><span>Mensagens</span><span class="badge hidden" id="cbadge"></span></button>
+  <button class="dk-b hidden" data-dock="friends" id="friendsBtn" title="Amigos" aria-label="Amigos"><svg class="ic"><use href="#i-users"/></svg><span>Amigos</span></button>
+  <button class="dk-b hidden" data-dock="mail" id="mailBtn" title="Caixa de entrada" aria-label="Caixa de entrada"><svg class="ic"><use href="#i-mail"/></svg><span>Correio</span><span class="badge hidden" id="fbadge"></span></button>
+  <button class="dk-b" data-dock="profile" id="dkProfile" title="Perfil" aria-label="Perfil"><svg class="ic"><use href="#i-user"/></svg><span>Perfil</span></button>
+</nav>
+
+
 <script>window.cloudReady=new Promise(r=>{window.__cloudResolve=r;});</script>
 <script type="module">
 /* ============================================================
@@ -939,6 +1024,7 @@ const UILANGS={pt:'Português',en:'English',es:'Español',fr:'Français'};
 let uiLang='pt'; try{ const s=localStorage.getItem('studions.ui'); if(UILANGS[s]) uiLang=s; }catch(e){}
 const I18N={"Convidado":["Guest","Invitado","Invité"],"Entrar ou criar conta":["Log in or sign up","Iniciar sesión o crear cuenta","Se connecter ou créer un compte"],"Sincronizado":["Synced","Sincronizado","Synchronisé"],"A guardar…":["Saving…","Guardando…","Enregistrement…"],"Erro ao sincronizar":["Sync error","Error al sincronizar","Erreur de synchronisation"],"Sem ligação — guarda ao voltar a ligar":["Offline — will save when reconnected","Sin conexión: se guardará al reconectar","Hors ligne — enregistrement au retour de la connexion"],"Perfil e definições":["Profile and settings","Perfil y ajustes","Profil et paramètres"],"Definir palavra-passe":["Set password","Establecer contraseña","Définir un mot de passe"],"Terminar sessão":["Log out","Cerrar sesión","Se déconnecter"],"Voltar":["Back","Volver","Retour"],"Início":["Home","Inicio","Accueil"],"Caixa de entrada":["Inbox","Bandeja de entrada","Boîte de réception"],"Amigos":["Friends","Amigos","Amis"],"Conta":["Account","Cuenta","Compte"],"Idioma":["Language","Idioma","Langue"],"Entra no Studions":["Log in to Studions","Entra en Studions","Connecte-toi à Studions"],"Continuar com Google":["Continue with Google","Continuar con Google","Continuer avec Google"],"ou com email":["or with email","o con correo electrónico","ou avec e-mail"],"Entrar":["Log in","Entrar","Se connecter"],"Criar conta":["Sign up","Crear cuenta","Créer un compte"],"Nome":["Name","Nombre","Nom"],"Email":["Email","Correo electrónico","E-mail"],"Palavra-passe":["Password","Contraseña","Mot de passe"],"Esqueci-me da palavra-passe":["I forgot my password","Olvidé mi contraseña","J'ai oublié mon mot de passe"],"ou":["or","o","ou"],"Continuar como convidado":["Continue as guest","Continuar como invitado","Continuer en tant qu'invité"],"Sem conta, os teus dados ficam só neste aparelho e não há amigos, partilha nem sincronização.":["Without an account, your data stays only on this device, and there are no friends, sharing or sync.","Sin cuenta, tus datos se quedan solo en este dispositivo y no hay amigos, compartir ni sincronización.","Sans compte, tes données restent uniquement sur cet appareil, sans amis, partage ni synchronisation."],"Tenho 13 anos ou mais (ou autorização de quem exerce a responsabilidade parental) e aceito os documentos abaixo. É necessário para criar conta ou entrar com o Google.":["I am 13 or older (or have permission from my parent or legal guardian) and I accept the documents below. This is required to sign up or log in with Google.","Tengo 13 años o más (o autorización de mi tutor legal) y acepto los documentos de abajo. Es necesario para crear una cuenta o entrar con Google.","J'ai 13 ans ou plus (ou l'autorisation de mon représentant légal) et j'accepte les documents ci-dessous. C'est nécessaire pour créer un compte ou se connecter avec Google."],"Termos de utilização":["Terms of use","Términos de uso","Conditions d'utilisation"],"Política de privacidade":["Privacy policy","Política de privacidad","Politique de confidentialité"],"Privacidade e termos":["Privacy and terms","Privacidad y términos","Confidentialité et conditions"],"Estes documentos estão disponíveis apenas em português, que é a versão que vale.":["These documents are only available in Portuguese, which is the version that applies.","Estos documentos solo están disponibles en portugués, que es la versión válida.","Ces documents sont disponibles uniquement en portugais, qui est la version qui fait foi."],"Para continuar, confirma que tens 13 anos ou mais e aceita os Termos e a Política de privacidade.":["To continue, confirm you are 13 or older and accept the Terms and the Privacy policy.","Para continuar, confirma que tienes 13 años o más y acepta los Términos y la Política de privacidad.","Pour continuer, confirme que tu as 13 ans ou plus et accepte les Conditions et la Politique de confidentialité."],"Pedidos de amizade, baralhos recebidos e avisos.":["Friend requests, received decks and notices.","Solicitudes de amistad, mazos recibidos y avisos.","Demandes d'amis, paquets reçus et avis."],"Troca baralhos com amigos através de um código.":["Swap decks with friends using a code.","Intercambia mazos con amigos mediante un código.","Échange des paquets avec tes amis grâce à un code."],"O teu código de amigo":["Your friend code","Tu código de amigo","Ton code d'ami"],"Dá este código a quem quiseres que te possa enviar baralhos. Serve só para partilhar baralhos.":["Give this code to anyone you want to be able to send you decks. It is only used to share decks.","Da este código a quien quieras que pueda enviarte mazos. Solo sirve para compartir mazos.","Donne ce code à qui tu veux pour qu'on puisse t'envoyer des paquets. Il sert uniquement à partager des paquets."],"Copiar":["Copy","Copiar","Copier"],"Gerar novo código":["Generate new code","Generar nuevo código","Générer un nouveau code"],"Adicionar amigo":["Add friend","Añadir amigo","Ajouter un ami"],"Adicionar":["Add","Añadir","Ajouter"],"Bloqueados":["Blocked","Bloqueados","Bloqués"],"Não foi possível abrir":["Could not open","No se pudo abrir","Impossible d'ouvrir"],"Ir para o início":["Go to home","Ir al inicio","Aller à l'accueil"],"Baralho partilhado contigo":["Deck shared with you","Mazo compartido contigo","Paquet partagé avec toi"],"Adicionar aos meus baralhos":["Add to my decks","Añadir a mis mazos","Ajouter à mes paquets"],"Agora não":["Not now","Ahora no","Pas maintenant"],"Gere a tua conta, a aparência e a segurança.":["Manage your account, appearance and security.","Gestiona tu cuenta, la apariencia y la seguridad.","Gère ton compte, l'apparence et la sécurité."],"Perfil":["Profile","Perfil","Profil"],"Alterar foto":["Change photo","Cambiar foto","Changer la photo"],"Remover":["Remove","Quitar","Retirer"],"A foto é reduzida e guardada na tua conta.":["The photo is resized and saved to your account.","La foto se reduce y se guarda en tu cuenta.","La photo est réduite et enregistrée dans ton compte."],"Guardar":["Save","Guardar","Enregistrer"],"Aparência":["Appearance","Apariencia","Apparence"],"Automático":["Automatic","Automático","Automatique"],"Segue o aparelho":["Follows your device","Sigue el dispositivo","Suit l'appareil"],"Claro":["Light","Claro","Clair"],"Escuro":["Dark","Oscuro","Sombre"],"Muda o idioma da aplicação. O conteúdo dos teus baralhos não é alterado.":["Changes the app language. The content of your decks is not changed.","Cambia el idioma de la aplicación. El contenido de tus mazos no se modifica.","Change la langue de l'application. Le contenu de tes paquets n'est pas modifié."],"Segurança":["Security","Seguridad","Sécurité"],"Palavra-passe atual":["Current password","Contraseña actual","Mot de passe actuel"],"Nova palavra-passe":["New password","Nueva contraseña","Nouveau mot de passe"],"Repetir nova":["Repeat new password","Repetir nueva","Répéter le nouveau"],"Alterar palavra-passe":["Change password","Cambiar contraseña","Changer le mot de passe"],"Entraste com o Google e ainda não tens palavra-passe.":["You signed in with Google and don't have a password yet.","Entraste con Google y aún no tienes contraseña.","Tu t'es connecté avec Google et tu n'as pas encore de mot de passe."],"Novo email":["New email","Nuevo correo electrónico","Nouvel e-mail"],"Alterar email":["Change email","Cambiar correo electrónico","Changer l'e-mail"],"Privacidade e dados":["Privacy and data","Privacidad y datos","Confidentialité et données"],"Tens direito a aceder aos teus dados e a levá-los contigo. Descarrega uma cópia em formato JSON.":["You have the right to access your data and take it with you. Download a copy in JSON format.","Tienes derecho a acceder a tus datos y llevártelos. Descarga una copia en formato JSON.","Tu as le droit d'accéder à tes données et de les emporter. Télécharge une copie au format JSON."],"Descarregar os meus dados":["Download my data","Descargar mis datos","Télécharger mes données"],"Download iniciado.":["Download started.","Descarga iniciada.","Téléchargement lancé."],"Não foi possível gerar o ficheiro.":["Could not create the file.","No se pudo generar el archivo.","Impossible de créer le fichier."],"Eliminar conta":["Delete account","Eliminar cuenta","Supprimer le compte"],"Apaga de forma permanente a tua conta e todos os teus baralhos e cartas. Não é possível recuperar.":["Permanently deletes your account and all your decks and cards. This cannot be undone.","Elimina de forma permanente tu cuenta y todos tus mazos y tarjetas. No se puede recuperar.","Supprime définitivement ton compte ainsi que tous tes paquets et cartes. Impossible à récupérer."],"Eliminar a minha conta…":["Delete my account…","Eliminar mi cuenta…","Supprimer mon compte…"],"Escreve":["Type","Escribe","Écris"],"para confirmar":["to confirm","para confirmar","pour confirmer"],"Eliminar definitivamente":["Delete permanently","Eliminar definitivamente","Supprimer définitivement"],"Cancelar":["Cancel","Cancelar","Annuler"],"Cria uma palavra-passe":["Create a password","Crea una contraseña","Crée un mot de passe"],"Assim também podes entrar com o teu email e a palavra-passe, além do Google.":["This way you can also log in with your email and password, as well as Google.","Así también podrás entrar con tu correo y contraseña, además de Google.","Ainsi, tu pourras aussi te connecter avec ton e-mail et ton mot de passe, en plus de Google."],"Repetir palavra-passe":["Repeat password","Repetir contraseña","Répéter le mot de passe"],"Guardar e continuar":["Save and continue","Guardar y continuar","Enregistrer et continuer"],"Bem-vindo(a)":["Welcome","Te damos la bienvenida","Bienvenue"],"Escolhe como queres estudar hoje.":["Choose how you want to study today.","Elige cómo quieres estudiar hoy.","Choisis comment tu veux étudier aujourd'hui."],"Modo convidado: os dados ficam só neste aparelho e as funções online (amigos, partilha e sincronização) não estão disponíveis.":["Guest mode: your data stays only on this device and online features (friends, sharing and sync) are not available.","Modo invitado: tus datos se quedan solo en este dispositivo y las funciones en línea (amigos, compartir y sincronización) no están disponibles.","Mode invité : tes données restent uniquement sur cet appareil et les fonctions en ligne (amis, partage et synchronisation) ne sont pas disponibles."],"Confirma o teu email através da mensagem que te enviámos.":["Confirm your email using the message we sent you.","Confirma tu correo con el mensaje que te enviamos.","Confirme ton e-mail grâce au message que nous t'avons envoyé."],"Reenviar email":["Resend email","Reenviar correo","Renvoyer l'e-mail"],"Já confirmei":["I've confirmed","Ya confirmé","J'ai confirmé"],"Flashcards":["Flashcards","Flashcards","Flashcards"],"Línguas e outras matérias, com cartas, modo mental e modo escrito.":["Languages and other subjects, with cards, mental mode and written mode.","Idiomas y otras materias, con tarjetas, modo mental y modo escrito.","Langues et autres matières, avec cartes, mode mental et mode écrit."],"Quiz":["Quiz","Quiz","Quiz"],"Testa os teus conhecimentos com perguntas e respostas.":["Test your knowledge with questions and answers.","Pon a prueba tus conocimientos con preguntas y respuestas.","Teste tes connaissances avec des questions et des réponses."],"Em breve":["Coming soon","Próximamente","Bientôt"],"Mais métodos":["More methods","Más métodos","Plus de méthodes"],"Novos modos de estudo vão aparecer aqui em breve.":["New study modes will appear here soon.","Pronto aparecerán aquí nuevos modos de estudio.","De nouveaux modes d'étude apparaîtront bientôt ici."],"Funções em beta":["Beta features","Funciones en beta","Fonctions en bêta"],"Em teste: podem ter erros e mudar a qualquer momento.":["Being tested: they may have errors and change at any time.","En pruebas: pueden tener errores y cambiar en cualquier momento.","En test : elles peuvent comporter des erreurs et changer à tout moment."],"Beta":["Beta","Beta","Bêta"],"IA · Beta":["AI · Beta","IA · Beta","IA · Bêta"],"Scan de testes":["Test scan","Escaneo de exámenes","Scan de tests"],"Foto ou print de um teste, ficha ou matriz, com respostas adaptadas ao teu ano.":["A photo or screenshot of a test, worksheet or test matrix, with answers adapted to your school year.","Foto o captura de un examen, ficha o matriz, con respuestas adaptadas a tu curso.","Photo ou capture d'un test, d'une fiche ou d'une matrice, avec des réponses adaptées à ton année."],"Requer conta":["Requires account","Requiere cuenta","Compte requis"],"O scan precisa de uma conta, porque a análise é feita online. Cria uma conta gratuita para o usares.":["The scan needs an account because the analysis is done online. Create a free account to use it.","El escaneo necesita una cuenta porque el análisis se hace en línea. Crea una cuenta gratuita para usarlo.","Le scan nécessite un compte, car l'analyse se fait en ligne. Crée un compte gratuit pour l'utiliser."],"Tira uma foto ou carrega um print de um teste, ficha ou matriz e recebe respostas adaptadas ao teu ano.":["Take a photo or upload a screenshot of a test, worksheet or test matrix and get answers adapted to your school year.","Haz una foto o sube una captura de un examen, ficha o matriz y recibe respuestas adaptadas a tu curso.","Prends une photo ou charge une capture d'un test, d'une fiche ou d'une matrice et reçois des réponses adaptées à ton année."],"Função em beta: as respostas são geradas por inteligência artificial e podem conter erros. Confirma sempre com o manual e com o professor, e usa como apoio ao estudo, respeitando as regras da tua escola.":["Beta feature: answers are generated by artificial intelligence and may contain errors. Always check with your textbook and teacher, and use it as a study aid, respecting your school's rules.","Función en beta: las respuestas las genera una inteligencia artificial y pueden contener errores. Contrasta siempre con el libro y con el profesor, y úsala como apoyo al estudio, respetando las normas de tu centro.","Fonction en bêta : les réponses sont générées par une intelligence artificielle et peuvent contenir des erreurs. Vérifie toujours avec ton manuel et ton professeur, et utilise-la comme aide à l'étude, dans le respect des règles de ton école."],"Ano de escolaridade":["School year","Curso escolar","Année scolaire"],"Escolhe o ano…":["Choose the year…","Elige el curso…","Choisis l'année…"],"Ensino superior":["Higher education","Educación superior","Enseignement supérieur"],"Disciplina (opcional)":["Subject (optional)","Asignatura (opcional)","Matière (facultatif)"],"ex.: Matemática A":["e.g. Mathematics A","p. ej.: Matemáticas A","ex. : Mathématiques A"],"Imagens (até 3)":["Images (up to 3)","Imágenes (hasta 3)","Images (jusqu'à 3)"],"Tirar foto":["Take photo","Hacer foto","Prendre une photo"],"Escolher imagem":["Choose image","Elegir imagen","Choisir une image"],"Percebo que as imagens são enviadas para um serviço de IA externo para serem analisadas, que a resposta pode ter erros e que não vou enviar dados pessoais de outras pessoas.":["I understand that the images are sent to an external AI service to be analysed, that the answer may contain errors, and that I will not send other people's personal data.","Entiendo que las imágenes se envían a un servicio de IA externo para analizarlas, que la respuesta puede tener errores y que no enviaré datos personales de otras personas.","Je comprends que les images sont envoyées à un service d'IA externe pour être analysées, que la réponse peut contenir des erreurs et que je n'enverrai pas de données personnelles d'autres personnes."],"Saber mais sobre os teus dados":["Learn more about your data","Saber más sobre tus datos","En savoir plus sur tes données"],"Analisar":["Analyse","Analizar","Analyser"],"Resultado":["Result","Resultado","Résultat"],"Resposta gerada por inteligência artificial. Pode conter erros: confirma antes de estudar.":["Answer generated by artificial intelligence. It may contain errors: check it before studying.","Respuesta generada por inteligencia artificial. Puede contener errores: compruébala antes de estudiar.","Réponse générée par une intelligence artificielle. Elle peut contenir des erreurs : vérifie-la avant d'étudier."],"Guardar como baralho":["Save as deck","Guardar como mazo","Enregistrer comme paquet"],"Baralho criado em Flashcards, Outros.":["Deck created in Flashcards, Other.","Mazo creado en Flashcards, Otros.","Paquet créé dans Flashcards, Autres."],"Confiança alta":["High confidence","Confianza alta","Confiance élevée"],"Confiança média":["Medium confidence","Confianza media","Confiance moyenne"],"Confiança baixa":["Low confidence","Confianza baja","Confiance faible"],"Não foi possível extrair perguntas ou temas desta imagem.":["Could not extract questions or topics from this image.","No se pudieron extraer preguntas ni temas de esta imagen.","Impossible d'extraire des questions ou des thèmes de cette image."],"A analisar… pode demorar até um minuto.":["Analysing… this can take up to a minute.","Analizando… puede tardar hasta un minuto.","Analyse en cours… cela peut prendre jusqu'à une minute."],"Máximo de 3 imagens.":["Maximum of 3 images.","Máximo de 3 imágenes.","3 images maximum."],"Imagem demasiado grande.":["Image too large.","Imagen demasiado grande.","Image trop volumineuse."],"Imagem demasiado grande ou inválida.":["Image too large or invalid.","Imagen demasiado grande o no válida.","Image trop volumineuse ou invalide."],"A tua sessão expirou. Entra de novo.":["Your session has expired. Log in again.","Tu sesión ha caducado. Vuelve a entrar.","Ta session a expiré. Reconnecte-toi."],"Confirma primeiro o teu email para usares esta função.":["Confirm your email first to use this feature.","Confirma primero tu correo para usar esta función.","Confirme d'abord ton e-mail pour utiliser cette fonction."],"Fizeste muitos pedidos. Tenta de novo daqui a pouco.":["You made too many requests. Try again in a little while.","Has hecho demasiadas solicitudes. Inténtalo de nuevo en un rato.","Tu as fait trop de demandes. Réessaie dans un moment."],"Esta função ainda não está ativada neste site.":["This feature is not enabled on this site yet.","Esta función aún no está activada en este sitio.","Cette fonction n'est pas encore activée sur ce site."],"O serviço de IA está ocupado. Tenta de novo daqui a pouco.":["The AI service is busy. Try again in a little while.","El servicio de IA está ocupado. Inténtalo de nuevo en un rato.","Le service d'IA est occupé. Réessaie dans un moment."],"Não foi possível interpretar a resposta. Tenta com uma imagem mais nítida.":["Could not interpret the response. Try a sharper image.","No se pudo interpretar la respuesta. Prueba con una imagen más nítida.","Impossible d'interpréter la réponse. Essaie avec une image plus nette."],"Não foi possível analisar agora. Tenta de novo.":["Could not analyse right now. Try again.","No se pudo analizar ahora. Inténtalo de nuevo.","Impossible d'analyser pour le moment. Réessaie."],"Que tipo de flashcards queres treinar?":["What kind of flashcards do you want to practise?","¿Qué tipo de flashcards quieres practicar?","Quel type de flashcards veux-tu t'entraîner ?"],"Línguas":["Languages","Idiomas","Langues"],"Vocabulário e frases em qualquer idioma, com deteção de idioma e tradução automática.":["Vocabulary and phrases in any language, with language detection and automatic translation.","Vocabulario y frases en cualquier idioma, con detección de idioma y traducción automática.","Vocabulaire et phrases dans n'importe quelle langue, avec détection de la langue et traduction automatique."],"Outros":["Other","Otros","Autres"],"Qualquer matéria: conceitos, datas, fórmulas, perguntas e respostas.":["Any subject: concepts, dates, formulas, questions and answers.","Cualquier materia: conceptos, fechas, fórmulas, preguntas y respuestas.","N'importe quelle matière : notions, dates, formules, questions et réponses."],"O que queres fazer?":["What do you want to do?","¿Qué quieres hacer?","Que veux-tu faire ?"],"Baralhos e cartas":["Decks and cards","Mazos y tarjetas","Paquets et cartes"],"Cria baralhos e adiciona cartas com respostas e notas.":["Create decks and add cards with answers and notes.","Crea mazos y añade tarjetas con respuestas y notas.","Crée des paquets et ajoute des cartes avec réponses et notes."],"Estudar":["Study","Estudiar","Étudier"],"Modo mental ou escrito, num sentido ou no outro.":["Mental or written mode, in either direction.","Modo mental o escrito, en uno u otro sentido.","Mode mental ou écrit, dans un sens ou dans l'autre."],"Treina vocabulário e frases em qualquer idioma. O que queres fazer?":["Practise vocabulary and phrases in any language. What do you want to do?","Practica vocabulario y frases en cualquier idioma. ¿Qué quieres hacer?","Entraîne-toi au vocabulaire et aux phrases dans n'importe quelle langue. Que veux-tu faire ?"],"Treina qualquer matéria com perguntas e respostas. O que queres fazer?":["Practise any subject with questions and answers. What do you want to do?","Practica cualquier materia con preguntas y respuestas. ¿Qué quieres hacer?","Entraîne-toi sur n'importe quelle matière avec des questions et des réponses. Que veux-tu faire ?"],"Baralho":["Deck","Mazo","Paquet"],"Baralho atual":["Current deck","Mazo actual","Paquet actuel"],"Novo":["New","Nuevo","Nouveau"],"Renomear":["Rename","Renombrar","Renommer"],"Partilhar":["Share","Compartir","Partager"],"Apagar":["Delete","Borrar","Supprimer"],"Com uma conta podes partilhar baralhos por link e enviá-los a amigos.":["With an account you can share decks by link and send them to friends.","Con una cuenta puedes compartir mazos por enlace y enviarlos a amigos.","Avec un compte, tu peux partager des paquets par lien et les envoyer à tes amis."],"Partilhar baralho":["Share deck","Compartir mazo","Partager le paquet"],"Enviar a amigos":["Send to friends","Enviar a amigos","Envoyer à des amis"],"Partilhar por link":["Share by link","Compartir por enlace","Partager par lien"],"Quem tiver o link e uma conta no Studions pode ver o baralho e adicionar uma cópia. As alterações que fizeres depois só chegam a quem abrir o link se carregares em \"Atualizar conteúdo\".":["Anyone with the link and a Studions account can view the deck and add a copy. Changes you make afterwards only reach people who open the link if you press \"Update content\".","Quien tenga el enlace y una cuenta de Studions puede ver el mazo y añadir una copia. Los cambios que hagas después solo llegan a quien abra el enlace si pulsas \"Actualizar contenido\".","Toute personne ayant le lien et un compte Studions peut voir le paquet et en ajouter une copie. Les modifications faites ensuite n'arrivent à ceux qui ouvrent le lien que si tu appuies sur « Mettre à jour le contenu »."],"Partilhar…":["Share…","Compartir…","Partager…"],"Atualizar conteúdo":["Update content","Actualizar contenido","Mettre à jour le contenu"],"Parar de partilhar":["Stop sharing","Dejar de compartir","Arrêter le partage"],"Adicionar flashcard":["Add flashcard","Añadir flashcard","Ajouter une flashcard"],"Editar flashcard":["Edit flashcard","Editar flashcard","Modifier la flashcard"],"Palavra ou frase (qualquer idioma)":["Word or phrase (any language)","Palabra o frase (cualquier idioma)","Mot ou phrase (n'importe quelle langue)"],"Pergunta ou termo":["Question or term","Pregunta o término","Question ou terme"],"Idioma do texto":["Text language","Idioma del texto","Langue du texte"],"Traduzir para":["Translate to","Traducir a","Traduire vers"],"Tradução (vazio = traduzir automaticamente)":["Translation (empty = translate automatically)","Traducción (vacío = traducir automáticamente)","Traduction (vide = traduire automatiquement)"],"Resposta (opcional)":["Answer (optional)","Respuesta (opcional)","Réponse (facultatif)"],"Notas":["Notes","Notas","Notes"],"Traduzir agora":["Translate now","Traducir ahora","Traduire maintenant"],"Cartas":["Cards","Tarjetas","Cartes"],"Configurar sessão":["Set up session","Configurar sesión","Configurer la session"],"Modo":["Mode","Modo","Mode"],"Mental":["Mental","Mental","Mental"],"Passar ou acertei":["Skip or got it","Pasar o acerté","Passer ou réussi"],"Escrita":["Written","Escrita","Écrit"],"Certo, mal escrito ou errado":["Correct, misspelled or wrong","Correcto, mal escrito o incorrecto","Correct, mal écrit ou faux"],"Direção":["Direction","Dirección","Sens"],"Original → Tradução":["Original → Translation","Original → Traducción","Original → Traduction"],"Tradução → Original":["Translation → Original","Traducción → Original","Traduction → Original"],"Misto":["Mixed","Mixto","Mixte"],"Ordem":["Order","Orden","Ordre"],"Aleatória":["Random","Aleatoria","Aléatoire"],"Pela ordem de criação":["In order of creation","Por orden de creación","Par ordre de création"],"Mais difíceis primeiro":["Hardest first","Las más difíciles primero","Les plus difficiles d'abord"],"Nº de cartas (0 = todas)":["No. of cards (0 = all)","N.º de tarjetas (0 = todas)","Nb de cartes (0 = toutes)"],"Começar":["Start","Empezar","Commencer"],"Terminar":["Finish","Terminar","Terminer"],"Passar":["Skip","Pasar","Passer"],"Virar":["Flip","Girar","Retourner"],"espaço":["space","espacio","espace"],"Acertei":["Got it","Acerté","Réussi"],"Verificar":["Check","Comprobar","Vérifier"],"Não sei":["I don't know","No lo sé","Je ne sais pas"],"Seguinte":["Next","Siguiente","Suivant"],"Resultado da sessão":["Session result","Resultado de la sesión","Résultat de la session"],"pontuação":["score","puntuación","score"],"Repetir as falhadas":["Repeat the missed ones","Repetir las falladas","Répéter les ratées"],"Nova sessão":["New session","Nueva sesión","Nouvelle session"],"Como te chamamos?":["What should we call you?","¿Cómo te llamamos?","Comment t'appelle-t-on ?"],"o.teu@email.com":["your@email.com","tu@correo.com","ton@email.com"],"Mínimo 6 caracteres":["At least 6 characters","Mínimo 6 caracteres","6 caractères minimum"],"Código do amigo (ex.: K7QM-4XD2)":["Friend's code (e.g. K7QM-4XD2)","Código del amigo (p. ej.: K7QM-4XD2)","Code de l'ami (ex. : K7QM-4XD2)"],"novo@email.com":["new@email.com","nuevo@correo.com","nouveau@email.com"],"ex.: serendipity":["e.g. serendipity","p. ej.: serendipity","ex. : serendipity"],"Opcional. Várias respostas separadas por /":["Optional. Several answers separated by /","Opcional. Varias respuestas separadas por /","Facultatif. Plusieurs réponses séparées par /"],"Exemplos, género, pronúncia, contexto…":["Examples, gender, pronunciation, context…","Ejemplos, género, pronunciación, contexto…","Exemples, genre, prononciation, contexte…"],"Escreve a resposta e prime Enter":["Type the answer and press Enter","Escribe la respuesta y pulsa Enter","Écris la réponse et appuie sur Entrée"],"Detetar automaticamente":["Detect automatically","Detectar automáticamente","Détecter automatiquement"],"Português":["Portuguese","Portugués","Portugais"],"Inglês":["English","Inglés","Anglais"],"Espanhol":["Spanish","Español","Espagnol"],"Francês":["French","Francés","Français"],"Alemão":["German","Alemán","Allemand"],"Italiano":["Italian","Italiano","Italien"],"Neerlandês":["Dutch","Neerlandés","Néerlandais"],"Sueco":["Swedish","Sueco","Suédois"],"Polaco":["Polish","Polaco","Polonais"],"Russo":["Russian","Ruso","Russe"],"Ucraniano":["Ukrainian","Ucraniano","Ukrainien"],"Turco":["Turkish","Turco","Turc"],"Árabe":["Arabic","Árabe","Arabe"],"Hebraico":["Hebrew","Hebreo","Hébreu"],"Hindi":["Hindi","Hindi","Hindi"],"Japonês":["Japanese","Japonés","Japonais"],"Coreano":["Korean","Coreano","Coréen"],"Chinês":["Chinese","Chino","Chinois"],"Latim":["Latin","Latín","Latin"],"Romeno":["Romanian","Rumano","Roumain"],"Grego":["Greek","Griego","Grec"],"Checo":["Czech","Checo","Tchèque"],"Autodetect":["Auto-detect","Autodetectar","Détection auto"],"Original":["Original","Original","Original"],"Tradução":["Translation","Traducción","Traduction"],"Pergunta":["Question","Pregunta","Question"],"Resposta":["Answer","Respuesta","Réponse"],"Nome do novo baralho:":["Name of the new deck:","Nombre del nuevo mazo:","Nom du nouveau paquet :"],"Novo nome:":["New name:","Nuevo nombre:","Nouveau nom :"],"Tem de existir pelo menos um baralho nesta categoria.":["There must be at least one deck in this category.","Debe existir al menos un mazo en esta categoría.","Il doit y avoir au moins un paquet dans cette catégorie."],"Sem ligação ao serviço de tradução.":["Cannot reach the translation service.","Sin conexión con el servicio de traducción.","Impossible de joindre le service de traduction."],"Escreve primeiro a palavra.":["Type the word first.","Escribe primero la palabra.","Écris d'abord le mot."],"A traduzir…":["Translating…","Traduciendo…","Traduction…"],"Escreve a tradução manualmente.":["Type the translation manually.","Escribe la traducción manualmente.","Écris la traduction manuellement."],"Escreve a palavra.":["Type the word.","Escribe la palabra.","Écris le mot."],"Escreve a resposta.":["Type the answer.","Escribe la respuesta.","Écris la réponse."],"Carta guardada.":["Card saved.","Tarjeta guardada.","Carte enregistrée."],"Apagar esta carta?":["Delete this card?","¿Borrar esta tarjeta?","Supprimer cette carte ?"],"Terminar a sessão agora?":["End the session now?","¿Terminar la sesión ahora?","Terminer la session maintenant ?"],"Este baralho não tem cartas.":["This deck has no cards.","Este mazo no tiene tarjetas.","Ce paquet ne contient aucune carte."],"Ainda não há cartas neste baralho.":["There are no cards in this deck yet.","Aún no hay tarjetas en este mazo.","Il n'y a pas encore de cartes dans ce paquet."],"Carta":["Card","Tarjeta","Carte"],"Flashcards /":["Flashcards /","Flashcards /","Flashcards /"],"A verificar sinónimos…":["Checking synonyms…","Comprobando sinónimos…","Vérification des synonymes…"],"Só demora um instante.":["It only takes a moment.","Solo tarda un instante.","Cela ne prend qu'un instant."],"Resposta guardada:":["Answer saved:","Respuesta guardada:","Réponse enregistrée :"],"Resposta correta:":["Correct answer:","Respuesta correcta:","Bonne réponse :"],"Escreveste:":["You wrote:","Escribiste:","Tu as écrit :"],"género":["gender","género","genre"],"sinónimo":["synonym","sinónimo","synonyme"],"acentos":["accents","acentos","accents"],"Certo!":["Correct!","¡Correcto!","Correct !"],"Mal escrito":["Misspelled","Mal escrito","Mal écrit"],"Errado":["Wrong","Incorrecto","Faux"],"Aceite como sinónimo.":["Accepted as a synonym.","Aceptado como sinónimo.","Accepté comme synonyme."],"Aceite: variante de género.":["Accepted: gender variant.","Aceptado: variante de género.","Accepté : variante de genre."],"Está certo, mas faltam acentos.":["Correct, but accents are missing.","Está bien, pero faltan acentos.","C'est correct, mais il manque des accents."],"Certas":["Correct","Correctas","Correctes"],"Mal escritas":["Misspelled","Mal escritas","Mal écrites"],"Passadas":["Skipped","Pasadas","Passées"],"Erradas":["Wrong","Incorrectas","Fausses"],"Email ou palavra-passe incorretos.":["Incorrect email or password.","Correo o contraseña incorrectos.","E-mail ou mot de passe incorrect."],"Não existe nenhuma conta com este email.":["No account exists with this email.","No existe ninguna cuenta con este correo.","Aucun compte n'existe avec cet e-mail."],"Já existe uma conta com este email. Tenta entrar.":["An account with this email already exists. Try logging in.","Ya existe una cuenta con este correo. Intenta entrar.","Un compte existe déjà avec cet e-mail. Essaie de te connecter."],"A palavra-passe tem de ter pelo menos 6 caracteres.":["The password must be at least 6 characters long.","La contraseña debe tener al menos 6 caracteres.","Le mot de passe doit contenir au moins 6 caractères."],"O email não é válido.":["The email is not valid.","El correo no es válido.","L'e-mail n'est pas valide."],"Demasiadas tentativas. Espera um pouco e tenta de novo.":["Too many attempts. Wait a moment and try again.","Demasiados intentos. Espera un poco e inténtalo de nuevo.","Trop de tentatives. Attends un peu et réessaie."],"Sem ligação à internet.":["No internet connection.","Sin conexión a internet.","Pas de connexion internet."],"A janela foi fechada antes de concluir o login.":["The window was closed before login finished.","La ventana se cerró antes de completar el inicio de sesión.","La fenêtre a été fermée avant la fin de la connexion."],"Por segurança, volta a introduzir as tuas credenciais.":["For security, enter your credentials again.","Por seguridad, vuelve a introducir tus credenciales.","Par sécurité, saisis à nouveau tes identifiants."],"O navegador bloqueou a janela do Google. Permite pop-ups e tenta de novo.":["The browser blocked the Google window. Allow pop-ups and try again.","El navegador bloqueó la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.","Le navigateur a bloqué la fenêtre Google. Autorise les pop-ups et réessaie."],"Esse email já está a ser usado por outra conta.":["That email is already used by another account.","Ese correo ya lo usa otra cuenta.","Cet e-mail est déjà utilisé par un autre compte."],"Este endereço ainda não está autorizado no Firebase.":["This address is not authorised in Firebase yet.","Esta dirección aún no está autorizada en Firebase.","Cette adresse n'est pas encore autorisée dans Firebase."],"Este método de login não está ativado no Firebase.":["This login method is not enabled in Firebase.","Este método de inicio de sesión no está activado en Firebase.","Cette méthode de connexion n'est pas activée dans Firebase."],"Ocorreu um erro.":["An error occurred.","Se produjo un error.","Une erreur s'est produite."],"O login ainda não está configurado.":["Login is not set up yet.","El inicio de sesión aún no está configurado.","La connexion n'est pas encore configurée."],"Preenche o email e a palavra-passe.":["Fill in your email and password.","Rellena el correo y la contraseña.","Renseigne ton e-mail et ton mot de passe."],"Escreve o teu nome.":["Type your name.","Escribe tu nombre.","Écris ton nom."],"Escreve primeiro o teu email.":["Type your email first.","Escribe primero tu correo.","Écris d'abord ton e-mail."],"Se existir uma conta com este email, enviámos um link para definir nova palavra-passe (vê também o spam).":["If an account exists with this email, we sent a link to set a new password (check spam too).","Si existe una cuenta con este correo, hemos enviado un enlace para definir una nueva contraseña (revisa también el spam).","S'il existe un compte avec cet e-mail, nous avons envoyé un lien pour définir un nouveau mot de passe (vérifie aussi les spams)."],"Email enviado":["Email sent","Correo enviado","E-mail envoyé"],"Tenta mais tarde":["Try later","Inténtalo más tarde","Réessaie plus tard"],"Ainda não confirmado":["Not confirmed yet","Aún no confirmado","Pas encore confirmé"],"As palavras-passe não coincidem.":["The passwords don't match.","Las contraseñas no coinciden.","Les mots de passe ne correspondent pas."],"Esta conta já tem palavra-passe.":["This account already has a password.","Esta cuenta ya tiene contraseña.","Ce compte a déjà un mot de passe."],"Por segurança, termina sessão e entra de novo com o Google; depois define a palavra-passe.":["For security, log out and log in again with Google; then set the password.","Por seguridad, cierra sesión y entra de nuevo con Google; después define la contraseña.","Par sécurité, déconnecte-toi et reconnecte-toi avec Google ; définis ensuite le mot de passe."],"Palavra-passe atual incorreta.":["Current password is incorrect.","La contraseña actual es incorrecta.","Le mot de passe actuel est incorrect."],"O teu email vem da conta Google, por isso não pode ser alterado aqui.":["Your email comes from your Google account, so it can't be changed here.","Tu correo proviene de tu cuenta de Google, por eso no se puede cambiar aquí.","Ton e-mail provient de ton compte Google, il ne peut donc pas être modifié ici."],"Define primeiro uma palavra-passe para poderes alterar o email.":["Set a password first so you can change your email.","Define primero una contraseña para poder cambiar el correo.","Définis d'abord un mot de passe pour pouvoir changer l'e-mail."],"Escolhe um ficheiro de imagem.":["Choose an image file.","Elige un archivo de imagen.","Choisis un fichier image."],"Foto atualizada.":["Photo updated.","Foto actualizada.","Photo mise à jour."],"Não foi possível usar essa imagem.":["Could not use that image.","No se pudo usar esa imagen.","Impossible d'utiliser cette image."],"Foto removida.":["Photo removed.","Foto eliminada.","Photo retirée."],"Escreve um nome.":["Type a name.","Escribe un nombre.","Écris un nom."],"Nome atualizado.":["Name updated.","Nombre actualizado.","Nom mis à jour."],"Escreve a palavra-passe atual.":["Type the current password.","Escribe la contraseña actual.","Écris le mot de passe actuel."],"A nova palavra-passe tem de ter pelo menos 6 caracteres.":["The new password must be at least 6 characters long.","La nueva contraseña debe tener al menos 6 caracteres.","Le nouveau mot de passe doit contenir au moins 6 caractères."],"As palavras-passe novas não coincidem.":["The new passwords don't match.","Las contraseñas nuevas no coinciden.","Les nouveaux mots de passe ne correspondent pas."],"A nova palavra-passe tem de ser diferente da atual.":["The new password must be different from the current one.","La nueva contraseña debe ser diferente de la actual.","Le nouveau mot de passe doit être différent de l'actuel."],"Palavra-passe alterada.":["Password changed.","Contraseña cambiada.","Mot de passe modifié."],"Esse já é o teu email.":["That is already your email.","Ese ya es tu correo.","C'est déjà ton e-mail."],"Escreve a tua palavra-passe.":["Type your password.","Escribe tu contraseña.","Écris ton mot de passe."],"A tua conta e todos os teus dados foram eliminados.":["Your account and all your data have been deleted.","Tu cuenta y todos tus datos han sido eliminados.","Ton compte et toutes tes données ont été supprimés."],"Adiciona cartas ao baralho antes de o partilhar.":["Add cards to the deck before sharing it.","Añade tarjetas al mazo antes de compartirlo.","Ajoute des cartes au paquet avant de le partager."],"A criar link…":["Creating link…","Creando enlace…","Création du lien…"],"Link criado. Copia-o e envia a quem quiseres.":["Link created. Copy it and send it to anyone you like.","Enlace creado. Cópialo y envíalo a quien quieras.","Lien créé. Copie-le et envoie-le à qui tu veux."],"Sem permissão: falta atualizar as regras do Firestore para permitir partilhas.":["No permission: the Firestore rules need to be updated to allow sharing.","Sin permiso: faltan actualizar las reglas de Firestore para permitir compartir.","Pas d'autorisation : les règles Firestore doivent être mises à jour pour permettre le partage."],"Link copiado.":["Link copied.","Enlace copiado.","Lien copié."],"Seleciona o link e copia-o manualmente.":["Select the link and copy it manually.","Selecciona el enlace y cópialo manualmente.","Sélectionne le lien et copie-le manuellement."],"O baralho está vazio. Adiciona cartas ou pára de partilhar.":["The deck is empty. Add cards or stop sharing.","El mazo está vacío. Añade tarjetas o deja de compartir.","Le paquet est vide. Ajoute des cartes ou arrête le partage."],"Conteúdo atualizado. O link é o mesmo.":["Content updated. The link is the same.","Contenido actualizado. El enlace es el mismo.","Contenu mis à jour. Le lien est le même."],"Parar de partilhar? O link deixa de funcionar. Quem já adicionou uma cópia mantém-na.":["Stop sharing? The link will stop working. Anyone who already added a copy keeps it.","¿Dejar de compartir? El enlace dejará de funcionar. Quien ya añadió una copia la conserva.","Arrêter le partage ? Le lien ne fonctionnera plus. Ceux qui ont déjà ajouté une copie la gardent."],"Partilha terminada.":["Sharing stopped.","Se dejó de compartir.","Partage arrêté."],"Baralho partilhado":["Shared deck","Mazo compartido","Paquet partagé"],"O link pode estar incorreto ou o dono terminou a partilha.":["The link may be wrong or the owner stopped sharing.","El enlace puede ser incorrecto o el propietario dejó de compartir.","Le lien est peut-être incorrect ou le propriétaire a arrêté le partage."],"Este baralho é teu. Podes adicionar uma cópia.":["This deck is yours. You can add a copy.","Este mazo es tuyo. Puedes añadir una copia.","Ce paquet est à toi. Tu peux en ajouter une copie."],"Alguém":["Someone","Alguien","Quelqu'un"],"Sem notificações por agora.":["No notifications for now.","Sin notificaciones por ahora.","Aucune notification pour le moment."],"Aceitar":["Accept","Aceptar","Accepter"],"Ignorar":["Ignore","Ignorar","Ignorer"],"Ver":["View","Ver","Voir"],"Recusar":["Decline","Rechazar","Refuser"],"Bloquear":["Block","Bloquear","Bloquer"],"Desbloquear":["Unblock","Desbloquear","Débloquer"],"Falta atualizar as regras do Firestore para usar amigos.":["The Firestore rules need to be updated to use friends.","Faltan actualizar las reglas de Firestore para usar amigos.","Les règles Firestore doivent être mises à jour pour utiliser les amis."],"Ainda não tens amigos. Pede o código a alguém e adiciona-o acima.":["You have no friends yet. Ask someone for their code and add it above.","Aún no tienes amigos. Pide el código a alguien y añádelo arriba.","Tu n'as pas encore d'amis. Demande son code à quelqu'un et ajoute-le ci-dessus."],"Não bloqueaste ninguém.":["You haven't blocked anyone.","No has bloqueado a nadie.","Tu n'as bloqué personne."],"Não pode enviar-te pedidos nem baralhos.":["Cannot send you requests or decks.","No puede enviarte solicitudes ni mazos.","Ne peut pas t'envoyer de demandes ni de paquets."],"Amigo":["Friend","Amigo","Ami"],"Pendente":["Pending","Pendiente","En attente"],"Podem trocar baralhos.":["You can swap decks.","Podéis intercambiar mazos.","Vous pouvez échanger des paquets."],"A aguardar que aceite o pedido.":["Waiting for them to accept the request.","Esperando a que acepte la solicitud.","En attente de l'acceptation de la demande."],"Código copiado.":["Code copied.","Código copiado.","Code copié."],"Seleciona o código e copia-o manualmente.":["Select the code and copy it manually.","Selecciona el código y cópialo manualmente.","Sélectionne le code et copie-le manuellement."],"Gerar um código novo? O código antigo deixa de funcionar para novos pedidos. Os teus amigos atuais mantêm-se.":["Generate a new code? The old code stops working for new requests. Your current friends stay.","¿Generar un código nuevo? El código antiguo dejará de funcionar para nuevas solicitudes. Tus amigos actuales se mantienen.","Générer un nouveau code ? L'ancien code ne fonctionnera plus pour de nouvelles demandes. Tes amis actuels restent."],"O código tem 8 letras e números.":["The code has 8 letters and numbers.","El código tiene 8 letras y números.","Le code comporte 8 lettres et chiffres."],"Esse é o teu próprio código.":["That is your own code.","Ese es tu propio código.","C'est ton propre code."],"Código não encontrado. Confirma-o com o teu amigo.":["Code not found. Check it with your friend.","Código no encontrado. Confírmalo con tu amigo.","Code introuvable. Vérifie-le avec ton ami."],"Já tens esta pessoa na lista.":["You already have this person on your list.","Ya tienes a esta persona en tu lista.","Cette personne est déjà dans ta liste."],"Bloqueaste esta pessoa. Desbloqueia-a primeiro.":["You blocked this person. Unblock them first.","Has bloqueado a esta persona. Desbloquéala primero.","Tu as bloqué cette personne. Débloque-la d'abord."],"Não foi possível enviar o pedido a esta pessoa.":["Could not send the request to this person.","No se pudo enviar la solicitud a esta persona.","Impossible d'envoyer la demande à cette personne."],"Ainda não tens amigos que te tenham aceitado.":["You don't have any friends who have accepted you yet.","Aún no tienes amigos que te hayan aceptado.","Tu n'as pas encore d'amis qui t'ont accepté."],"Adicionar amigos":["Add friends","Añadir amigos","Ajouter des amis"],"Enviado":["Sent","Enviado","Envoyé"],"Enviar":["Send","Enviar","Envoyer"],"Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.":["Could not send. The person may not have accepted your friendship yet.","No se pudo enviar. Puede que la persona aún no haya aceptado tu amistad.","Envoi impossible. La personne n'a peut-être pas encore accepté ton amitié."],"Entra ou cria conta para abrires o baralho que partilharam contigo.":["Log in or sign up to open the deck shared with you.","Entra o crea una cuenta para abrir el mazo que compartieron contigo.","Connecte-toi ou crée un compte pour ouvrir le paquet partagé avec toi."],"Não foi possível carregar o serviço de login. Verifica a ligação à internet e recarrega a página.":["Could not load the login service. Check your internet connection and reload the page.","No se pudo cargar el servicio de inicio de sesión. Comprueba tu conexión a internet y recarga la página.","Impossible de charger le service de connexion. Vérifie ta connexion internet et recharge la page."],"O login ainda não está configurado: falta colar a configuração do Firebase no ficheiro.":["Login is not set up yet: the Firebase configuration still needs to be pasted into the file.","El inicio de sesión aún no está configurado: falta pegar la configuración de Firebase en el archivo.","La connexion n'est pas encore configurée : il faut coller la configuration Firebase dans le fichier."],"Escreve a tua palavra-passe atual.":["Type your current password.","Escribe tu contraseña actual.","Écris ton mot de passe actuel."],"agora mesmo":["just now","ahora mismo","à l'instant"],"Sem ligação ao serviço de tradução":["Cannot reach the translation service","Sin conexión con el servicio de traducción","Impossible de joindre le service de traduction"],"Studions":["Studions","Studions","Studions"],"Várias respostas aceites separadas por /":["Several accepted answers separated by /","Varias respuestas aceptadas separadas por /","Plusieurs réponses acceptées séparées par /"],"Pedidos de amizade, baralhos recebidos e avisos aparecem aqui.":["Friend requests, received decks and notices appear here.","Las solicitudes de amistad, los mazos recibidos y los avisos aparecen aquí.","Les demandes d'amis, les paquets reçus et les avis apparaissent ici."]};
 const I18N_PAT=[["Bem-vindo(a), {0}",["Welcome, {0}","Te damos la bienvenida, {0}","Bienvenue, {0}"]],["Apagar o baralho \"{0}\" e todas as suas cartas?",["Delete the deck \"{0}\" and all its cards?","¿Borrar el mazo \"{0}\" y todas sus tarjetas?","Supprimer le paquet « {0} » et toutes ses cartes ?"]],["O texto já parece estar em {~0}. Escolhe outro idioma de destino ou escreve a tradução à mão.",["The text already seems to be in {0}. Choose another target language or type the translation by hand.","El texto ya parece estar en {0}. Elige otro idioma de destino o escribe la traducción a mano.","Le texte semble déjà être en {0}. Choisis une autre langue cible ou écris la traduction à la main."]],["Traduzido ({~0} → {~1}). Podes editar o resultado.",["Translated ({0} → {1}). You can edit the result.","Traducido ({0} → {1}). Puedes editar el resultado.","Traduit ({0} → {1}). Tu peux modifier le résultat."]],["Traduzido. Podes editar o resultado.",["Translated. You can edit the result.","Traducido. Puedes editar el resultado.","Traduit. Tu peux modifier le résultat."]],["{~0} Escreve a tradução manualmente.",["{0} Type the translation manually.","{0} Escribe la traducción manualmente.","{0} Écris la traduction manuellement."]],["Flashcards / {~0} /",["Flashcards / {0} /","Flashcards / {0} /","Flashcards / {0} /"]],["Flashcards · {~0}",["Flashcards · {0}","Flashcards · {0}","Flashcards · {0}"]],["de {#0}",["of {0}","de {0}","sur {0}"]],["semelhança {#0}%",["similarity {0}%","similitud {0}%","similarité {0} %"]],["Resposta correta: {0}",["Correct answer: {0}","Respuesta correcta: {0}","Bonne réponse : {0}"]],["Escreveste: {0}",["You wrote: {0}","Escribiste: {0}","Tu as écrit : {0}"]],["Amigos ({#0})",["Friends ({0})","Amigos ({0})","Amis ({0})"]],["Bloqueados ({#0})",["Blocked ({0})","Bloqueados ({0})","Bloqués ({0})"]],["quer ser teu amigo · {~0}",["wants to be your friend · {0}","quiere ser tu amigo · {0}","veut être ton ami · {0}"]],["aceitou o teu pedido de amizade · {~0}",["accepted your friend request · {0}","aceptó tu solicitud de amistad · {0}","a accepté ta demande d'ami · {0}"]],["{0} enviou-te um baralho",["{0} sent you a deck","{0} te envió un mazo","{0} t'a envoyé un paquet"]],["· {#0} carta · {~1} · {~2}",["· {0} card · {1} · {2}","· {0} tarjeta · {1} · {2}","· {0} carte · {1} · {2}"]],["· {#0} cartas · {~1} · {~2}",["· {0} cards · {1} · {2}","· {0} tarjetas · {1} · {2}","· {0} cartes · {1} · {2}"]],["há {#0} min",["{0} min ago","hace {0} min","il y a {0} min"]],["há {#0} h",["{0} h ago","hace {0} h","il y a {0} h"]],["há {#0} d",["{0} d ago","hace {0} d","il y a {0} j"]],["Remover {0} da tua lista?",["Remove {0} from your list?","¿Quitar a {0} de tu lista?","Retirer {0} de ta liste ?"]],["Bloquear {0}? Deixas de receber pedidos e baralhos desta pessoa, e ela é removida dos teus amigos.",["Block {0}? You will stop receiving requests and decks from this person, and they will be removed from your friends.","¿Bloquear a {0}? Dejarás de recibir solicitudes y mazos de esta persona, y se eliminará de tus amigos.","Bloquer {0} ? Tu ne recevras plus de demandes ni de paquets de cette personne, et elle sera retirée de tes amis."]],["Pedido enviado a {0}. Quando aceitar, podem trocar baralhos.",["Request sent to {0}. Once they accept, you can swap decks.","Solicitud enviada a {0}. Cuando la acepte, podréis intercambiar mazos.","Demande envoyée à {0}. Quand elle l'acceptera, vous pourrez échanger des paquets."]],["Enviado para {0}.",["Sent to {0}.","Enviado a {0}.","Envoyé à {0}."]],["Partilhado por {0}",["Shared by {0}","Compartido por {0}","Partagé par {0}"]],["Enviámos um link de confirmação para {0}. O email só muda depois de clicares nele (vê também o spam).",["We sent a confirmation link to {0}. The email only changes after you click it (check spam too).","Hemos enviado un enlace de confirmación a {0}. El correo solo cambia después de pulsarlo (revisa también el spam).","Nous avons envoyé un lien de confirmation à {0}. L'e-mail ne change qu'après avoir cliqué dessus (vérifie aussi les spams)."]],["Ocorreu um erro. ({0})",["An error occurred. ({0})","Se produjo un error. ({0})","Une erreur s'est produite. ({0})"]],["{#0}.º ano",["Year {0} (PT)","{0}.º año (PT)","Année {0} (PT)"]]];
+Object.assign(I18N,{"Mensagens":["Messages","Mensajes","Messages"],"Correio":["Mail","Correo","Courrier"],"Navegação":["Navigation","Navegación","Navigation"],"Conversas com os teus amigos.":["Conversations with your friends.","Conversaciones con tus amigos.","Conversations avec tes amis."],"Escreve uma mensagem…":["Type a message…","Escribe un mensaje…","Écris un message…"],"Ainda não há mensagens. Diz olá!":["No messages yet. Say hi!","Aún no hay mensajes. ¡Di hola!","Pas encore de messages. Dis bonjour !"],"Hoje":["Today","Hoy","Aujourd'hui"],"Ontem":["Yesterday","Ayer","Hier"],"Tu:":["You:","Tú:","Toi :"],"Enviaste um baralho":["You sent a deck","Enviaste un mazo","Tu as envoyé un paquet"],"Enviou-te um baralho":["Sent you a deck","Te envió un mazo","T'a envoyé un paquet"],"Ver baralho":["View deck","Ver mazo","Voir le paquet"],"Enviar baralho":["Send deck","Enviar mazo","Envoyer un paquet"],"Escolhe um baralho para enviar":["Choose a deck to send","Elige un mazo para enviar","Choisis un paquet à envoyer"],"Sem baralhos com cartas.":["No decks with cards.","Sin mazos con tarjetas.","Aucun paquet avec des cartes."],"Só podes enviar mensagens a amigos que já aceitaram o teu pedido.":["You can only message friends who have accepted your request.","Solo puedes enviar mensajes a amigos que ya aceptaron tu solicitud.","Tu ne peux écrire qu'aux amis qui ont accepté ta demande."],"Não foi possível enviar a mensagem. Confirma que a amizade foi aceite e que as regras do Firestore permitem mensagens.":["Could not send the message. Check that the friendship was accepted and that the Firestore rules allow messages.","No se pudo enviar el mensaje. Comprueba que la amistad fue aceptada y que las reglas de Firestore permiten mensajes.","Impossible d'envoyer le message. Vérifie que l'amitié a été acceptée et que les règles Firestore autorisent les messages."],"A enviar…":["Sending…","Enviando…","Envoi…"],"Mensagem":["Message","Mensaje","Message"],"Enviar":["Send","Enviar","Envoyer"]});
 const LI={en:0,es:1,fr:2};
 const UNITS={baralho:['deck','mazo','paquet'],baralhos:['decks','mazos','paquets'],carta:['card','tarjeta','carte'],cartas:['cards','tarjetas','cartes']};
 let patRx=null;
@@ -965,7 +1051,7 @@ function i18n(s){
 }
 ['alert','confirm','prompt'].forEach(k=>{ try{ const f=window[k].bind(window); window[k]=(msg,d)=>f(i18n(String(msg)),d); }catch(e){} });
 const origT=new WeakMap(), lastT=new WeakMap(), origA=new WeakMap();
-const NOTR='script,style,textarea,[translate="no"],#faceFront,#faceBack,#deckSelect,#sDeck,#shList,#shName,#uName,#uEmail,#pfEmail';
+const NOTR='script,style,textarea,[translate="no"],#faceFront,#faceBack,#deckSelect,#sDeck,#shList,#shName,#uName,#uEmail,#pfEmail,.msgtxt,#cvText';
 const DIRECT='#cardList .t,#cardList .s,#cardList .n,.li .q,.li .a,.li .u,.res-item .rt,.res-item .ra';
 function trText(n){
   const p=n.parentElement; if(!p||p.closest(NOTR)||p.matches(DIRECT)) return;
@@ -1064,6 +1150,7 @@ function applyRemote(r){
   db=r; fixDb(); applyTheme(db.theme||'auto'); renderUser();
   try{ localStorage.setItem(userKey(),JSON.stringify(db)); }catch(e){}
   fillDeckSelects(); if(current==='cards') renderCards(); if(current==='home') updateHome();
+  refreshChatUI();
 }
 function listen(){
   if(unsub) unsub();
@@ -1078,13 +1165,13 @@ function ensureTypeDeck(){
 }
 
 /* ================== Navegação ================== */
-const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',legal:'vLegal',scan:'vScan',profile:'vProfile',share:'vShare',friends:'vFriends',mail:'vMail',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
+const VIEWS={loading:'vLoading',auth:'vAuth',setpass:'vSetPass',legal:'vLegal',scan:'vScan',profile:'vProfile',share:'vShare',friends:'vFriends',chats:'vChats',chat:'vChat',mail:'vMail',cat:'vCat',home:'vHome',hub:'vHub',cards:'vCards',study:'vStudy'};
 const TYPE_LABEL={lang:'Línguas',other:'Outros'};
-const crumbOf=v=>({mail:'<b>Caixa de entrada</b>',friends:'<b>Amigos</b>',share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',legal:'<b>Privacidade e termos</b>',scan:'<b>Scan de testes</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
-const BACK={legal:'home',scan:'home',mail:'home',friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
+const crumbOf=v=>({chats:'<b>Mensagens</b>',chat:`Mensagens  /  <b>${esc(chatName())}</b>`,mail:'<b>Caixa de entrada</b>',friends:'<b>Amigos</b>',share:'<b>Baralho partilhado</b>',profile:'<b>Perfil e definições</b>',legal:'<b>Privacidade e termos</b>',scan:'<b>Scan de testes</b>',cat:'<b>Flashcards</b>',hub:`Flashcards  /  <b>${TYPE_LABEL[fcType]}</b>`,cards:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Baralhos e cartas</b>`,study:`Flashcards  /  ${TYPE_LABEL[fcType]}  /  <b>Estudar</b>`})[v];
+const BACK={chats:'home',chat:'chats',legal:'home',scan:'home',mail:'home',friends:'home',share:'home',profile:'home',cat:'home',hub:'cat',cards:'hub',study:'hub'};
 let current='home';
 function go(v){
-  if(user&&user.isGuest&&['friends','mail','profile','share','setpass','scan'].includes(v)) v='home';
+  if(user&&user.isGuest&&['friends','mail','profile','share','setpass','scan','chats','chat'].includes(v)) v='home';
   current=v;
   if(v!=='study'&&db){ S=null; if(pendingRemote){ const r=pendingRemote; pendingRemote=null; applyRemote(r); } }
   for(const k in VIEWS) $(VIEWS[k]).classList.toggle('hidden',k!==v);
@@ -1093,16 +1180,19 @@ function go(v){
   if(v==='home') updateHome();
   if(v==='mail') showMail();
   if(v==='friends') showFriends();
+  if(v==='chats') showChats();
+  if(v==='chat') showChat();
   if(v==='profile') renderProfile();
   if(v==='scan') resetScan();
   if(v==='cat') updateCat();
   if(v==='hub') applyHub();
   if(v==='cards'){ applyTypeUI(); fillDeckSelects(); renderCards(); }
   if(v==='study'){ applyTypeUI(); fillDeckSelects(); resetStudyUI(); }
+  updateDock(v);
   window.scrollTo({top:0});
 }
 $('brand').onclick=()=>{ if(user&&db) go('home'); };
-$('backBtn').onclick=()=>go(BACK[current]);
+$('backBtn').onclick=()=>{ const b=(current==='share'&&shareBack)||BACK[current]; if(current==='share') shareBack=null; go(b); };
 $('tileFlash').onclick=()=>go('cat');
 $('tileScan').onclick=()=>{ if(!user||user.isGuest){ alert('O scan precisa de uma conta, porque a análise é feita online. Cria uma conta gratuita para o usares.'); return; } go('scan'); };
 $('tileLang').onclick=()=>{ fcType='lang'; go('hub'); };
@@ -1809,8 +1899,8 @@ $('shStop').onclick=async()=>{
 /* abrir um baralho partilhado */
 const clip=(s,n)=>String(s==null?'':s).slice(0,n);
 let shareItemId=null;
-async function openShare(idArg,itemId){
-  const id=idArg||pendingShare; shareItemId=itemId||null; pendingShare=null; try{ sessionStorage.removeItem('studions.pendingShare'); }catch(e){}
+async function openShare(idArg,itemId,back){
+  const id=idArg||pendingShare; shareItemId=itemId||null; shareBack=back||null; pendingShare=null; try{ sessionStorage.removeItem('studions.pendingShare'); }catch(e){}
   sharedData=null; go('share');
   $('shLoad').classList.remove('hidden'); $('shBody').classList.add('hidden'); $('shErr').classList.add('hidden');
   try{
@@ -1841,8 +1931,8 @@ $('shAdd').onclick=()=>{
   if(shareItemId){ cloud.deleteItem(user.uid,shareItemId).catch(()=>{}); shareItemId=null; }
   go('hub');
 };
-$('shNo').onclick=()=>{ sharedData=null; go(shareItemId?'mail':'home'); shareItemId=null; };
-$('shHome').onclick=()=>{ go(shareItemId?'mail':'home'); shareItemId=null; };
+$('shNo').onclick=()=>{ sharedData=null; const b=shareItemId?'mail':(shareBack||'home'); shareItemId=null; shareBack=null; go(b); };
+$('shHome').onclick=()=>{ const b=shareItemId?'mail':(shareBack||'home'); shareItemId=null; shareBack=null; go(b); };
 
 /* ---- amigos, caixa de entrada e perfis ---- */
 let friends=[], blocks=[], inbox=[], fTab='friends', unInbox=null, codeChecked=false, lastAcc=0;
@@ -1881,13 +1971,14 @@ function makeRow(L,whoHTML,btns){
 async function refreshFriends(){
   if(!cloud||!user) return;
   try{ const l=await cloud.listFriends(user.uid); friends=await Promise.all(l.map(async f=>({...f,ok:await cloud.friendStatus(user.uid,f.id).catch(()=>false)}))); }catch(e){}
+  processIncoming();
 }
 async function refreshBlocks(){ if(!cloud||!user) return; try{ blocks=await cloud.listBlocks(user.uid); }catch(e){} }
 function rerender(){ if(current==='friends') renderFriends(); else if(current==='mail') renderMail(); }
 function startInbox(){
   if(unInbox) unInbox();
   unInbox=cloud.listenInbox(user.uid,items=>{
-    inbox=items; badge();
+    rawInbox=items; inbox=items.filter(i=>i.kind!=='msg'); badge(); processIncoming();
     const acc=items.filter(i=>i.kind==='accepted').length;
     if(acc!==lastAcc){ lastAcc=acc; refreshFriends().then(rerender); }
     if(current==='mail'){ renderMail(); loadProfiles(items.map(i=>i.fromUid)).then(()=>{ if(current==='mail') renderMail(); }); }
@@ -1930,7 +2021,7 @@ async function blockFrom(it,nm){
   emsg('');
   try{
     await cloud.blockUser(user.uid,it.fromUid,nm);
-    for(const x of inbox.filter(i=>i.fromUid===it.fromUid)) await cloud.deleteItem(user.uid,x.id).catch(()=>{});
+    for(const x of rawInbox.filter(i=>i.fromUid===it.fromUid)) await cloud.deleteItem(user.uid,x.id).catch(()=>{});
     await Promise.all([refreshFriends(),refreshBlocks()]); if(current==='friends') fTab='blocked'; rerender();
   }catch(e){ emsg(friendly(e)); }
 }
@@ -1962,7 +2053,7 @@ function renderFriends(){
     friends.forEach(f=>{
       const nm=nameOf(f.id,f.name);
       makeRow(L,`${avatarHTML(f.id,nm)}<div style="min-width:0"><div class="t">${esc(nm)} <span class="tag ${f.ok?'':'warn'}">${f.ok?'Amigo':'Pendente'}</span></div><div class="s">${f.ok?'Podem trocar baralhos.':'A aguardar que aceite o pedido.'}</div></div>`,
-        [['Remover','',()=>removeFriendUI(f,nm)],['Bloquear','bad',()=>blockFrom({fromUid:f.id},nm)]]);
+        [...(f.ok?[['Mensagem','primary',()=>openChat(f.id)]]:[]),['Remover','',()=>removeFriendUI(f,nm)],['Bloquear','bad',()=>blockFrom({fromUid:f.id},nm)]]);
     });
   }else{
     if(!blocks.length) return empty('Não bloqueaste ninguém.');
@@ -2026,10 +2117,217 @@ async function sendTo(uidTo,nm,btn){
   const d=deck(); if(!d.shareId) return; btn.disabled=true; smsg('');
   try{
     await cloud.shareDeck(d.shareId,snapshot(d));
-    await cloud.sendItem(uidTo,{kind:'deck',fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:Date.now()});
+    const mid=uid(), tt=Date.now();
+    await cloud.sendItem(uidTo,{kind:'deck',mid,fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:tt});
+    addMsg(uidTo,nm,{id:mid,me:true,t:tt,k:'d',d:{n:clip(d.name,60),c:d.cards.length,y:d.type||'lang',s:d.shareId}}); save(); refreshChatUI();
     sentTo[d.shareId+':'+uidTo]=1; renderSendList(true); smsg('Enviado para '+nm+'.',false);
   }catch(e){ btn.disabled=false; smsg(e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
 }
+
+/* ================== Mensagens (conversas com amigos) ================== */
+let rawInbox=[], chatWith=null, shareBack=null, procBusy=false, procAgain=false, chatsAt=0;
+const outbox=[], MAXMSG=120, MAXTXT=500;
+const peekChat=fid=>(db&&db.chats&&db.chats[fid])||null;
+function chatOf(fid,name){
+  if(!db.chats||typeof db.chats!=='object') db.chats={};
+  let ch=db.chats[fid];
+  if(!ch||!Array.isArray(ch.msgs)) ch=db.chats[fid]={name:clip(name,60),msgs:[],read:0};
+  if(name) ch.name=clip(name,60);
+  return ch;
+}
+function trimChats(){
+  const c=db.chats; if(!c) return;
+  for(const k in c){ const m=c[k].msgs; if(m.length>MAXMSG) m.splice(0,m.length-MAXMSG); }
+  let size=JSON.stringify(c).length;
+  while(size>250000){
+    let ok=null, ot=Infinity;
+    for(const k in c){ const m=c[k].msgs; if(m.length&&m[0].t<ot){ ot=m[0].t; ok=k; } }
+    if(!ok) break;
+    size-=JSON.stringify(c[ok].msgs[0]).length+1; c[ok].msgs.shift();
+  }
+}
+function addMsg(fid,name,m){
+  const ch=chatOf(fid,name);
+  if(ch.msgs.some(x=>x.id===m.id)) return false;
+  ch.msgs.push(m); ch.msgs.sort((a,b)=>a.t-b.t); trimChats(); return true;
+}
+const unreadOf=fid=>{ const ch=peekChat(fid); return ch?ch.msgs.filter(m=>!m.me&&m.t>(ch.read||0)).length:0; };
+function chatBadge(){
+  const b=$('cbadge'); if(!b) return;
+  let n=0; if(db&&db.chats) for(const k in db.chats) n+=unreadOf(k);
+  b.textContent=n>9?'9+':String(n); b.classList.toggle('hidden',!n);
+}
+function markRead(fid){
+  const ch=peekChat(fid); if(!ch||!unreadOf(fid)) return;
+  const last=ch.msgs.length?ch.msgs[ch.msgs.length-1].t:0;
+  ch.read=Math.max(Date.now(),last); save(); chatBadge();
+}
+const chatName=()=>chatWith?nameOf(chatWith,(peekChat(chatWith)||{}).name):'';
+function refreshChatUI(){
+  chatBadge();
+  if(current==='chats') renderChats();
+  else if(current==='chat'&&chatWith){ markRead(chatWith); renderChat(true); }
+}
+
+/* receber: mensagens (e baralhos) de amigos passam para a conversa */
+async function processIncoming(){
+  if(!db||!user||user.isGuest||!cloud) return;
+  if(procBusy){ procAgain=true; return; }
+  procBusy=true;
+  try{
+    const ids=new Map(friends.map(f=>[f.id,f]));
+    let changed=false; const done=[];
+    for(const it of rawInbox.slice()){
+      if((it.kind!=='msg'&&it.kind!=='deck')||!ids.has(it.fromUid)) continue;
+      const f=ids.get(it.fromUid), nm=nameOf(it.fromUid,it.fromName||f.name);
+      const id=clip(it.mid,40)||('i'+it.id), t=Number(it.createdAt)||Date.now();
+      let m=null;
+      if(it.kind==='msg'){
+        const x=clip(it.text,MAXTXT); if(x.trim()) m={id,me:false,t,k:'t',x};
+        done.push(it);
+      }else if(/^[A-Za-z0-9_-]{10,40}$/.test(String(it.shareId))){
+        m={id,me:false,t,k:'d',d:{n:clip(it.deckName,60)||'Baralho',c:Number(it.count)||0,y:it.deckType==='other'?'other':'lang',s:String(it.shareId)}};
+      }
+      if(m&&addMsg(it.fromUid,nm,m)) changed=true;
+    }
+    if(changed){ save(); await pushCloud(); }
+    for(const it of done) await cloud.deleteItem(user.uid,it.id).catch(()=>{});
+    if(changed) refreshChatUI();
+  }catch(e){}
+  finally{ procBusy=false; if(procAgain){ procAgain=false; processIncoming(); } }
+}
+
+/* lista de conversas */
+async function showChats(){
+  renderChats();
+  if(Date.now()-chatsAt>20000){ chatsAt=Date.now(); await refreshFriends(); }
+  await loadProfiles(friends.map(f=>f.id));
+  if(current==='chats') renderChats();
+}
+const lastOf=fid=>{ const ch=peekChat(fid); return ch&&ch.msgs.length?ch.msgs[ch.msgs.length-1]:null; };
+function previewHTML(m){
+  if(!m) return '<span class="hint">…</span>';
+  const who=m.me?'<span>Tu:</span> ':'';
+  if(m.k==='d') return who+'<span class="msgtxt">«'+esc(m.d.n)+'»</span>';
+  return who+'<span class="msgtxt">'+esc(m.x)+'</span>';
+}
+function renderChats(){
+  const L=$('cList'); if(!L||!db) return; L.innerHTML='';
+  const map=new Map();
+  friends.forEach(f=>map.set(f.id,{id:f.id,name:f.name,ok:f.ok}));
+  Object.keys(db.chats||{}).forEach(k=>{ if(!map.has(k)) map.set(k,{id:k,name:db.chats[k].name,ok:false}); });
+  const rows=[...map.values()].filter(r=>r.ok||lastOf(r.id));
+  if(!rows.length){
+    L.innerHTML='<div class="empty" style="padding:14px">Ainda não tens amigos que te tenham aceitado. <button class="linkbtn" id="cGoFriends">Adicionar amigos</button></div>';
+    $('cGoFriends').onclick=()=>go('friends'); return;
+  }
+  rows.sort((a,b)=>((lastOf(b.id)||{t:0}).t-(lastOf(a.id)||{t:0}).t)||String(a.name).localeCompare(String(b.name)));
+  rows.forEach((r,i)=>{
+    const nm=nameOf(r.id,r.name), m=lastOf(r.id), un=unreadOf(r.id);
+    const el=document.createElement('button'); el.className='crow'; el.style.animationDelay=i*35+'ms';
+    el.innerHTML=`${avatarHTML(r.id,nm)}<div class="mid"><div class="nm"><span class="msgtxt">${esc(nm)}</span>${m?`<span class="tm">${timeAgo(m.t)}</span>`:''}</div><div class="pv">${previewHTML(m)}</div></div>${un?`<span class="ub">${un>9?'9+':un}</span>`:''}`;
+    el.onclick=()=>openChat(r.id); L.appendChild(el);
+  });
+}
+function openChat(fid){ chatWith=fid; $('cvDecks').classList.add('hidden'); pmsg('cvMsg',''); go('chat'); }
+
+/* conversa */
+async function showChat(){
+  if(!chatWith){ go('chats'); return; }
+  renderChat(); markRead(chatWith);
+  await loadProfiles([chatWith]);
+  if(current==='chat') renderChat(true);
+}
+const chatMsgs=fid=>{ const ch=peekChat(fid), a=ch?ch.msgs.slice():[]; outbox.filter(o=>o.to===fid).forEach(o=>a.push(o.m)); return a.sort((x,y)=>x.t-y.t); };
+const dayKey=t=>{ const d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); };
+function dayLabel(t){
+  const n=Date.now(); if(dayKey(t)===dayKey(n)) return 'Hoje'; if(dayKey(t)===dayKey(n-864e5)) return 'Ontem';
+  return new Date(t).toLocaleDateString(uiLang,{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+const clock=t=>new Date(t).toLocaleTimeString(uiLang,{hour:'2-digit',minute:'2-digit'});
+function renderChat(stay){
+  const fid=chatWith; if(!fid||!db) return;
+  const nm=chatName();
+  $('cvHead').innerHTML=`${avatarHTML(fid,nm)}<div class="t msgtxt">${esc(nm)}</div>`;
+  const f=friends.find(x=>x.id===fid), can=!!(f&&f.ok);
+  $('cvForm').classList.toggle('hidden',!can); $('cvNo').classList.toggle('hidden',can);
+  if(!can) $('cvDecks').classList.add('hidden');
+  const box=$('cvMsgs'), atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;
+  const ms=chatMsgs(fid); box.innerHTML='';
+  if(!ms.length) box.innerHTML='<div class="empty">Ainda não há mensagens. Diz olá!</div>';
+  let day='';
+  ms.forEach(m=>{
+    const dk=dayKey(m.t); if(dk!==day){ day=dk; const s=document.createElement('div'); s.className='dsep'; s.textContent=dayLabel(m.t); box.appendChild(s); }
+    const el=document.createElement('div'); el.className='bub '+(m.me?'me':'them')+(m.pend?' pend':'');
+    if(m.k==='d'){
+      const d=m.d, n=Number(d.c)||0, ty=d.y==='other'?'Outros':'Línguas';
+      el.classList.add('deckb');
+      el.innerHTML=`<div class="dklbl">${m.me?'Enviaste um baralho':'Enviou-te um baralho'}</div><div class="dk"><div class="dki">${ic('layers')}</div><div class="dkt"><b class="msgtxt">${esc(d.n)}</b><div class="dkm"><span>${n} carta${n!==1?'s':''}</span><span>·</span><span>${ty}</span></div></div></div>`;
+      const b=document.createElement('button'); b.className='btn sm dkb'; b.innerHTML=ic('right')+' <span>Ver baralho</span>';
+      b.onclick=()=>{ if(/^[A-Za-z0-9_-]{10,40}$/.test(String(d.s))) openShare(d.s,null,'chat'); };
+      el.appendChild(b);
+    }else el.innerHTML=`<span class="msgtxt">${esc(m.x)}</span>`;
+    const tm=document.createElement('span'); tm.className='tm'; tm.textContent=clock(m.t); el.appendChild(tm);
+    box.appendChild(el);
+  });
+  if(!stay||atBottom) box.scrollTop=box.scrollHeight;
+}
+const cvErr=e=>e&&e.code==='permission-denied'?'Não foi possível enviar a mensagem. Confirma que a amizade foi aceite e que as regras do Firestore permitem mensagens.':friendly(e);
+async function sendText(){
+  const fid=chatWith, ta=$('cvText'), x=clip(ta.value.trim(),MAXTXT); if(!x||!fid) return;
+  const f=friends.find(q=>q.id===fid); if(!f||!f.ok) return;
+  ta.value=''; ta.style.height=''; pmsg('cvMsg','');
+  const m={id:uid(),me:true,t:Date.now(),k:'t',x,pend:true}, o={to:fid,m}; outbox.push(o); renderChat();
+  try{
+    await cloud.sendItem(fid,{kind:'msg',mid:m.id,fromUid:user.uid,fromName:clip(userName(),60),text:x,createdAt:m.t});
+    outbox.splice(outbox.indexOf(o),1); delete m.pend; addMsg(fid,nameOf(fid,f.name),m); save();
+  }catch(e){ outbox.splice(outbox.indexOf(o),1); ta.value=x; pmsg('cvMsg',cvErr(e)); }
+  if(current==='chat'&&chatWith===fid) renderChat();
+}
+$('cvSend').onclick=sendText;
+$('cvText').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendText(); }});
+$('cvText').addEventListener('input',e=>{ const t=e.target; t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,120)+'px'; });
+$('cvDeckBtn').onclick=()=>{
+  const box=$('cvDecks'); if(!box.classList.contains('hidden')){ box.classList.add('hidden'); return; }
+  const L=$('cvDeckList'); L.innerHTML=''; pmsg('cvMsg','');
+  const ds=db.decks.filter(d=>d.cards.length);
+  if(!ds.length) L.innerHTML='<div class="empty" style="padding:12px">Sem baralhos com cartas.</div>';
+  ds.forEach(d=>{
+    const n=d.cards.length;
+    const el=document.createElement('div'); el.className='item';
+    el.innerHTML=`<div style="min-width:0"><div class="t">${esc(d.name)}</div><div class="s"><span>${n} carta${n!==1?'s':''}</span></div></div>`;
+    const b=document.createElement('button'); b.className='btn sm primary'; b.innerHTML=ic('send')+' <span>Enviar</span>'; b.onclick=()=>sendDeckChat(d,b);
+    el.appendChild(b); L.appendChild(el);
+  });
+  box.classList.remove('hidden');
+};
+async function sendDeckChat(d,btn){
+  const fid=chatWith, f=friends.find(q=>q.id===fid); if(!f||!f.ok||!d.cards.length) return;
+  const nm=nameOf(fid,f.name); btn.disabled=true; pmsg('cvMsg','A enviar…',false);
+  try{
+    if(!d.shareId){ const id=newShareId(); await cloud.shareDeck(id,snapshot(d)); d.shareId=id; save(); }
+    else await cloud.shareDeck(d.shareId,snapshot(d));
+    const mid=uid(), t=Date.now();
+    await cloud.sendItem(fid,{kind:'deck',mid,fromUid:user.uid,fromName:clip(userName(),60),shareId:d.shareId,deckName:clip(d.name,60),deckType:d.type||'lang',count:d.cards.length,createdAt:t});
+    addMsg(fid,nm,{id:mid,me:true,t,k:'d',d:{n:clip(d.name,60),c:d.cards.length,y:d.type||'lang',s:d.shareId}}); save();
+    sentTo[d.shareId+':'+fid]=1;
+    $('cvDecks').classList.add('hidden'); pmsg('cvMsg','Enviado para '+nm+'.',false);
+    if(current==='chat'&&chatWith===fid) renderChat();
+  }catch(e){ btn.disabled=false; pmsg('cvMsg',e&&e.code==='permission-denied'?'Não foi possível enviar. A pessoa pode ainda não ter aceitado a tua amizade.':friendly(e)); }
+}
+
+/* ---- dock inferior ---- */
+function updateDock(v){
+  const d=$('dock'); if(!d) return;
+  const show=!!(user&&!user.isGuest&&db&&!['auth','loading','setpass'].includes(v));
+  d.classList.toggle('hidden',!show); document.body.classList.toggle('has-dock',show);
+  let a={home:'home',cat:'home',hub:'home',cards:'home',study:'home',scan:'home',legal:'home',chats:'chats',chat:'chats',friends:'friends',mail:'mail',profile:'profile'}[v];
+  if(v==='share') a=shareItemId?'mail':(shareBack==='chat'?'chats':'home');
+  d.querySelectorAll('.dk-b').forEach(b=>b.classList.toggle('active',b.dataset.dock===a));
+}
+$('dkHome').onclick=()=>go('home');
+$('dkChats').onclick=()=>go('chats');
+$('dkProfile').onclick=()=>go('profile');
 
 /* ================== Legal ================== */
 // PREENCHER: nome e email de contacto do responsável pelo site (obrigatório para a política ser válida).
@@ -2270,7 +2568,7 @@ async function onUser(u){
   }else{
     if(unsub){ unsub(); unsub=null; }
     clearTimeout(saveTimer); user=null; db=null; S=null; pendingRemote=null; deleting=false;
-    if(unInbox){ unInbox(); unInbox=null; } inbox=[]; friends=[]; blocks=[]; codeChecked=false; lastAcc=0; badge();
+    if(unInbox){ unInbox(); unInbox=null; } inbox=[]; rawInbox=[]; chatWith=null; outbox.length=0; friends=[]; blocks=[]; codeChecked=false; lastAcc=0; badge(); chatBadge();
     renderUser();
     if(guestFlag()&&!pendingShare&&!goneMsg){ enterGuest(); return; }
     showAuth(goneMsg||(pendingShare?'Entra ou cria conta para abrires o baralho que partilharam contigo.':'')); goneMsg='';
